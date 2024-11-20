@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+.color {
+  background: linear-gradient(to right, #ff66b2, #ff8c00);
+  background-clip: text; /* Clips the background to the text */
+  -webkit-background-clip: text; /* Webkit-specific background clip */
+  -webkit-text-fill-color: transparent; /* Makes text transparent so background shows through */
+}
