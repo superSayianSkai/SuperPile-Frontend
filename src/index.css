@@ -18,3 +18,25 @@
   -webkit-background-clip: text; /* Webkit-specific background clip */
   -webkit-text-fill-color: transparent; /* Makes text transparent so background shows through */
 }
+
+/* skeleton animation for linkPanel */
+
+.skeleton {
+  opacity: 0.7;
+  animation: skeleton-loading 0.4s linear infinite alternate;
+  -webkit-animation: skeleton-loading 0.4s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 90%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+.scroll {
+  scrollbar-width: none;
+}
+

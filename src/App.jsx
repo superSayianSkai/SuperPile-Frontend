@@ -6,11 +6,10 @@ import { useContext } from "react";
 import { SuperPileContext } from "./context/SuperPileContext";
 const App = () => {
   const { LinkBoardPanel } = useContext(SuperPileContext);
-  console.log(LinkBoardPanel);
 
   return (
     <div
-      className={`h-[100vh] p-[1rem] ${
+      className={`h-[100vh] ${
         LinkBoardPanel ? "overflow-hidden" : ""
       } `}
     >

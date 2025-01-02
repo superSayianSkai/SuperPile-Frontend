@@ -1,0 +1,13 @@
+// settings page 
+//  -number of links stored
+//  -premium settings
+//  -Theme Toggle
+//  -Log-out
+//  -
+
+
+// other features
+//   -Toggle categories and pile
+//   -fix copy to clipboard
+//   -Change the banner and the picture profile
+//   -animation
