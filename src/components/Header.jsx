@@ -23,7 +23,7 @@ const Header = () => {
           className="rounded-full h-[100%] w-[100%] text-black px-[1rem] bg-transparent border-transparent outline-none text-[12px]"
         />
       </div>
-      <i className="bi bi-search text-[.8rem]"></i>
+      {/* <i className="bi bi-search text-[.8rem]"></i> */}
     </div>
   );
 };

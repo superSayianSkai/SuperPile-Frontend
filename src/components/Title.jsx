@@ -8,11 +8,11 @@ const Title = () => {
       <img
         style={{ }}
         src={boy}
-        className="h-[220px] md:h-[220px] w-[100%] object-cover  "
+        className="h-[180px] md:h-[220px] w-[100%] object-cover  "
       />
       <img
         src={skai}
-        className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-md absolute bottom-[-50px] md:bottom-[-70px] left-[19px] md:left-[50px]"
+        className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full border-[4px]  absolute bottom-[-50px] md:bottom-[-70px] left-[19px] md:left-[50px]"
       />
     </div>
   );

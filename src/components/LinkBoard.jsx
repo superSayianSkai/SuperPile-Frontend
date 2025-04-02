@@ -14,25 +14,24 @@ const LinkBoard = () => {
   return (
     <div className="mt-[100px] mx-[20px] md:mx-[50px] ">
       <h2 className="font-bold text-[1.8rem] md:text-[3rem] mb-[2rem] color">
-        Skai's Linkboard
+        Skai's PileBoard
       </h2>
-      <div className="flex justify-between mb-[10px] items-center">
-        <div className="px-1 flex items-center gap-2">
-          <i className="bi bi-folder text-[1rem]"></i>
-          <h2 className="font-bold text-[.9rem] md:text-[1rem] ">Categories</h2>
-          {/* <p className="text-[12px] text-gray-500 leading-[2.5]">
-            All your links neatly gathered in one convenient place for quick and
-            easy access whenever you need them.
-          </p> */}
+      <div className="flex justify-between mb-[10px] items-center border-b-[1px] md:border-b-[0] pb-2  ">
+        <div className="px-1 flex items-center gap-2 cursor-pointer hover:opacity-80">
+          {/* <i className="bi bi-folder text-[1rem]"></i> */}
+          <h2 className="font-bold text-[.9rem] md:text-[1rem] hidden md:block ">
+            All
+          </h2>
         </div>
 
-        <button className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white font-bold cursor-pointer hover:opacity-100 bg-black px-6 py-2">
-          <h2 onClick={setLinkBoardPanelToggle} className="">
-            Pile
-          </h2>
+        <button
+          onClick={setLinkBoardPanelToggle}
+          className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white font-bold cursor-pointer hover:opacity-100 bg-black px-6 py-2"
+        >
+          Pile
         </button>
       </div>
-      <div className="flex gap-x-[1.9rem]  gap-y-[3rem] py-[1.5rem] w-[100%]  flex-wrap">
+      <div className="flex gap-x-[1.9rem]  gap-y-[3rem] py-[1.5rem] w-[100%]  flex-wrap mt-[40px]">
         {pile?.map((link) => {
           return (
             <div

@@ -35,9 +35,12 @@ const LinkPanel = () => {
     } else {
       showMeta(false);
     }
-
+    ///
+    
     axios
-      .get(`http://localhost:4501/fetchMetaData?url=${link}`)
+      .get(
+        `  https://superpile-backend-1.onrender.com/fetchMetaData?url=${link}`
+      )
       .then((response) => {
         // setMetaLink(link);
         setMetaInfo({
