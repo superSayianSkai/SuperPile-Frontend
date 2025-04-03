@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div
-      className={`h-[100vh] ${
+      className={`h-[100vh] flex flex-col ${
         LinkBoardPanel ? "overflow-hidden" : ""
       } `}
     >

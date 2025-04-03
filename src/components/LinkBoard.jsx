@@ -12,10 +12,7 @@ const LinkBoard = () => {
     console.log("copied to clipboard");
   };
   return (
-    <div className="mt-[100px] mx-[20px] md:mx-[50px] ">
-      <h2 className="font-bold text-[1.8rem] md:text-[3rem] mb-[2rem] color">
-        Skai's PileBoard
-      </h2>
+    <div className="py-[20px] md:mx-[50px] ">
       <div className="flex justify-between mb-[10px] items-center border-b-[1px] md:border-b-[0] pb-2  ">
         <div className="px-1 flex items-center gap-2 cursor-pointer hover:opacity-80">
           {/* <i className="bi bi-folder text-[1rem]"></i> */}
@@ -31,30 +28,30 @@ const LinkBoard = () => {
           Pile
         </button>
       </div>
-      <div className="flex gap-x-[1.9rem]  gap-y-[3rem] py-[1.5rem] w-[100%]  flex-wrap mt-[40px]">
+      <div className="grid grid-cols-3 gap-x-[2rem] gap-y-[4rem] p-2">
         {pile?.map((link) => {
           return (
-            <div
-              draggable="true"
-              key={link.id}
-              className="border-[1px] border-slate-300 md:w-[219px] pb-2 rounded-xl overflow-clip flex flex-col justify-between cursor-pointer "
-            >
-              <a href={link.link} target="_blank" className="">
-                <div className="w-[100%]  h-[100%] ">
-                  <img
-                    style={{ objectPosition: "center 20%" }}
-                    src={link.image}
-                    className="w-[100%] h-[120px] object-cover block "
-                  />
-                </div>
-              </a>
+            <div key={link.id}>
+              <div
+                draggable="true"
+                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer"
+              >
+                <a href={link.link} target="_blank" className="">
+                  <div className="w-full aspect-[16/9] bg-black">
+                    <img
+                      src={link.image}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </a>
+              </div>
               <div className="pt-[.8rem] px-[.7rem] flex flex-col gap-[5px] justify-between">
                 <h2 className="font-bold text-[.7rem]">{link.title}</h2>
                 <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
                   {link.description.slice(0, 152)}
                 </p>
                 <div className="flex items-center w-[100%] pr-[1rem]">
-                  <div className="flex gap-2  mt-[10px] items-center w-[100%]">
+                  <div className="flex gap-4  mt-[10px] items-center w-[100%]">
                     <button
                       value={link.link}
                       onClick={copy}
@@ -62,9 +59,9 @@ const LinkBoard = () => {
                     >
                       <i className="bi bi-clipboard hover:text-gray-500 "></i>
                     </button>
-                    {/* <button className="w-[30%] rounded-full border-[1px] border-gray-500 hover:bg-gray-100  hover:border-orange-300 hover:text-black p-1 text-[.6rem]">
-                      Share
-                    </button> */}
+                    <button className="text-[15px]">
+                    <i className="bi bi-share hover:text-gray-500 "></i>
+                    </button>
                     <button className=" rounded-full    text-[15px]">
                       <i
                         onClick={() => removePile(link)}
