@@ -3,7 +3,7 @@ const Title = () => {
   const [active, setActive] = useState();
   return (
     <div className="flex flex-col items-center  text-black  relative my-[6rem] gap-[.8rem]">
-      <h2 className="font-bold text-[1.8rem] md:text-[3rem]  color">
+      <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
         Skai&apos;s PileBoard
       </h2>
   {/* i need to make this animated */}

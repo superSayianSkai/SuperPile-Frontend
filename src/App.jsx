@@ -1,9 +1,9 @@
 import Header from "./components/Header";
 import Title from "./components/Title";
 import LinkBoard from "./components/LinkBoard";
-import LinkPanel from "./components/LinkPanel";
 import { useContext } from "react";
 import { SuperPileContext } from "./context/SuperPileContext";
+import Login from "./components/Login";
 const App = () => {
   const { LinkBoardPanel } = useContext(SuperPileContext);
 
@@ -16,7 +16,7 @@ const App = () => {
       <Header />
       <Title />
       <LinkBoard />
-      {LinkBoardPanel ? <LinkPanel /> : ""}
+      {LinkBoardPanel ? <Login /> : ""}
     </div>
   );
 };

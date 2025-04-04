@@ -12,11 +12,11 @@ const LinkBoard = () => {
     console.log("copied to clipboard");
   };
   return (
-    <div className="py-[20px] md:mx-[50px] ">
+    <div className="py-[20px] lg:mx-[50px] mx-[1rem] md:px-0">
       <div className="flex justify-between mb-[10px] items-center border-b-[1px] md:border-b-[0] pb-2  ">
         <div className="px-1 flex items-center gap-2 cursor-pointer hover:opacity-80">
           {/* <i className="bi bi-folder text-[1rem]"></i> */}
-          <h2 className="font-bold text-[.9rem] md:text-[1rem] hidden md:block ">
+          <h2 className="font-bold text-[.9rem] md:text-[1rem] ">
             All
           </h2>
         </div>
@@ -28,7 +28,7 @@ const LinkBoard = () => {
           Pile
         </button>
       </div>
-      <div className="grid grid-cols-3 gap-x-[2rem] gap-y-[4rem] p-2">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  md:p-2">
         {pile?.map((link) => {
           return (
             <div key={link.id}>

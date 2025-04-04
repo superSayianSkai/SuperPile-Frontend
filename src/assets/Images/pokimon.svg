@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+    <!-- Outer circle -->
+    <circle cx="100" cy="100" r="70" fill="none" stroke="black" stroke-width="4" />
+    
+    <!-- Top half - #ff8c00 (orange) -->
+    <path d="M30,100 A70,70 0 0,1 170,100" fill="#ff8c00" />
+    
+    <!-- Bottom half - white -->
+    <path d="M30,100 A70,70 0 0,0 170,100" fill="white" />
+    
+    <!-- Center band -->
+    <rect x="30" y="95" width="140" height="10" fill="black" />
+    
+    <!-- Center button - diamond shape -->
+    <rect x="95" y="92.5" width="10" height="10" fill="white" transform="rotate(45, 100, 100)" stroke="black" stroke-width="2"/>
+    
+    <!-- Small dot in center -->
+    <circle cx="100" cy="100" r="2" fill="black" />
+    
+    <!-- Decorative elements - small triangles -->
+    <polygon points="120,50 125,60 115,60" fill="black" />
+    <polygon points="80,150 85,140 75,140" fill="#ff8c00" />
+  </svg>
+  
