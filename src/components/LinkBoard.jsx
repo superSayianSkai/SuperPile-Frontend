@@ -3,13 +3,33 @@ import { useContext } from "react";
 import { SupaPileContext } from "../context/SupaPileContext";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import useFetchPile from "../hooks/useFetchPile";
+
 const LinkBoard = () => {
   const { data } = useFetchPile({ id: "all" });
   const pile = data?.data?.data;
   console.log(data?.data?.data);
   const { setLinkBoardPanelToggle } = useContext(SupaPileContext);
   // const { pile, removePile } = useContext(SupaPileContext);
+  const [metaData, setMetaData] = useState();
+  useEffect(() => {
+    const socket = io("http://localhost:5223", {
+      withCredentials: true,
+    });
+    console.log("jey");
+
+    socket.on("metaUpdate", (updatedMeta) => {
+      setMetaData(updatedMeta);
+      // console.log("THis is the metaUpdate", updatedMeta);
+    });
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
+  console.log(metaData);
 
   const copy = (e) => {
     navigator.clipboard.writeText(e.target.value);
@@ -34,7 +54,7 @@ const LinkBoard = () => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  md:p-2">
         {pile?.map((link) => {
           return (
-            <div key={link._id}>
+            <div key={link._id || metaData?.id}>
               <div
                 draggable="true"
                 className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer"
@@ -42,14 +62,16 @@ const LinkBoard = () => {
                 <a href={link.url} target="_blank" className="">
                   <div className="w-full aspect-[16/9] bg-black">
                     <img
-                      src={link.image}
+                      src={link.image || metaData?.image}
                       className="w-full h-full object-contain"
                     />
                   </div>
                 </a>
               </div>
               <div className="pt-[.8rem] px-[.7rem] flex flex-col gap-[5px] justify-between">
-                <h2 className="font-bold text-[.7rem]">{link.title}</h2>
+                <h2 className="font-bold text-[.7rem]">
+                  {link.title || metaData?.title}
+                </h2>
                 <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
                   {link.description.slice(0, 152)}
                 </p>

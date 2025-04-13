@@ -6,6 +6,7 @@ import { SupaPileContext } from "./context/SupaPileContext";
 import useAuth from "./hooks/useAuthPile";
 import LinkPanel from "../src/components/LinkPanel";
 import Login from "./components/Login";
+
 const App = () => {
   const userData = useAuth()?.data;
   const { LinkBoardPanel } = useContext(SupaPileContext);

@@ -19,7 +19,6 @@ const useFetchPile = ({ id }) => {
       if (error.response?.status === 404) return false; // don't retry on permanent errors
       return failureCount < 10; // try 10 times max
     },
-    retryDelay: () => 2000,
   });
 };
 

@@ -12,7 +12,7 @@ const LinkPanel = () => {
   const { setLinkBoardPanelToggle } = useContext(SupaPileContext);
   const [metaLink, setMetaLink] = useState("");
   const [meta, showMeta] = useState(false);
-  const { data, isLoading, isError } = useMeta({ link: metaLink });
+  const { data, isLoading} = useMeta({ link: metaLink });
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: postURL,
