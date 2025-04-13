@@ -1,4 +1,10 @@
+import useAuth from "../hooks/useAuthPile";
+import profile from "../assets/Images/profile.svg";
+import { useMemo } from "react";
 const Header = () => {
+  const { data, isLoading } = useAuth();
+
+  console.log(isLoading)
   return (
     <div className="flex justify-between px-[1rem] h-[10vh] items-center  w-[100%] bg-white top-0 left-0 border-b-slate-200 border-x-0 border-[1px] z-[1000]">
       <div className="flex gap-[.7rem] py-[.8rem] font-Monsterrat font-bold text-[1rem] items-center">
@@ -34,15 +40,27 @@ const Header = () => {
         </div>
         <div className="text-[.9rem]">Supapile</div>
       </div>
-
-      <div className="flex gap-2">
-        <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:bg-slate-100">
-          Sign in
-        </button>
-        <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:opacity-75 bg-black text-white">
-          Sign Up
-        </button>
-      </div>
+      {data ? (
+        <div className="flex">
+          {isLoading ? (
+            <img src={profile} />
+          ) : (
+            <img
+              src={data?.data?.profilePicture}
+              className="rounded-full h-auto w-[32px] cursor-pointer"
+            />
+          )}
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:bg-slate-100">
+            Sign in
+          </button>
+          <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:opacity-75 bg-black text-white">
+            Sign Up
+          </button>
+        </div>
+      )}
     </div>
   );
 };

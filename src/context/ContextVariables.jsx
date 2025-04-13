@@ -1,15 +1,26 @@
-import { SuperPileContext } from "./SuperPileContext";
 import { useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
 
-const SuperPileProvider = ({ children }) => {
-  // Toggle state
+export const ContextVariable = () => {
   const [LinkBoardPanel, setLinkBoardPanel] = useState(false);
+  const baseURL = import.meta.env.VITE_BASE_URL;
+ 
+ console.log(baseURL)
   const setLinkBoardPanelToggle = () => {
     setLinkBoardPanel((prev) => !prev);
   };
 
-  //getting the data in the local storage
+  
+  //sign in to google start
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    console.log("Redirecting to google sign in");
+    window.location.href = `${baseURL}/auth/google`;
+  };
+
+  //sign in to google end
+
+  //getting the data in the local storage start
   const getStoredPile = () => {
     const storedData = localStorage.getItem("pile");
     if (storedData) {
@@ -22,6 +33,7 @@ const SuperPileProvider = ({ children }) => {
     }
     return []; // Return an empty array if no data exists in localStorage
   };
+  // ends
 
   const [pile, setPileLink] = useState(getStoredPile());
 
@@ -40,29 +52,21 @@ const SuperPileProvider = ({ children }) => {
     setPileLink(updatedPile);
   };
 
+  useEffect(() => {
+    localStorage.setItem("pile", JSON.stringify(pile));
+  }, [pile]);
+
   // Remove from pile
   const removePile = (newLink) => {
     const updatedPile = pile.filter((item) => item.id !== newLink.id);
     setPileLink(updatedPile);
   };
-
-  useEffect(() => {
-    localStorage.setItem("pile", JSON.stringify(pile));
-  }, [pile]);
-
-  return (
-    <SuperPileContext.Provider
-      value={{
-        LinkBoardPanel,
-        setLinkBoardPanelToggle,
-        pile,
-        addPile,
-        removePile,
-      }}
-    >
-      {children}
-    </SuperPileContext.Provider>
-  );
+  return {
+    LinkBoardPanel,
+    setLinkBoardPanelToggle,
+    addPile,
+    removePile,
+    pile,
+    handleSignIn,
+  };
 };
-
-export default SuperPileProvider;

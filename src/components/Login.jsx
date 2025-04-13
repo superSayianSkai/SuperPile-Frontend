@@ -1,4 +1,7 @@
+import { SupaPileContext } from "../context/SupaPileContext";
+import { useContext } from "react";
 const Login = () => {
+  const { handleSignIn } = useContext(SupaPileContext);
   return (
     <div className="fixed inset-0 z-[1000] overflow-hidden  transition-all duration-300 ease-in-out w-[100%]">
       <div className="h-[100svh] bg-gray-100 flex flex-col">
@@ -45,7 +48,11 @@ const Login = () => {
             </div>
 
             {/* Google Button */}
-            <button className="w-full bg-black text-white rounded-lg py-3 px-4 flex items-center justify-center gap-2 mb-4 hover:bg-[#ff8c00]">
+            <button
+              type="button"
+              className="w-full bg-black text-white rounded-lg py-3 px-4 flex items-center justify-center gap-2 mb-4 hover:bg-[#ff8c00]"
+              onClick={handleSignIn}
+            >
               <i className="bi bi-google text-white"></i>
               Continue with Google
             </button>

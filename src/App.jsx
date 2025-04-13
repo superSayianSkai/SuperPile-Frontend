@@ -1,22 +1,32 @@
 import Header from "./components/Header";
-import Title from "./components/Title";
+import Hero from "./components/Hero";
 import LinkBoard from "./components/LinkBoard";
 import { useContext } from "react";
-import { SuperPileContext } from "./context/SuperPileContext";
+import { SupaPileContext } from "./context/SupaPileContext";
+import useAuth from "./hooks/useAuthPile";
+import LinkPanel from "../src/components/LinkPanel";
 import Login from "./components/Login";
 const App = () => {
-  const { LinkBoardPanel } = useContext(SuperPileContext);
+  const userData = useAuth()?.data;
+  const { LinkBoardPanel } = useContext(SupaPileContext);
 
   return (
     <div
       className={`h-[100vh] flex flex-col ${
-        LinkBoardPanel ? "overflow-hidden" : ""
+        LinkBoardPanel && userData ? "overflow-hidden" : ""
       } `}
     >
       <Header />
-      <Title />
+      <Hero />
+      {/* want to fix the hero later*/}
       <LinkBoard />
-      {LinkBoardPanel ? <Login /> : ""}
+      {LinkBoardPanel && !userData ? (
+        <Login />
+      ) : LinkBoardPanel && userData ? (
+        <LinkPanel />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

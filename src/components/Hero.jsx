@@ -1,12 +1,14 @@
 import { useState } from "react";
-const Title = () => {
+import useAuth from "../hooks/useAuthPile";
+const Hero = () => {
+  const name = useAuth().data?.data.name;
   const [active, setActive] = useState();
   return (
     <div className="flex flex-col items-center  text-black  relative my-[6rem] gap-[.8rem]">
       <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
-        Skai&apos;s PileBoard
+        {name}&apos;s PileBoard
       </h2>
-  {/* i need to make this animated */}
+      {/* i need to make this animated */}
       <div
         onClick={() => setActive(true)}
         className={`rounded-2xl  w-[300px] px-4 py-2 flex items-center  bg-gray-100  ${
@@ -17,7 +19,7 @@ const Title = () => {
         <input
           onFocus={() => setActive(true)}
           onBlur={() => setActive(false)}
-          placeholder="Search your Linkboard "
+          placeholder="Search your pileboard "
           className="rounded-full h-[100%] w-[100%] px-2 text-black bg-transparent border-transparent outline-none text-[12px]"
         />
       </div>
@@ -25,4 +27,4 @@ const Title = () => {
   );
 };
 
-export default Title;
+export default Hero;
