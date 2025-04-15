@@ -12,6 +12,7 @@ const getMetaData = async ({ link }) => {
       description: data?.data.description,
       link: link,
     };
+
     console.log(metaInfo);
     return metaInfo;
   } catch (error) {

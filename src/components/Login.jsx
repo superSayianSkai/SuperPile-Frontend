@@ -1,7 +1,7 @@
-import { SupaPileContext } from "../context/SupaPileContext";
+import { SupaPileAUTHContext } from "../context/SupaPileContext";
 import { useContext } from "react";
 const Login = () => {
-  const { handleSignIn } = useContext(SupaPileContext);
+  const { handleSignIn } = useContext(SupaPileAUTHContext);
   return (
     <div className="fixed inset-0 z-[1000] overflow-hidden  transition-all duration-300 ease-in-out w-[100%]">
       <div className="h-[100svh] bg-gray-100 flex flex-col">

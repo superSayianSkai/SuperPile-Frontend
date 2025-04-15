@@ -1,3 +1,4 @@
 import { createContext } from "react";
 
-export const SupaPileContext = createContext();
+export const SupaPileAUTHContext = createContext();
+export const StateContext = createContext();

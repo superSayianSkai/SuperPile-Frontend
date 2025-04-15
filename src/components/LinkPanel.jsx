@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import { SupaPileContext } from "../context/SupaPileContext";
+import { StateContext } from "../context/SupaPileContext";
 import { useState } from "react";
 import pokimon from "../assets/Images/pokimon.svg";
 import useMeta from "../hooks/useMeta";
@@ -9,11 +9,16 @@ const LinkPanel = () => {
   const regex = /https?:\/\/[\w.-]+\.[a-z]{2,}/;
   const textAreaRef = useRef();
   const secondTextAreaRef = useRef();
-  const { setLinkBoardPanelToggle } = useContext(SupaPileContext);
-  const [metaLink, setMetaLink] = useState("");
+  const {
+    setLinkBoardPanelToggle,
+    modifyTheHostName,
+    metaLink,
+    setTheMetaLink,
+  } = useContext(StateContext);
   const [meta, showMeta] = useState(false);
-  const { data, isLoading} = useMeta({ link: metaLink });
+  const { data, isLoading } = useMeta({ link: metaLink });
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: postURL,
     onSuccess: () => {
@@ -51,7 +56,8 @@ const LinkPanel = () => {
     const input = e.target.value;
     if (input.match(regex)) {
       showMeta(true);
-      setMetaLink(input);
+      setTheMetaLink(input);
+      modifyTheHostName(input);
     } else {
       showMeta(false);
     }

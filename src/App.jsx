@@ -2,14 +2,14 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import LinkBoard from "./components/LinkBoard";
 import { useContext } from "react";
-import { SupaPileContext } from "./context/SupaPileContext";
+import { StateContext } from "./context/SupaPileContext";
 import useAuth from "./hooks/useAuthPile";
 import LinkPanel from "../src/components/LinkPanel";
 import Login from "./components/Login";
 
 const App = () => {
   const userData = useAuth()?.data;
-  const { LinkBoardPanel } = useContext(SupaPileContext);
+  const { LinkBoardPanel } = useContext(StateContext);
 
   return (
     <div

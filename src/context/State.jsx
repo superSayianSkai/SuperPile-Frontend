@@ -1,39 +1,37 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
-
-export const ContextVariable = () => {
+const State = () => {
   const [LinkBoardPanel, setLinkBoardPanel] = useState(false);
-  const baseURL = import.meta.env.VITE_BASE_URL;
- 
- console.log(baseURL)
+  const [hostname, getHostName] = useState();
+  const [hostNameSentence, getHostNameSentence] = useState("");
+  const [metaLink, setMetaLink] = useState("");
   const setLinkBoardPanelToggle = () => {
     setLinkBoardPanel((prev) => !prev);
   };
-
-  
-  //sign in to google start
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    console.log("Redirecting to google sign in");
-    window.location.href = `${baseURL}/auth/google`;
+  const setTheMetaLink = (e) => {
+    setMetaLink(e);
+  };
+  const modifyTheHostName = (url) => {
+    const hostNameSentence = new URL(url).hostname;
+    const hostname = hostNameSentence?.split(".")[0];
+    getHostName(hostname);
+    getHostNameSentence("from" + " " + hostNameSentence);
   };
 
-  //sign in to google end
-
-  //getting the data in the local storage start
+  console.log(hostname);
+  console.log(hostNameSentence);
   const getStoredPile = () => {
     const storedData = localStorage.getItem("pile");
     if (storedData) {
       try {
-        return JSON.parse(storedData); // Return the parsed data if valid
+        return JSON.parse(storedData);
       } catch (error) {
         console.error("Failed to parse stored data:", error);
-        return []; // Return an empty array if parsing fails
+        return [];
       }
     }
-    return []; // Return an empty array if no data exists in localStorage
+    return [];
   };
-  // ends
 
   const [pile, setPileLink] = useState(getStoredPile());
 
@@ -56,17 +54,20 @@ export const ContextVariable = () => {
     localStorage.setItem("pile", JSON.stringify(pile));
   }, [pile]);
 
-  // Remove from pile
   const removePile = (newLink) => {
     const updatedPile = pile.filter((item) => item.id !== newLink.id);
     setPileLink(updatedPile);
   };
   return {
-    LinkBoardPanel,
-    setLinkBoardPanelToggle,
     addPile,
     removePile,
+    LinkBoardPanel,
+    setLinkBoardPanelToggle,
+    modifyTheHostName,
     pile,
-    handleSignIn,
+    metaLink,
+    setTheMetaLink,
   };
 };
+
+export default State;
