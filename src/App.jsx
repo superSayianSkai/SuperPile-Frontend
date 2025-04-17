@@ -1,10 +1,10 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import LinkBoard from "./components/LinkBoard";
+import PileBoard from "./components/PileBoard";
 import { useContext } from "react";
 import { StateContext } from "./context/SupaPileContext";
 import useAuth from "./hooks/useAuthPile";
-import LinkPanel from "../src/components/LinkPanel";
+import PilePanel from "../src/components/PilePanel";
 import Login from "./components/Login";
 
 const App = () => {
@@ -20,11 +20,11 @@ const App = () => {
       <Header />
       <Hero />
       {/* want to fix the hero later*/}
-      <LinkBoard />
+      <PileBoard />
       {LinkBoardPanel && !userData ? (
         <Login />
       ) : LinkBoardPanel && userData ? (
-        <LinkPanel />
+        <PilePanel />
       ) : (
         ""
       )}

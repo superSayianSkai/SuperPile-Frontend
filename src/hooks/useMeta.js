@@ -10,7 +10,7 @@ const getMetaData = async ({ link }) => {
       image: data?.data.image,
       title: data?.data.title,
       description: data?.data.description,
-      link: link,
+      url: link,
     };
 
     console.log(metaInfo);

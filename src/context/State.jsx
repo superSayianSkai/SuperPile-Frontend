@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
 const State = () => {
   const [LinkBoardPanel, setLinkBoardPanel] = useState(false);
-  const [hostname, getHostName] = useState();
+  const [hostName, getHostName] = useState("");
   const [hostNameSentence, getHostNameSentence] = useState("");
   const [metaLink, setMetaLink] = useState("");
   const setLinkBoardPanelToggle = () => {
@@ -18,8 +18,6 @@ const State = () => {
     getHostNameSentence("from" + " " + hostNameSentence);
   };
 
-  console.log(hostname);
-  console.log(hostNameSentence);
   const getStoredPile = () => {
     const storedData = localStorage.getItem("pile");
     if (storedData) {
@@ -67,6 +65,8 @@ const State = () => {
     pile,
     metaLink,
     setTheMetaLink,
+    hostName,
+    hostNameSentence
   };
 };
 

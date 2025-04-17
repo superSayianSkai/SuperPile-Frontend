@@ -3,9 +3,8 @@ import { StateContext } from "../context/SupaPileContext";
 import { useState } from "react";
 import pokimon from "../assets/Images/pokimon.svg";
 import useMeta from "../hooks/useMeta";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import postURL from "../hooks/usePostURL";
-const LinkPanel = () => {
+import usePostPile from "../hooks/usePostPile";
+const PilePanel = () => {
   const regex = /https?:\/\/[\w.-]+\.[a-z]{2,}/;
   const textAreaRef = useRef();
   const secondTextAreaRef = useRef();
@@ -17,38 +16,8 @@ const LinkPanel = () => {
   } = useContext(StateContext);
   const [meta, showMeta] = useState(false);
   const { data, isLoading } = useMeta({ link: metaLink });
-  const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
-    mutationFn: postURL,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["pile"]);
-    },
-
-    onMutate: async (newPost) => {
-      const previousPosts = queryClient.getQueryData(["pile"])?.data.data || [];
-      queryClient.setQueryData(["pile"], {
-        data: {
-          data: [
-            ...previousPosts,
-            {
-              _id: Date.now(),
-              image: "",
-              description: "",
-              title: "",
-              url: newPost,
-            },
-          ],
-        },
-      });
-      return { previousPosts };
-    },
-
-    onError: (err) => {
-      console.log(err);
-    },
-  });
-
+  const { mutate } = usePostPile();
   const titleMaxLength = 30;
   const descMaxLength = 104;
 
@@ -148,4 +117,4 @@ const LinkPanel = () => {
   );
 };
 
-export default LinkPanel;
+export default PilePanel;
