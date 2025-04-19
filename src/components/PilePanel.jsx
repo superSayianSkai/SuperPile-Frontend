@@ -15,15 +15,17 @@ const PilePanel = () => {
     setTheMetaLink,
   } = useContext(StateContext);
   const [meta, showMeta] = useState(false);
+  const [categoryInput,setCategoryInput]=useState()
   const { data, isLoading } = useMeta({ link: metaLink });
-
   const { mutate } = usePostPile();
   const titleMaxLength = 30;
   const descMaxLength = 104;
-
+  const theCategoryInput=(e)=>{
+    setCategoryInput(e.target.value);
+   }
   const workOnSetTheMetaLink = (e) => {
     const input = e.target.value;
-    if (input.match(regex)) {
+    if (input.match(regex) ) {
       showMeta(true);
       setTheMetaLink(input);
       modifyTheHostName(input);
@@ -33,33 +35,36 @@ const PilePanel = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate(metaLink);
+        mutate({"url":metaLink,"category":categoryInput});
     setLinkBoardPanelToggle();
   };
-
+  console.log(categoryInput);
   return (
     <div className="fixed inset-0 z-[1000] flex justify-center items-center transition-all duration-300 ease-in-out ">
       <div
         onClick={setLinkBoardPanelToggle}
         className="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-10"
       ></div>
-      <div className=" bg-white shadow-sm w-[93%] lg:w-[50%] absolute rounded-xl outline-none border-0 z-20  flex flex-col justify-center top-[6rem] md:top-[9rem] overflow-hidden ">
+      <div className=" bg-white shadow-sm w-[93%] lg:w-[50%] absolute rounded-xl outline-none border-0 z-20  flex flex-col justify-center top-[6rem] md:top-[6rem] overflow-hidden h-auto">
         <div className="w-[100%] h-[50px] flex  items-center  mt-2 border-[1px] border-t-0 border-r-0 border-l-0 px-[1rem]">
           <img src={pokimon} className="w-[20px] h-[20px]" />
           {/* need to fix the icon */}
+         <form onSubmit={handleSubmit} className="flex w-[100%]">
           <input
             onChange={workOnSetTheMetaLink}
             placeholder="paste your Link"
             className="px-[1rem] h-] w-[100%]  outline-none border-0 "
           />
+          <button>
           <i
-            onClick={handleSubmit}
             className="bi bi-arrow-right-circle-fill  z-30 text-2xl cursor-pointer "
           ></i>
+          </button>
+        </form>
         </div>
         {meta && (
           <div className="flex flex-col mt-5 justify-between  gap-5  ">
-            <div className="flex flex-col justify-between gap-8 pb-6 px-[1rem] w-[100%]">
+            <div className="flex flex-col justify-between gap-8 px-[1rem] w-[100%]">
               {isLoading ? (
                 <div className="w-[100%] flex flex-col md:flex-row  gap-8">
                   <div className="mt-2 ">
@@ -77,7 +82,7 @@ const PilePanel = () => {
                 </div>
               ) : (
                 <>
-                  <div className="flex flex-col md:flex-row gap-4 ">
+                  <div className="flex flex-col md:flex-row gap-4">
                     <img
                       src={data.image}
                       className=" md:w-[250px] md:h-[200px]  object-cover rounded-xl  "
@@ -109,6 +114,12 @@ const PilePanel = () => {
                   </div>
                 </>
               )}
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 text-[1rem] font-bold border-t-2 p-[1rem] items-center justify-between p-577  ">
+            <h2>
+            Create a Category
+            </h2>
+            <input value={categoryInput} defaultValue={"All"} onChange={theCategoryInput} className="px-2 border-2 border-black text-[1rem] rounded-md capitalize" maxLength={20} placeholder="maxlength=20  "/>
             </div>
           </div>
         )}

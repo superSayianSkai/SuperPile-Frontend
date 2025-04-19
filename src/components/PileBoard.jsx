@@ -6,14 +6,17 @@ import { toast } from "react-toastify";
 import useFetchPile from "../hooks/useFetchPile";
 import useSoftDeletePile from "../hooks/useSoftDeletePile";
 import useMeta from "../hooks/useMeta";
+import CategoryController from "./CategoryController";
+import Category from "./Category";
 const PileBoard = () => {
-  const { data } = useFetchPile({ id: "all" });
-  const pile = data?.data?.data;
-  const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence } =
+  const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence,tick} =
     useContext(StateContext);
+  const { data } = useFetchPile({ id: tick });
+  const pile = data?.data?.data;
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
-  console.log(mutate);
+  console.log(hostName)
+  console.log(MetaData)
   const softDelete = (e) => {
     console.log(e);
     mutate(e);
@@ -23,33 +26,61 @@ const PileBoard = () => {
     navigator.clipboard.writeText(e);
     toast.success("copied to clipboard");
   };
-  return (
-    <div className="py-[20px] lg:mx-[50px] mx-[1rem] md:px-0">
-      <div className="flex justify-between mb-[10px] items-center border-b-[1px] md:border-b-[0] pb-2  ">
-        <div className="px-1 flex items-center gap-2 cursor-pointer hover:opacity-80">
-          {/* <i className="bi bi-folder text-[1rem]"></i> */}
-          <h2 className="font-bold text-[.9rem] md:text-[1rem] ">All</h2>
-        </div>
 
+  // i have to check what is going on in this function 
+  const shareNavigator = async () => {
+    const url = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Check this out!", url });
+        return;
+      } catch (error) {
+        console.error("Sharing failed", error);
+      }
+    }
+
+    // Fallback: open WhatsApp Web with prefilled message
+    const encodedURL = encodeURIComponent(url);
+    const whatsappURL = `https://web.whatsapp.com/send?text=${encodedURL}`;
+    window.open(whatsappURL, "_blank");
+
+    // Optionally also copy to clipboard
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Link copied to clipboard!");
+    } catch (error) {
+      console.error("Clipboard copy failed:", error);
+      alert("Could not copy link. Please copy manually.");
+    }
+  };
+
+  return (
+    <div className="py-[20px] lg:mx-[30px] mx-[1rem] md:px-0 ">
+
+      <div className="flex justify-between mb-5 items-center md:px-2 border-b-2 md:border-0">
+       <CategoryController/>
         <button
           onClick={setLinkBoardPanelToggle}
-          className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white font-bold cursor-pointer hover:opacity-100 bg-black px-6 py-2"
+          className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white font-bold cursor-pointer hover:opacity-100 bg-black px-5 py-1 mb-2"
         >
           Pile
         </button>
       </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  md:p-2">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
+      <Category/>
         {pile?.map((link) => {
           return (
             <div key={link._id || MetaData._id}>
               <div
                 draggable="true"
-                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer"
+                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90"
               >
                 <a href={link.url} target="_blank" className="">
                   {/* metaData */}
                   <div className="w-full aspect-[16/9] bg-black">
-                    {link.image || link.url === MetaData?.url ? (
+                  {console.log(MetaData?.image?.length)}
+                    {link.image!="" || link.url === MetaData?.url && MetaData.image?.length > 0? (
                       <img
                         src={link.image || MetaData?.image}
                         className="w-full h-full object-contain"
@@ -90,7 +121,16 @@ const PileBoard = () => {
                     >
                       <i className="bi bi-clipboard hover:text-gray-500 "></i>
                     </button>
-                    <button className="text-[15px]">
+                    <button
+                      onClick={() =>
+                        shareNavigator({
+                          title: "whatsapp",
+                          text: link.url,
+                          url: "https://web.whatsapp.com/",
+                        })
+                      }
+                      className="text-[15px]"
+                    >
                       <i className="bi bi-share hover:text-gray-500 "></i>
                     </button>
                     <button className=" rounded-full    text-[15px]">
@@ -98,7 +138,11 @@ const PileBoard = () => {
                         onClick={() => softDelete([{ _id: link._id }])}
                         className="bi bi-trash3 text-red-600 hover:text-gray-500   cursor-pointer"
                       ></i>
+                      
                     </button>
+                    <button className=" rounded-full    text-[15px]"> 
+                      <i className="bi bi-bookmark-check hover:text-gray-500 "></i>
+                      </button>
                   </div>
                 </div>
               </div>

@@ -12,6 +12,11 @@ const StateProvider = ({ children }) => {
     modifyTheHostName,
     metaLink,
     setTheMetaLink,
+    setTheCategoryState,
+    categoryState,
+    categoryRef,
+    tick,
+    setTheTick
   } = State();
   return (
     <StateContext.Provider
@@ -26,6 +31,11 @@ const StateProvider = ({ children }) => {
         modifyTheHostName,
         metaLink,
         setTheMetaLink,
+        setTheCategoryState,
+        categoryState,
+        categoryRef,
+        tick,
+        setTheTick
       }}
     >
       {children}

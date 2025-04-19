@@ -1,7 +1,7 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import PileBoard from "./components/PileBoard";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { StateContext } from "./context/SupaPileContext";
 import useAuth from "./hooks/useAuthPile";
 import PilePanel from "../src/components/PilePanel";
@@ -9,11 +9,10 @@ import Login from "./components/Login";
 
 const App = () => {
   const userData = useAuth()?.data;
-  const { LinkBoardPanel } = useContext(StateContext);
-
+  const { LinkBoardPanel,categoryState } = useContext(StateContext);
   return (
     <div
-      className={`h-[100vh] flex flex-col ${
+      className={`h-[100vh] flex flex-col relative ${
         LinkBoardPanel && userData ? "overflow-hidden" : ""
       } `}
     >

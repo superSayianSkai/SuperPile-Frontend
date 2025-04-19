@@ -3,10 +3,17 @@ import useAuth from "../hooks/useAuthPile";
 const Hero = () => {
   const name = useAuth().data?.data.name;
   const [active, setActive] = useState();
+  //i need to get back to this
+  // const [refactoredName,setName]=useState([])
+  // for(let i =0; i< name?.length; i++){
+  //   setName(prev=>prev.push(name))
+  // }
+  // console.log(refactoredName)
+ 
   return (
     <div className="flex flex-col items-center  text-black  relative my-[6rem] gap-[.8rem]">
       <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
-        {name}&apos;s PileBoard
+        {name?.slice("")}&apos;s PileBoard
       </h2>
       {/* i need to make this animated */}
       <div

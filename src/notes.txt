@@ -1,13 +1,3 @@
-// settings page 
-//  -number of links stored
-//  -premium settings
-//  -Theme Toggle
-//  -Log-out
-//  -
-
-
-// other features
-//   -Toggle categories and pile
-//   -fix copy to clipboard
-//   -Change the banner and the picture profile
-//   -animation
+-- fix the title for hero
+-- i need a default image for meta tage for post
+-- adjust the state for category pick

@@ -2,10 +2,10 @@ import apiClient from "../lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-const postURL = async (url) => {
-  console.log(url);
+const postURL = async ({url,category}) => {
+
   try {
-    const response = await apiClient.post("/api/post-pile", { url });
+    const response = await apiClient.post("/api/post-pile", { url,category });
     console.log(response);
     return response;
   } catch (error) {

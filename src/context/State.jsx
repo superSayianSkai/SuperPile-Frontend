@@ -1,16 +1,29 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidV4 } from "uuid";
+import { useRef } from "react";
 const State = () => {
   const [LinkBoardPanel, setLinkBoardPanel] = useState(false);
   const [hostName, getHostName] = useState("");
   const [hostNameSentence, getHostNameSentence] = useState("");
   const [metaLink, setMetaLink] = useState("");
+  const [categoryState,setCategoryState]=useState("")
+  const[tick,setTick]=useState("all") 
+  const categoryRef =useRef()
+
+  console.log(categoryRef)
   const setLinkBoardPanelToggle = () => {
     setLinkBoardPanel((prev) => !prev);
   };
   const setTheMetaLink = (e) => {
     setMetaLink(e);
   };
+  const setTheCategoryState=()=>{
+    setCategoryState(prev=>!prev)
+  }
+  const setTheTick=(cat)=>{
+    console.log(cat)
+    setTick(cat)
+  }
   const modifyTheHostName = (url) => {
     const hostNameSentence = new URL(url).hostname;
     const hostname = hostNameSentence?.split(".")[0];
@@ -66,7 +79,12 @@ const State = () => {
     metaLink,
     setTheMetaLink,
     hostName,
-    hostNameSentence
+    hostNameSentence,
+    setTheCategoryState,
+    categoryState,
+    categoryRef,
+    tick,
+    setTheTick
   };
 };
 
