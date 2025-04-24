@@ -2,8 +2,8 @@ import { useContext, useRef } from "react";
 import { StateContext } from "../context/SupaPileContext";
 import { useState } from "react";
 import pokimon from "../assets/Images/pokimon.svg";
-import useMeta from "../hooks/useMeta";
-import usePostPile from "../hooks/usePostPile";
+import useMeta from "../tanstack-query-hooks/useMeta";
+import usePostPile from "../tanstack-query-hooks/usePostPile";
 const PilePanel = () => {
   const regex = /https?:\/\/[\w.-]+\.[a-z]{2,}/;
   const textAreaRef = useRef();
@@ -12,6 +12,7 @@ const PilePanel = () => {
     setLinkBoardPanelToggle,
     modifyTheHostName,
     metaLink,
+    hostNameSentence,
     setTheMetaLink,
   } = useContext(StateContext);
   const [meta, showMeta] = useState(false);
@@ -83,10 +84,23 @@ const PilePanel = () => {
               ) : (
                 <>
                   <div className="flex flex-col md:flex-row gap-4">
+                  {
+                    data.image?.length > 1 ?(
+
                     <img
                       src={data.image}
                       className=" md:w-[250px] md:h-[200px]  object-cover rounded-xl  "
                     />
+                    ) :
+                    (
+                      
+                      <div className="w-full h-[300px] md:h-[200px] rounded-xl object-contain bg-black flex justify-center items-center font-bold text-[2rem] text-white uppercase text-center">
+                     
+                            {data.title}
+                        
+                     
+                      </div>
+                    ) }
                     <div className="flex flex-col w-[100%] gap-2">
                       <h2
                         ref={textAreaRef}
@@ -108,7 +122,8 @@ const PilePanel = () => {
                         style={{ resize: "none", overflow: "hidden" }}
                         className="text-[1rem] text-gray-500 text-wrap w-[100%] scroll p-2 text-ellipse"
                       >
-                        {data.description}
+                      {console.log(data.description)}
+                        {data.description ? data.description :hostNameSentence}
                       </p>
                     </div>
                   </div>

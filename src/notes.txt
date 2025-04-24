@@ -1,3 +1,4 @@
 -- fix the title for hero
 -- i need a default image for meta tage for post
 -- adjust the state for category pick
+-- handle no network

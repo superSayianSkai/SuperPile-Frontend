@@ -1,14 +1,16 @@
 import { useContext} from "react"
 import { StateContext } from "../context/SupaPileContext"
-import { useFetchCategory } from "../hooks/useFetchCategory";
+import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
+import useCategoryStore from "../zustard/useCategoryList";
 const Category = () => {
-    const {categoryState,tick,setTheTick} =useContext(StateContext);
+    const {tick,setTheTick} =useContext(StateContext);
+    const {isOpen}=useCategoryStore();  
     const {data}=useFetchCategory()
     const category= data?.data.data.categories
     console.log(tick)
-
-  return categoryState ? (
-        <div className="border-2 bg-white text-black w-[200px]  h-auto left-0 z-[2] rounded-lg flex flex-col gap-2 absolute -top-5 cursor-pointer">
+    
+  return isOpen ? (
+        <div className="border-2 bg-white text-black w-[200px]  h-auto -left-2 z-[2] rounded-lg flex flex-col gap-2 absolute top-6 cursor-pointer">
         {
           category?.slice().reverse().map((c,index)=>{
             return(

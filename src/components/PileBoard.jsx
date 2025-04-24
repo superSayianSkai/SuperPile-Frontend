@@ -3,20 +3,31 @@ import { useContext } from "react";
 import { StateContext } from "../context/SupaPileContext";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import useFetchPile from "../hooks/useFetchPile";
-import useSoftDeletePile from "../hooks/useSoftDeletePile";
-import useMeta from "../hooks/useMeta";
+import useFetchPile from "../tanstack-query-hooks/useFetchPile";
+import useSoftDeletePile from "../tanstack-query-hooks/useSoftDeletePile";
+import useMeta from "../tanstack-query-hooks/useMeta";
+import ChangeCategoryContainer from "./ChangeCategoryContainer";
 import CategoryController from "./CategoryController";
+import { fetchCickedCategory } from "../tanstack-query-hooks/useFetchClickedCategory";
 import Category from "./Category";
+import { useMutation } from "@tanstack/react-query";
+import useClickedCategory from "../zustard/useClickedCategory";
 const PileBoard = () => {
   const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence,tick} =
     useContext(StateContext);
   const { data } = useFetchPile({ id: tick });
+ 
+  const {setTheClickedPile, clickedPile}=useClickedCategory()
+  const {mutate:fetchMutate}=useMutation({
+        mutationFn: fetchCickedCategory,
+        onSuccess:(data)=>{
+          setTheClickedPile(data)
+        }
+    }
+  )
   const pile = data?.data?.data;
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
-  console.log(hostName)
-  console.log(MetaData)
   const softDelete = (e) => {
     console.log(e);
     mutate(e);
@@ -55,9 +66,15 @@ const PileBoard = () => {
     }
   };
 
+
+  const handleClick = (pile) => {
+    console.log(pile )
+     fetchMutate({_id:pile});
+    console.log("You clicked:", pile); // this logs immediately
+  };
   return (
     <div className="py-[20px] lg:mx-[30px] mx-[1rem] md:px-0 ">
-
+        {clickedPile && <ChangeCategoryContainer/> } 
       <div className="flex justify-between mb-5 items-center md:px-2 border-b-2 md:border-0">
        <CategoryController/>
         <button
@@ -68,13 +85,13 @@ const PileBoard = () => {
         </button>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
-      <Category/>
+      
         {pile?.map((link) => {
           return (
             <div key={link._id || MetaData._id}>
               <div
                 draggable="true"
-                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90"
+                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90 "
               >
                 <a href={link.url} target="_blank" className="">
                   {/* metaData */}
@@ -86,13 +103,13 @@ const PileBoard = () => {
                         className="w-full h-full object-contain"
                       />
                     ) : (
-                      <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold">
+                      <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold ">
                         {link.title ? (
                           <h1 className="text-[2rem] text-white uppercase">
                             {link.title}
                           </h1>
                         ) : (
-                          <h1 className="text-[2rem] text-white uppercase">
+                          <h1 className="text-[2rem] text-white uppercase ">
                             {hostName}
                           </h1>
                         )}
@@ -108,10 +125,10 @@ const PileBoard = () => {
                     : hostName}
                 </h2>
                 <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
-                  {link.description || MetaData
-                    ? link.description.slice(0, 152) ||
-                      MetaData?.description.slice(0, 152)
-                    : hostNameSentence}
+                {(link?.description || MetaData?.description)
+  ? (link?.description?.slice(0, 152) || MetaData?.description?.slice(0, 152))
+  : hostNameSentence}
+
                 </p>
                 <div className="flex items-center w-[100%] pr-[1rem]">
                   <div className="flex gap-4  mt-[10px] items-center w-[100%]">
@@ -138,9 +155,8 @@ const PileBoard = () => {
                         onClick={() => softDelete([{ _id: link._id }])}
                         className="bi bi-trash3 text-red-600 hover:text-gray-500   cursor-pointer"
                       ></i>
-                      
                     </button>
-                    <button className=" rounded-full    text-[15px]"> 
+                    <button onClick={()=>handleClick(link._id)} className="relative rounded-full text-[15px]"> 
                       <i className="bi bi-bookmark-check hover:text-gray-500 "></i>
                       </button>
                   </div>

@@ -1,15 +1,14 @@
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import PileBoard from "./components/PileBoard";
-import { useContext, useEffect } from "react";
+import { useContext} from "react";
 import { StateContext } from "./context/SupaPileContext";
-import useAuth from "./hooks/useAuthPile";
+import useAuth from "./tanstack-query-hooks/useAuthPile";
 import PilePanel from "../src/components/PilePanel";
 import Login from "./components/Login";
-
 const App = () => {
   const userData = useAuth()?.data;
-  const { LinkBoardPanel,categoryState } = useContext(StateContext);
+  const { LinkBoardPanel} = useContext(StateContext);
   return (
     <div
       className={`h-[100vh] flex flex-col relative ${
@@ -17,6 +16,7 @@ const App = () => {
       } `}
     >
       <Header />
+
       <Hero />
       {/* want to fix the hero later*/}
       <PileBoard />

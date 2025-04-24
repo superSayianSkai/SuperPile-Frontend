@@ -13,6 +13,7 @@ export const getUserPile = async ({ id }) => {
   }
 };
 const useFetchPile = ({ id }) => {
+  console.log(id)
   return useQuery({
     queryKey: ["pile", id], 
     queryFn: () => getUserPile({ id }),

@@ -1,25 +1,21 @@
 import { useState } from "react";
-import useAuth from "../hooks/useAuthPile";
+import useAuth from "../tanstack-query-hooks/useAuthPile";
 const Hero = () => {
   const name = useAuth().data?.data.name;
+  const newName=name?.split(" ")[0]
   const [active, setActive] = useState();
-  //i need to get back to this
-  // const [refactoredName,setName]=useState([])
-  // for(let i =0; i< name?.length; i++){
-  //   setName(prev=>prev.push(name))
-  // }
-  // console.log(refactoredName)
- 
+
+
   return (
     <div className="flex flex-col items-center  text-black  relative my-[6rem] gap-[.8rem]">
       <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
-        {name?.slice("")}&apos;s PileBoard
+        {newName}&apos;s PileBoard
       </h2>
       {/* i need to make this animated */}
       <div
         onClick={() => setActive(true)}
-        className={`rounded-2xl  w-[300px] px-4 py-2 flex items-center  bg-gray-100  ${
-          active ? "border-[2px] border-[#ff8c00]" : "border-none"
+        className={`rounded-2xl border-[1px] w-[300px] px-4 py-2 flex items-center  bg-gray-100  ${
+          active && "border-[1px] border-[#ff8c00]" 
         }`}
       >
         <i className="bi bi-search text-[.8rem]"></i>

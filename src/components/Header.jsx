@@ -1,6 +1,5 @@
-import useAuth from "../hooks/useAuthPile";
+import useAuth from "../tanstack-query-hooks/useAuthPile";
 import profile from "../assets/Images/profile.svg";
-import { useMemo } from "react";
 const Header = () => {
   const { data, isLoading } = useAuth();
 
