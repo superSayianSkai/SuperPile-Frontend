@@ -1,33 +1,15 @@
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import PileBoard from "./components/PileBoard";
-import { useContext} from "react";
-import { StateContext } from "./context/SupaPileContext";
-import useAuth from "./tanstack-query-hooks/useAuthPile";
-import PilePanel from "../src/components/PilePanel";
-import Login from "./components/Login";
+import HomePage from "./pages/HomePage";
+import NotFound from "./pages/NotFound";
+import ArchivedPage from "./pages/ArchivedPage";
+import { createBrowserRouter,RouterProvider } from "react-router-dom";
 const App = () => {
-  const userData = useAuth()?.data;
-  const { LinkBoardPanel} = useContext(StateContext);
+  const router= createBrowserRouter([
+    {path:"*", element:<NotFound/>}, 
+    {path:"/",element:<HomePage/>},
+    {path:"/archived",element:<ArchivedPage/>}
+  ])
   return (
-    <div
-      className={`h-[100vh] flex flex-col relative ${
-        LinkBoardPanel && userData ? "overflow-hidden" : ""
-      } `}
-    >
-      <Header />
-
-      <Hero />
-      {/* want to fix the hero later*/}
-      <PileBoard />
-      {LinkBoardPanel && !userData ? (
-        <Login />
-      ) : LinkBoardPanel && userData ? (
-        <PilePanel />
-      ) : (
-        ""
-      )}
-    </div>
+ <RouterProvider router={router}/>
   );
 };
 

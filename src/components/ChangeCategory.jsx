@@ -10,7 +10,7 @@ const ChangeCategory = () => {
   const {clickedPile}=useClickedCategory()
   const [clickedState, setClickedState] = useState()  
   console.log(categoryChangerStore)
-  const category = data?.data.data.categories;
+  const category = data?.data.categories;
   const {setTheTick} =useContext(StateContext)
   const {mutate}=useChangeCategory()
   let clickedPileCategory=clickedPile.data[0].category;
@@ -19,7 +19,7 @@ const ChangeCategory = () => {
   const handleChange=async(e)=>{
    const ticked = e.target.value
    setTheCategoryChangerStore(e);
-   await mutate({_id:clickedPileId, category:ticked})
+   mutate({_id:clickedPileId, category:ticked})
    setTheTick(ticked)
    setClickedState(ticked)
   }

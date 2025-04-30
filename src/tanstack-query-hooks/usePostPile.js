@@ -3,11 +3,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 const postURL = async ({url,category}) => {
-
-  try {
+  console.log(category)
+    try {
     const response = await apiClient.post("/api/post-pile", { url,category });
     console.log(response);
-    return response;
+    return response.data;
   } catch (error) {
     console.error(error);
   }
@@ -21,11 +21,12 @@ const usePostPile = () => {
       queryClient.invalidateQueries(["pile"]);
     },
 
-    onMutate: async (newPost) => {
-      await queryClient.cancelQueries({ queryKey: ["pile"] });
-      const previousPosts = queryClient.getQueryData(["pile"])?.data.data || [];
-      queryClient.setQueryData(["pile"], {
-        data: {
+    onMutate: async ({url, category}) => {
+      console.log(category)
+      await queryClient.cancelQueries({ queryKey: ["pile", "all"] });
+      const previousPosts = queryClient.getQueryData(["pile", "all"])?.data || [];
+      console.log(previousPosts)
+      queryClient.setQueryData(["pile", "all"], {
           data: [
             ...previousPosts,
             {
@@ -33,12 +34,13 @@ const usePostPile = () => {
               image: "",
               description: "",
               title: "",
-              url: newPost,
+              url: url,
+              category:category
             },
           ],
-        },
+      
       });
-      return { previousPosts,newPost };
+      return { previousPosts};
     },
     onError: (err) => {
       console.log(err);

@@ -2,3 +2,8 @@
 -- i need a default image for meta tage for post
 -- adjust the state for category pick
 -- handle no network
+--handle why i can't add space to the category name
+-- license for github
+-- image loading lazily
+-- see if i can change category optimistically
+-- let the new pile be on top of the pile

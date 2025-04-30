@@ -16,9 +16,9 @@ const PilePanel = () => {
     setTheMetaLink,
   } = useContext(StateContext);
   const [meta, showMeta] = useState(false);
-  const [categoryInput,setCategoryInput]=useState()
+  const [categoryInput,setCategoryInput]=useState("all")
   const { data, isLoading } = useMeta({ link: metaLink });
-  const { mutate } = usePostPile();
+  const { mutate} = usePostPile();
   const titleMaxLength = 30;
   const descMaxLength = 104;
   const theCategoryInput=(e)=>{

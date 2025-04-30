@@ -1,27 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
-export const getUserPile = async ({ id }) => {
-  console.log(id)
+export const getUserPile = async ({ category }) => {
+  console.log(category)
   try {
-    const data = await apiClient.get(`/api/read-pile/${id}`);
-    console.log(data)
-    return data;
+    const response = await apiClient.get(`/api/read-pile/${category}`);
+
+    return response.data;
   } catch (error) {
     console.log(error);
     return new Error("No pile");
   }
 };
-const useFetchPile = ({ id }) => {
-  console.log(id)
+const useFetchPile = ({ category }) => {
+  console.log(category)
   return useQuery({
-    queryKey: ["pile", id], 
-    queryFn: () => getUserPile({ id }),
+    queryKey: ["pile" ,category], 
+    queryFn: () => getUserPile({ category }),
     retry: (failureCount, error) => {
       if (error.response?.status === 404) return false;
       return failureCount < 10; 
     },
-    enabled: !!id,
+    enabled: !!category,
   });
 };
 

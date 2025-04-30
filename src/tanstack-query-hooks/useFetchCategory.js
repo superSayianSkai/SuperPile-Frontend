@@ -2,10 +2,12 @@ import apiClient from "../lib/axios";
 import { useQuery } from "@tanstack/react-query";
 const fetchCategory=async() => {
    const response= await apiClient.get("/api/list-of-category")
-   return response 
+   console.log(response)
+   return response.data 
 }
 
 export const useFetchCategory=()=>{
+
     return useQuery({
         queryKey:["category"],
         queryFn: fetchCategory,
@@ -15,7 +17,6 @@ export const useFetchCategory=()=>{
             }
             return failureCount < 2;
           },
-        staleTime:5*60*100
     })
 
 }

@@ -3,9 +3,8 @@ import apiClient from "../lib/axios";
 
 const getUserAuthorised = async () => {
   try {
-    const { data } = await apiClient.get("/auth/me");
-    console.log(data);
-    return data;
+    const response = await apiClient.get("/auth/me");
+    return response.data;
   } catch (error) {
     console.log(error);
     throw new Error("Unauthorized");

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
-const softDeletePile = async ([{ _id, category }]) => {
+const softDeletePile = async ([{ _id }]) => {
   console.log(_id);
   const result = await apiClient.put("/api/soft-delete-pile", [{ _id }]);
   console.log(result);
@@ -12,26 +12,50 @@ const useSoftDeletePile = () => {
   return useMutation({
     mutationFn: softDeletePile,
     onSuccess: () => {
-      queryClient.invalidateQueries(["pile"]);
+      queryClient.invalidateQueries(["pile", "archivedPile"]);
     },
-    onMutate: async (newId) => {
-      await queryClient.cancelQueries({ queryKey: ["pile"] });
-      const previousPiles = queryClient.getQueryData(["pile"])?.data.data || [];
-      const id=(newId[0])._id
+    onMutate: async (newPile) => {
+      const id = newPile[0]._id;
+      const category = newPile[0].category;
+      queryClient.invalidateQueries(["pile", category]);
       console.log(id)
-      const newpile = previousPiles.filter(
-        (previousPiles) => id != previousPiles._id
-      );
-      console.log(newpile)
-      queryClient.setQueryData(["pile"],{
-        data:{
-            data:[
-            ...newpile
-            ]
-        }
-        
-      })
-     return {newpile}
+      console.log(category);
+      await queryClient.cancelQueries(["pile", "all"]);
+
+      let previousPosts =
+        queryClient.getQueryData(["pile", category])?.data ||
+        queryClient.getQueryData(["pile", "all"])?.data;
+
+
+      console.log(previousPosts);
+      console.log(id);
+
+      if (!previousPosts) {
+        console.warn("No cached posts found.");
+        return { newpile: [] };
+      }
+
+
+      const newpile = previousPosts.filter((post) => post._id !== id);
+      const removedPile = previousPosts.filter((post) => post._id === id);
+
+      console.log("💖 I love you");
+      console.log(removedPile);
+
+      queryClient.setQueryData(["pile", category], { data: newpile });
+      
+      queryClient.setQueryData(["pile", "all"], {
+        data: queryClient.getQueryData(["pile", "all"])?.data?.filter(p => p._id !== id) || []
+      });
+    
+      queryClient.setQueryData(["archivedPile"], {
+        data: removedPile,
+      });
+
+      return { newpile };
+    },
+    onError: (err) => {
+      console.log(err);
     },
   });
 };
