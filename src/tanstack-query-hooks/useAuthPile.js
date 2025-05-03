@@ -13,6 +13,7 @@ const getUserAuthorised = async () => {
 const useAuth = () => {
   return useQuery({
     queryKey: ["user"],
+    refetchOnMount:false,
     queryFn: getUserAuthorised,
     retry: (failureCount, error) => {
       if (error.status === 401) {

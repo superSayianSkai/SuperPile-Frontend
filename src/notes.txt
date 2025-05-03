@@ -7,3 +7,8 @@
 -- image loading lazily
 -- see if i can change category optimistically
 -- let the new pile be on top of the pile
+
+
+URGENT
+--implement optimistical update on change category
+--implement changing visibility

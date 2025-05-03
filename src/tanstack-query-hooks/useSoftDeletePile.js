@@ -39,8 +39,6 @@ const useSoftDeletePile = () => {
       const newpile = previousPosts.filter((post) => post._id !== id);
       const removedPile = previousPosts.filter((post) => post._id === id);
 
-      console.log("💖 I love you");
-      console.log(removedPile);
 
       queryClient.setQueryData(["pile", category], { data: newpile });
       

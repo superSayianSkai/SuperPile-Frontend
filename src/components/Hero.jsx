@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuth from "../tanstack-query-hooks/useAuthPile";
 const Hero = () => {
-  const name = useAuth().data?.data.name;
+  const name = useAuth().data?.data?.name;
   const newName=name?.split(" ")[0]
   const [active, setActive] = useState();
 
