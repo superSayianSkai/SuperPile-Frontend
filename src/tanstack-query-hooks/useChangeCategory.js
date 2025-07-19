@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
-import { useQueryClient } from "@tanstack/react-query";
+
 const changeCategory = async ({ _id, category }) => {
   const response = await apiClient.post("/api/change-pile-category", {
     _id,
@@ -12,30 +12,60 @@ const changeCategory = async ({ _id, category }) => {
 
 const useChangeCategory = () => {
   const queryClient = useQueryClient();
-  console.log("yeheheh");
+
   return useMutation({
     mutationFn: changeCategory,
-    onSuccess: ({category}) => {
-      queryClient.invalidateQueries(["pile", category]);
+
+   onMutate: async ({ _id, category, fromCategory }) => {
+  await queryClient.cancelQueries({ queryKey: ["pile", fromCategory] });
+  await queryClient.cancelQueries({ queryKey: ["pile", category] });
+
+  const previousFrom = queryClient.getQueryData(["pile", fromCategory]);
+  const previousTo = queryClient.getQueryData(["pile", category]);
+
+  const removedPile = previousFrom?.data?.find((post) => post._id === _id);
+
+  // Remove from old category cache **only if it's NOT 'all'**
+  if (fromCategory !== "all") {
+    const updatedFromData = previousFrom?.data?.filter((post) => post._id !== _id) || [];
+    queryClient.setQueryData(["pile", fromCategory], {
+      data: updatedFromData,
+    });
+  }
+
+  // Add to new category cache **only if new category is NOT 'all'**
+  // Because you don't want UI to show it added in 'all'
+  if (category !== "all" && category !== fromCategory && removedPile) {
+    queryClient.setQueryData(["pile", category], {
+      data: [...(previousTo?.data || []), removedPile].filter(Boolean),
+    });
+  }
+
+  return { previousFrom, previousTo };
+},
+  
+
+
+    onError: (error, variables, context) => {
+      // Rollback to previous cache if mutation fails
+      if (context?.previousFrom) {
+        queryClient.setQueryData(
+          ["pile", context.previousFrom],
+          context.previousFrom
+        );
+      }
+      if (context?.previousTo) {
+        queryClient.setQueryData(
+          ["pile", context.previousTo],
+          context.previousTo
+        );
+      }
+      console.error("Failed to change category:", error);
     },
-    onMutate: ({ _id, category }) => {
-      console.log(category);
-      console.log(_id);
-      const previousPosts = queryClient.getQueryData(["pile", "all"]);
-      console.log("hey something is going on");
-      console.log(previousPosts);
-      const newpile = previousPosts.data.filter((post) => post._id !== _id);
-      const removedPile = previousPosts.data.filter((post) => post._id === _id);
-      console.log(newpile);
-      console.log(removedPile);
-      queryClient.setQueryData(["pile", category], (old) => ({
-        data: [...(old?.data || []),...removedPile],
-      }));
+
+    onSuccess: ({ category }) => {
+      queryClient.invalidateQueries({ queryKey: ["pile", category] });
     },
-    onError: (error) => {
-      console.log(error);
-    },
-    //perfrom optimistical update on changing category
   });
 };
 

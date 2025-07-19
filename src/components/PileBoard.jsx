@@ -10,74 +10,68 @@ import ChangeCategoryContainer from "./ChangeCategoryContainer";
 import CategoryController from "./CategoryController";
 import { fetchCickedCategory } from "../tanstack-query-hooks/useFetchClickedCategory";
 import { useMutation } from "@tanstack/react-query";
-import useClickedCategory from "../zustard/useClickedCategory";
+import useClickedModal from "../zustard/useClickedModal";
 import { useEffect } from "react";
+import useStateStore from "../zustard/useStateStore";
+import useChangeVisibility from "../tanstack-query-hooks/useChangeVisibility";
+import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
+
 const PileBoard = () => {
+  const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence } =
+    useContext(StateContext);
+  const { supaPileState } = useStateStore();
+  // const { piles: data } = useFetchPile({
+  //   category: supaPileState.category,
+  //   keyword: supaPileState.keyword,
+  // });
   const {
-    setLinkBoardPanelToggle,
-    metaLink,
-    hostName,
-    hostNameSentence,
-    tick,
-  } = useContext(StateContext);
-  console.log("heheyeyeyey");
-  console.log(tick);
-  const { data } = useFetchPile({ category: tick });
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useFetchPile({
+    category: supaPileState.category,
+    keyword: supaPileState.keyword,
+  });
+  const allPiles = data?.pages.flatMap((page) => page.piles) || [];
+
+  console.log("i love Jesus");
+  console.log();
+  console.log("heh eheyeheyheye");
+  console.log(data);
+
   const [showFirst, setShowFirst] = useState(true);
-  const { setTheClickedPile, clickedPile } = useClickedCategory();
+  const { setTheModal, clicked } = useClickedModal();
   const { mutate: fetchMutate } = useMutation({
     mutationFn: fetchCickedCategory,
     onSuccess: (data) => {
-      setTheClickedPile(data);
+      const modData = data.data[0];
+      setTheModal({ pile: modData, isOpen: true, modalType: "changeCategory" });
     },
   });
-  const pile = data?.data;
-  console.log(pile);
+
+  const { mutate: changeVisibility } = useChangeVisibility();
+  const { data: category } = useFetchCategory();
+  console.log("hey hey hey");
+  console.log(category);
+  const link = allPiles.map((pile) => pile?.visibility);
+
+  console.log("hey hey hey");
+  console.log(link);
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
   const softDelete = (e) => {
-    console.log("jusct clicked");
-    console.log(e);
     mutate(e);
   };
   const copy = (e) => {
-    console.log(e);
     navigator.clipboard.writeText(e);
     toast.success("copied to clipboard");
   };
 
-  // i have to check what is going on in this function
-  const shareNavigator = async () => {
-    const url = window.location.href;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "Check this out!", url });
-        return;
-      } catch (error) {
-        console.error("Sharing failed", error);
-      }
-    }
-
-    // Fallback: open WhatsApp Web with prefilled message
-    const encodedURL = encodeURIComponent(url);
-    const whatsappURL = `https://web.whatsapp.com/send?text=${encodedURL}`;
-    window.open(whatsappURL, "_blank");
-
-    // Optionally also copy to clipboard
-    try {
-      await navigator.clipboard.writeText(url);
-      alert("Link copied to clipboard!");
-    } catch (error) {
-      console.error("Clipboard copy failed:", error);
-      alert("Could not copy link. Please copy manually.");
-    }
-  };
-
   const handleClick = (pile) => {
-    console.log(pile);
     fetchMutate({ _id: pile });
-    console.log("You clicked:", pile); // this logs immediately
   };
 
   const handleShortcut = (e) => {
@@ -99,18 +93,18 @@ const PileBoard = () => {
     return () => clearTimeout(interval);
   });
   return (
-    <div className="py-[20px] lg:mx-[30px] mx-[1rem] md:px-0 ">
-      {clickedPile && <ChangeCategoryContainer />}
+    <div className=" lg:mx-[30px] mx-[1rem] md:px-0 ">
+      {clicked.isOpen && <ChangeCategoryContainer />}
       <div className="flex justify-between mb-5 items-center md:px-2 border-b-2 md:border-0">
         <CategoryController id={"pickCategory"} />
         <div className="flex justify-center items-center gap-5">
           <button
             id="my-button"
             onClick={setLinkBoardPanelToggle}
-            className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white font-bold cursor-pointer hover:opacity-100 bg-black px-6 py-1 mb-2 relative h-6"
+            className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:opacity-100 px-6 py-1 mb-2 relative h-6 overflow-hidden"
           >
             <div
-              className={`absolute transition-opacity duration-1000 ${
+              className={`absolute transition-opacity duration-500 ease-in-out ${
                 showFirst
                   ? "opacity-100 animate-fadeIn"
                   : "opacity-0 animate-fadeOut"
@@ -120,11 +114,11 @@ const PileBoard = () => {
             </div>
 
             <div
-              className={`absolute transition-opacity duration-1000 ${
+              className={`absolute transition-opacity duration-500 ease-in-out ${
                 showFirst
                   ? "opacity-0 animate-fadeOut"
                   : "opacity-100 animate-fadeIn"
-              } flex text-[.8rem]`}
+              } flex items-center gap-1 text-[.8rem]`}
             >
               <i className="bi bi-command"></i>
               <i className="bi bi-plus"></i>
@@ -134,29 +128,27 @@ const PileBoard = () => {
         </div>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
-        {pile?.map((link) => {
+        {allPiles?.map((link) => {
           return (
-            <div key={link._id || MetaData._id}>
+            <div key={link?._id || MetaData?._id} data={allPiles}>
               <div
                 draggable="true"
                 className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90 "
               >
-                <a href={link.url} target="_blank" className="">
-                  {/* metaData */}
+                <a href={link?.url} target="_blank" className="">
                   <div className="w-full aspect-[16/9] bg-black">
-                    {console.log(MetaData?.image?.length)}
-                    {link.image != "" ||
-                    (link.url === MetaData?.url &&
+                    {link?.image != "" ||
+                    (link?.url === MetaData?.url &&
                       MetaData.image?.length > 0) ? (
                       <img
-                        src={link.image || MetaData?.image}
+                        src={link?.image || MetaData?.image}
                         className="w-full h-full object-contain"
                       />
                     ) : (
                       <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold ">
                         {link.title ? (
                           <h1 className="text-[2rem] text-white uppercase">
-                            {link.title}
+                            {link?.title}
                           </h1>
                         ) : (
                           <h1 className="text-[2rem] text-white uppercase ">
@@ -170,8 +162,8 @@ const PileBoard = () => {
               </div>
               <div className="pt-[.8rem] px-[.7rem] flex flex-col gap-[5px] justify-between">
                 <h2 className="font-bold text-[.7rem]">
-                  {link.title || MetaData
-                    ? link.title || MetaData?.title
+                  {link?.title || MetaData
+                    ? link?.title || MetaData?.title
                     : hostName}
                 </h2>
                 <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
@@ -190,11 +182,7 @@ const PileBoard = () => {
                     </button>
                     <button
                       onClick={() =>
-                        shareNavigator({
-                          title: "whatsapp",
-                          text: link.url,
-                          url: "https://web.whatsapp.com/",
-                        })
+                        setTheModal({ isOpen: true, modalType: "share" })
                       }
                       className="text-[15px]"
                     >
@@ -204,26 +192,41 @@ const PileBoard = () => {
                       <i
                         onClick={() =>
                           softDelete([
-                            { _id: link._id, category: link.category },
+                            { _id: link?._id, category: link?.category },
                           ])
                         }
                         className="bi bi-trash3 text-red-600 hover:text-gray-500   cursor-pointer"
                       ></i>
                     </button>
                     <button
-                      onClick={() => handleClick(link._id)}
+                      onClick={() => handleClick(link?._id)}
                       className="relative rounded-full text-[15px]"
                     >
-                      <i className="bi bi-bookmark-check hover:text-gray-500 "></i>
+                      <i className="bi bi-bookmark-check hover:text-gray-500"></i>
                     </button>
-                    <button
-                      onClick={() => handleClick(link._id)}
-                      className="relative rounded-full text-[15px]"
-                    >
-                      <i className="bi bi-eye-slash"></i>
+                    <button className="text-[15px]">
+                      {link?.visibility === true ? (
+                        <i
+                          onClick={() =>
+                            changeVisibility({
+                              _id: link?._id,
+                              data: supaPileState?.category,
+                            })
+                          }
+                          className="bi bi-eye hover:text-gray-500 "
+                        ></i>
+                      ) : (
+                        <i
+                          onClick={() =>
+                            changeVisibility({
+                              _id: link?._id,
+                              data: supaPileState?.category,
+                            })
+                          }
+                          className="bi bi-eye-slash hover:text-gray-500 "
+                        ></i>
+                      )}
                     </button>
-
-                    {/* <i class="bi bi-eye"></i> */}
                   </div>
                 </div>
               </div>
@@ -231,6 +234,17 @@ const PileBoard = () => {
           );
         })}
       </div>
+      {hasNextPage && (
+        <div className="flex items-center justify-center">
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className= "text-white text-sm px-4 py-2 mb-4 rounded-md border border-black bg-black disabled:opacity-50"
+          >
+            {isFetchingNextPage ? "Loading more..." : "Load More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

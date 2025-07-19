@@ -18,7 +18,7 @@ const usePostPile = () => {
   return useMutation({
     mutationFn: postURL,
     onSuccess: () => {
-      queryClient.invalidateQueries(["pile"]);
+      queryClient.invalidateQueries({queryKey:["pile"]});
     },
 
     onMutate: async ({url, category}) => {

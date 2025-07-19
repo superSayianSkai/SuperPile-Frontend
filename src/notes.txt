@@ -1,14 +1,53 @@
--- fix the title for hero
--- i need a default image for meta tage for post
--- adjust the state for category pick
+TODO
 -- handle no network
 --handle why i can't add space to the category name
 -- license for github
 -- image loading lazily
--- see if i can change category optimistically
 -- let the new pile be on top of the pile
-
+--return other messege the api sends
+--keyword for the users
+-- i have to figure out why the layout changes when i search
+--loading icon
+-- add message to access search bar through shortcut
+-- stop userAuth from relaoding when i reload the page
+-- auth interceptors and protected route
+-- UI for new users
+-- create a new category
+-- to know how many piles i have both archived and not archived and also the number of public and not public
+-- implememt add category feature
+-- fix the issue with uuid's not deleting
+--study how mongodb aggregate works
+--add a drop down and a add category when users wants to add their pile.
+--Think of what i can make premium and freemium
+   -- collboration
+   -- maybe Ai
+-- i need to make sure the link generated, that the page knows if your signed in or not
+-- not forget to increase the expiry date on the link and show a message
+    -users that opens a foreign link can add a link of thier choice to thier pile
+-- i need to fix the copy link when i want to share a pile
+-- a message that says i need i can't add a duplicate link
+-- consider making it possible to download a link from a video
+-- refix some UI
+-- figure out if i need to rename the endpoint showing in the network tab
+-- the current hero information should be for first users
+-- work on the refresh token
+-- fix the category scroll
 
 URGENT
---implement optimistical update on change category
+-- put a load more on archived
+-- loading icon for piles
+-- the new pile should be on top
+-- adjust the ux for the quick search
+
+DONE
+-- i need to implement load more.
+--implement generating links
 --implement changing visibility
+-- i need a default image for meta tage for post
+--implement optimistical update on change category
+-- adjust the state for category pick
+-- see if i can change category optimistically
+
+LEARN
+--horizontal scaling
+--Load balance

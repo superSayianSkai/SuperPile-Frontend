@@ -8,8 +8,7 @@ const State = () => {
   const [hostNameSentence, getHostNameSentence] = useState("");
   const [metaLink, setMetaLink] = useState("");
   const [categoryState,setCategoryState]=useState("")
-  const[tick,setTick]=useState("all") 
-  
+  const[tick,setTick]=useState("all")
 
   const setLinkBoardPanelToggle = () => {
     setLinkBoardPanel((prev) => !prev);

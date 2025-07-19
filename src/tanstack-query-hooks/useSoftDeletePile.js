@@ -12,20 +12,22 @@ const useSoftDeletePile = () => {
   return useMutation({
     mutationFn: softDeletePile,
     onSuccess: () => {
-      queryClient.invalidateQueries(["pile", "archivedPile"]);
+      queryClient.invalidateQueries({ queryKey: ["pile", "archivedPile"] });
     },
     onMutate: async (newPile) => {
       const id = newPile[0]._id;
       const category = newPile[0].category;
-      queryClient.invalidateQueries(["pile", category]);
-      console.log(id)
+      const keyword = newPile[0].keyword;
+      console.log("checking out the keyword");
+      console.log(keyword);
+      queryClient.invalidateQueries({ queryKey: ["pile", category] });
+      console.log(id);
       console.log(category);
-      await queryClient.cancelQueries(["pile", "all"]);
+      await queryClient.cancelQueries({ queryKey: ["pile", "all"] });
 
       let previousPosts =
         queryClient.getQueryData(["pile", category])?.data ||
         queryClient.getQueryData(["pile", "all"])?.data;
-
 
       console.log(previousPosts);
       console.log(id);
@@ -35,17 +37,18 @@ const useSoftDeletePile = () => {
         return { newpile: [] };
       }
 
-
       const newpile = previousPosts.filter((post) => post._id !== id);
       const removedPile = previousPosts.filter((post) => post._id === id);
 
-
       queryClient.setQueryData(["pile", category], { data: newpile });
-      
+
       queryClient.setQueryData(["pile", "all"], {
-        data: queryClient.getQueryData(["pile", "all"])?.data?.filter(p => p._id !== id) || []
+        data:
+          queryClient
+            .getQueryData(["pile", "all"])
+            ?.data?.filter((p) => p._id !== id) || [],
       });
-    
+
       queryClient.setQueryData(["archivedPile"], {
         data: removedPile,
       });

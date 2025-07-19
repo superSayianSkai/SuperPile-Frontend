@@ -1,0 +1,7 @@
+Two core hooks in tanstack query for getting a request
+- useQuery - non pagnation, simple request.
+  -queryKey -Id 
+  -queryFN - a function that returns the promise
+- useInfiniteQuery - for pagenated get request
+  -queryKey, queryFn, and getNextPageParam 
+-countDocumnents() count the number items in the database

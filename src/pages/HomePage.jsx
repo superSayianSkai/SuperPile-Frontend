@@ -9,14 +9,13 @@ import Login from "../components/Login";
 const HomePage = () => {
   const userData = useAuth()?.data;
   const { LinkBoardPanel} = useContext(StateContext);
-  return (
+  return ( 
     <div
       className={`h-[100vh] flex flex-col relative ${
         LinkBoardPanel && userData ? "overflow-hidden" : ""
       } `}
     >
       <Header />
-
       <Hero />
       {/* want to fix the hero later*/}
       <PileBoard />

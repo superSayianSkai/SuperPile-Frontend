@@ -1,83 +1,145 @@
 import useAuth from "../tanstack-query-hooks/useAuthPile";
-import profile from "../assets/Images/profile.svg";
 import Profile from "./Profile";
 import { Link } from "react-router";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import useCategoryStore from "../zustard/useCategoryStore";
 import { useRef } from "react";
+import useClickedModal from "../zustard/useClickedModal";
+
 const Header = () => {
-  const {closeModal ,toggleCategory, modals}=useCategoryStore()
-  const profileToggle=useRef();
-  
-  useOnClickOutside(closeModal,profileToggle, "profile")
+  const { setTheModal } = useClickedModal();
+  const { closeModal, toggleCategory, modals } = useCategoryStore();
+  const profileToggle = useRef();
+  useOnClickOutside(closeModal, profileToggle, "profile");
   const { data, isLoading } = useAuth();
+
   return (
-    <div className="flex justify-between px-[1rem] h-[10vh] items-center  w-[100%] bg-white top-0 left-0 border-b-slate-200 border-x-0 border-[1px] z-[1000]">
-      <Link to="/" className="flex gap-[.7rem] py-[.8rem] font-Monsterrat font-bold text-[1rem] items-center">
-        {/* <img src={thunder} className="w-[30px] h-[30px]" /> */}
-        <div className={`relative`} style={{ width: "28px", height: "28px" }}>
-          {/* Outer circle */}
-          <div className="absolute inset-0 rounded-full border-2 border-black"></div>
+    <header className="sticky top-0 z-[1000] backdrop-blur-xl bg-white/80 border-b border-gray-200/50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo Section */}
+          <Link
+            to="/"
+            className="group flex items-center gap-3 transition-all duration-300 hover:scale-105"
+          >
+            <div className="relative" style={{ width: "32px", height: "32px" }}>
+              {/* Outer circle with gradient border */}
+              <div className="absolute inset-0 rounded-full p-0.5" style={{ background: "linear-gradient(to right, #ff66b2, #ff8c00)" }}>
+                <div className="w-full h-full rounded-full bg-white"></div>
+              </div>
 
-          {/* Top half - orange */}
-          <div
-            className="absolute top-0 left-0 right-0 h-1/2 rounded-t-full"
-            style={{ backgroundColor: "#ff8c00" }}
-          ></div>
+              {/* Top half - pink to orange gradient */}
+              <div
+                className="absolute top-0.5 left-0.5 right-0.5 h-[calc(50%-2px)] rounded-t-full"
+                style={{ background: "linear-gradient(to right, #ff66b2, #ff8c00)" }}
+              ></div>
 
-          {/* Bottom half - white */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-white rounded-b-full"></div>
+              {/* Bottom half - clean white */}
+              <div className="absolute bottom-0.5 left-0.5 right-0.5 h-[calc(50%-2px)] bg-white rounded-b-full"></div>
 
-          {/* Center band */}
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-black transform -translate-y-1/2"></div>
+              {/* Center divider with subtle shadow */}
+              <div className="absolute top-1/2 left-1 right-1 h-0.5 bg-gray-800 transform -translate-y-1/2 shadow-sm"></div>
 
-          {/* Center button - diamond shape */}
-          <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 bg-white border border-black rounded-sm transform -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
+              {/* Center diamond - more refined */}
+              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-white border-2 border-gray-800 rounded-sm transform -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-sm"></div>
 
-          {/* Small dot in center */}
-          <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-black rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
-
-          {/* Decorative elements - small triangles */}
-          <div className="absolute top-1/4 right-1/4 w-0.5 h-0.5 transform rotate-45 bg-black"></div>
-          <div
-            className="absolute bottom-1/4 left-1/4 w-0.5 h-0.5 transform rotate-45"
-            style={{ backgroundColor: "#ff8c00" }}
-          ></div>
-        </div>
-        <div className="text-[.9rem]">Supapile</div>
-      </Link>
-      {data ? (
-        <div className="flex">
-          {isLoading ? (
-            <img src={profile} />
-          ) : (
-            <div className="flex items-center gap-[2rem] justify-center">
-            <div className="font-bold border-[1px] border-gray-400 py-[.4rem] px-[.8rem]  rounded-full text-[.8rem] cursor-pointer flex gap-2 hover:opacity-90 justify-center items-center"> 
-            <i className="bi bi-chevron-double-up"></i>
-            <p>Share</p>
-            </div>            
-            <div  ref={profileToggle}>
-            <img
-              onClick={()=>toggleCategory("profile")}
-              src={data?.data?.profilePicture}
-              className="rounded-full h-auto w-[32px] cursor-pointer relative"
-            />
-          { modals.profile && <Profile/>}
+              {/* Center dot with subtle glow */}
+              <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-gray-800 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
             </div>
+
+            <span className="text-xl font-bold text-gray-900 transition-colors duration-300" style={{ color: "var(--hover-color, #1f2937)" }}>
+              <style>{`
+                .group:hover span {
+                  background: linear-gradient(to right, #ff66b2, #ff8c00);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                }
+              `}</style>
+              Supapile
+            </span>
+          </Link>
+
+          {/* User Section */}
+          {data ? (
+            <div className="flex items-center">
+              {isLoading ? (
+                <div className="animate-pulse">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  {/* Share Button */}
+                  <button
+                    onClick={() =>
+                      setTheModal({ isOpen: true, modalType: "generateLink" })
+                    }
+                    className="group relative flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full hover:border-transparent hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                    style={{
+                      background: "var(--bg, white)",
+                      "--hover-bg": "linear-gradient(to right, #ff66b2, #ff8c00)"
+                    }}
+                  >
+                    <style>{`
+                      .group:hover button {
+                        background: linear-gradient(to right, #ff66b2, #ff8c00) !important;
+                      }
+                    `}</style>
+                    <i className="bi bi-chevron-double-up text-sm transition-transform duration-300 group-hover:-translate-y-0.5"></i>
+                    <span>Share</span>
+                  </button>
+
+                  {/* Profile Section */}
+                  <div ref={profileToggle} className="relative">
+                    <button 
+                      onClick={() => toggleCategory("profile")}
+                      className="group relative"
+                    >
+                      <div className="relative">
+                        {/* Outer gradient border container - only visible on hover */}
+                        <div 
+                          className="absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{ background: "linear-gradient(to right, #ff66b2, #ff8c00)" }}
+                        ></div>
+                        
+                        {/* Profile picture container */}
+                        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white">
+                          <img
+                            src={data?.data?.profilePicture}
+                            alt="Profile"
+                            className="w-full h-full object-cover transition-all duration-300 shadow-sm group-hover:shadow-md"
+                          />
+                        </div>
+                      </div>
+                    </button>
+                    
+                    {/* Profile Dropdown */}
+                    {modals.profile && (
+                      <div className="absolute right-0 top-full mt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <Profile />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Auth Buttons */
+            <div className="flex items-center gap-3">
+              <button className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors duration-200">
+                Sign in
+              </button>
+              <button 
+                className="group relative px-6 py-2 hover:opacity-40 text-sm font-semibold text-white rounded-full transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-105"
+                style={{ background: "linear-gradient(to right, #ff66b2, #ff8c00)" }}
+              >
+                <span className="relative z-10">Sign Up</span>
+              </button>
             </div>
           )}
         </div>
-      ) : (
-        <div className="flex gap-2">
-          <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:bg-slate-100">
-            Sign in
-          </button>
-          <button className="text-[.8rem] font-bold border-[1px] py-1 px-4 rounded-md  hover:opacity-75 bg-black text-white">
-            Sign Up
-          </button>
-        </div>
-      )}
-    </div>
+      </div>
+    </header>
   );
 };
 

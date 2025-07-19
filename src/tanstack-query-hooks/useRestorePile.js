@@ -12,7 +12,7 @@ const useRestorePile =()=>{
     return useMutation({
         mutationFn:restore,
         onSuccess:()=>{
-            queryClient.invalidateQueries(["pile" ,"all"])
+            queryClient.invalidateQueries({queryKey:["pile" ,"all"]})
         },
         onMutate: async ({_id, category}) => {
             console.log(category)

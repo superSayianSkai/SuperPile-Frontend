@@ -24,7 +24,7 @@ const useHardDeletePile = () => {
      onMutate: async ({_id}) => {
       console.log("heheheh")
       console.log(_id )
-      await queryClient.cancelQueries(["archivedPile"]);
+      await queryClient.cancelQueries({queryKey:["archivedPile"]});
       const previousPosts = queryClient.getQueryData(["archivedPile"]).data;
       console.log(previousPosts)
       const newpile = previousPosts.filter((previousPile) => _id!= previousPile._id);
