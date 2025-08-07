@@ -1,8 +1,7 @@
 // import Link from "./Link";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { StateContext } from "../context/SupaPileContext";
-import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
 import useFetchPile from "../tanstack-query-hooks/useFetchPile";
 import useSoftDeletePile from "../tanstack-query-hooks/useSoftDeletePile";
 import useMeta from "../tanstack-query-hooks/useMeta";
@@ -11,37 +10,29 @@ import CategoryController from "./CategoryController";
 import { fetchCickedCategory } from "../tanstack-query-hooks/useFetchClickedCategory";
 import { useMutation } from "@tanstack/react-query";
 import useClickedModal from "../zustard/useClickedModal";
-import { useEffect } from "react";
 import useStateStore from "../zustard/useStateStore";
+import { usePostStore } from "../zustard/usePostStore";
 import useChangeVisibility from "../tanstack-query-hooks/useChangeVisibility";
-import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
-
+import { getMetaDataSync } from "../utils/getMetaDataSync";
+import CustomToast from "./ShowCustomToast";
+import usePostPile from "../tanstack-query-hooks/usePostPile";
+import { useQueryClient } from "@tanstack/react-query";
 const PileBoard = () => {
   const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence } =
     useContext(StateContext);
   const { supaPileState } = useStateStore();
-  // const { piles: data } = useFetchPile({
-  //   category: supaPileState.category,
-  //   keyword: supaPileState.keyword,
-  // });
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-  } = useFetchPile({
-    category: supaPileState.category,
-    keyword: supaPileState.keyword,
-  });
+  const { setPostData, pendingPosted } = usePostStore();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useFetchPile({
+      category: supaPileState.category,
+      keyword: supaPileState.keyword,
+    });
+
   const allPiles = data?.pages.flatMap((page) => page.piles) || [];
-
-  console.log("i love Jesus");
-  console.log();
-  console.log("heh eheyeheyheye");
-  console.log(data);
-
+  console.log("jessica loves me");
+  console.log(allPiles);
+  const queryClient = useQueryClient();
+  console.log("selena chromez");
   const [showFirst, setShowFirst] = useState(true);
   const { setTheModal, clicked } = useClickedModal();
   const { mutate: fetchMutate } = useMutation({
@@ -51,23 +42,32 @@ const PileBoard = () => {
       setTheModal({ pile: modData, isOpen: true, modalType: "changeCategory" });
     },
   });
-
+  const { mutate: postMutate } = usePostPile({});
   const { mutate: changeVisibility } = useChangeVisibility();
-  const { data: category } = useFetchCategory();
-  console.log("hey hey hey");
-  console.log(category);
-  const link = allPiles.map((pile) => pile?.visibility);
 
-  console.log("hey hey hey");
-  console.log(link);
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
   const softDelete = (e) => {
-    mutate(e);
+    mutate(e, {
+      onSuccess: (res) => {
+        const msg = res?.message || "Pile Archived";
+        showCustomToast(msg);
+      },
+    });
   };
+
+  const [toast, setToast] = useState({ show: false, message: "" });
+
+  const showCustomToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => {
+      setToast({ show: false, message: "" });
+    }, 3000);
+  };
+
   const copy = (e) => {
     navigator.clipboard.writeText(e);
-    toast.success("copied to clipboard");
+    showCustomToast("Copied to clipboard");
   };
 
   const handleClick = (pile) => {
@@ -81,6 +81,7 @@ const PileBoard = () => {
       document.getElementById("my-button").click();
     }
   };
+
   useEffect(() => {
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
@@ -92,67 +93,191 @@ const PileBoard = () => {
     }, 3000);
     return () => clearTimeout(interval);
   });
+
+  const { ref: lastPileRef, inView } = useInView();
+  const { ref: pileButtonRef, inView: isPileButtonInView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const [fromLogin, setFromLogin] = useState("");
+  const [fromLoginLoading, setFromLoginLoading] = useState(false);
+  console.log(fromLogin);
+  //  console.log("lets check this out")
+  useEffect(() => {
+    const savePendingLinkWithMeta = async () => {
+      const pending = localStorage.getItem("pending_link");
+
+      localStorage.removeItem("pending_link");
+      // ✅ Skip if it's already been posted
+      if (!pending || pendingPosted) return;
+
+      setFromLoginLoading(true);
+      const meta = await getMetaDataSync(pending);
+      if (!meta) {
+        setFromLoginLoading(false);
+        return;
+      }
+      setFromLogin(meta);
+      setFromLoginLoading(false);
+      postMutate(
+        { url: pending, category: "all" },
+        {
+          onSuccess: (data) => {
+            // setFromLoginLoading(false); // removed as requested
+            if (data?.message === "This link already exists in your pile.") {
+              CustomToast("This link is already in your pile.");
+              return;
+            }
+
+            setPostData(data); // ✅ This marks it as posted
+            queryClient.setQueryData(["user"], (prev) => prev); // prevents stale-triggered refetch
+            queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
+          },
+          onError: (error) => {
+            // setFromLoginLoading(false); // removed as requested
+            const msg = error?.response?.data?.message;
+            console.log("API error message:", msg);
+
+            if (msg === "This link already exists in your pile.") {
+              CustomToast("This pile exist.");
+            } else {
+              CustomToast("Something went wrong. Try again.");
+            }
+          },
+        }
+      );
+    };
+    savePendingLinkWithMeta();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="grid sm:grid-cols-2 m-[1rem] lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-10 px-4">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="border-[1px] border-slate-300 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
+          >
+            {/* Thumbnail skeleton */}
+            <div className="w-full aspect-[16/9] bg-gray-300" />
+
+            {/* Title and text */}
+            <div className="px-4 py-3 space-y-2">
+              <div className="h-4 bg-gray-300 rounded w-3/4" />
+              <div className="h-3 bg-gray-200 rounded w-full" />
+              <div className="h-3 bg-gray-200 rounded w-5/6" />
+              <div className="h-3 bg-gray-200 rounded w-2/3" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
   return (
-    <div className=" lg:mx-[30px] mx-[1rem] md:px-0 ">
+    <div className=" lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
       {clicked.isOpen && <ChangeCategoryContainer />}
-      <div className="flex justify-between mb-5 items-center md:px-2 border-b-2 md:border-0">
+      <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
         <CategoryController id={"pickCategory"} />
         <div className="flex justify-center items-center gap-5">
-          <button
-            id="my-button"
-            onClick={setLinkBoardPanelToggle}
-            className="text-[.6rem] md:text-[.8rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:opacity-100 px-6 py-1 mb-2 relative h-6 overflow-hidden"
-          >
-            <div
-              className={`absolute transition-opacity duration-500 ease-in-out ${
-                showFirst
-                  ? "opacity-100 animate-fadeIn"
-                  : "opacity-0 animate-fadeOut"
-              }`}
+          <div ref={pileButtonRef}>
+            <button
+              id="my-button"
+              onClick={setLinkBoardPanelToggle}
+              className="group text-[.6rem] dark:bg-white dark:text-black md:text-[.8rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-6 py-1 mb-2 relative h-6 overflow-hidden transition-colors"
             >
-              Pile
-            </div>
+              <div
+                className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
+                  showFirst
+                    ? "md:opacity-100 md:animate-fadeIn"
+                    : "md:opacity-0 animate-fadeOut"
+                } text-white transition`}
+              >
+                Pile
+              </div>
 
-            <div
-              className={`absolute transition-opacity duration-500 ease-in-out ${
-                showFirst
-                  ? "opacity-0 animate-fadeOut"
-                  : "opacity-100 animate-fadeIn"
-              } flex items-center gap-1 text-[.8rem]`}
-            >
-              <i className="bi bi-command"></i>
-              <i className="bi bi-plus"></i>
-              <p className="font-bold">K</p>
-            </div>
-          </button>
+              <div
+                className={`max-sm:hidden absolute transition-opacity duration-500 ease-in-out ${
+                  showFirst
+                    ? "opacity-0 animate-fadeOut"
+                    : "opacity-100 animate-fadeIn"
+                } flex items-center gap-1 text-[.8rem]`}
+              >
+                <i className="bi bi-command"></i>
+                <i className="bi bi-plus"></i>
+                <p className="font-bold">K</p>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
+      {/* Show user-friendly message if no piles */}
+      {allPiles.length === 0 && !fromLoginLoading && (
+        <div className="text-center text-gray-500 mt-10">
+          No piles found. Try adding some!
+        </div>
+      )}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
-        {allPiles?.map((link) => {
+        {(fromLoginLoading ||
+          (fromLogin &&
+            !allPiles.some((pile) => pile.url === fromLogin.url))) && (
+          <div className="">
+            {Array.from({ length: 1 }).map((_, i) => (
+              <div
+                key={i}
+                className="border-[1px] border-slate-300 dark:border-slate-500 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
+              >
+                {/* Thumbnail skeleton */}
+                <div className="w-full aspect-[16/9] bg-gray-300" />
+
+                {/* Title and text */}
+                <div className="px-4 py-3 space-y-2">
+                  <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  <div className="h-3 bg-gray-200 rounded w-full" />
+                  <div className="h-3 bg-gray-200 rounded w-5/6" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {allPiles?.map((link, index) => {
+          const isLast = index === allPiles.length - 1;
           return (
-            <div key={link?._id || MetaData?._id} data={allPiles}>
+            <div
+              key={link?._id || MetaData?._id}
+              data={allPiles}
+              ref={isLast ? lastPileRef : null}
+            >
               <div
                 draggable="true"
-                className="border-[1px] border-slate-300  rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90 "
+                className="border-[1px] border-slate-300 dark:border-slate-500 rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90 "
               >
                 <a href={link?.url} target="_blank" className="">
                   <div className="w-full aspect-[16/9] bg-black">
-                    {link?.image != "" ||
+                    {link?.image !== "" ||
                     (link?.url === MetaData?.url &&
-                      MetaData.image?.length > 0) ? (
+                      MetaData?.image?.length > 0) ||
+                    fromLogin?.image?.length > 0 ? (
                       <img
-                        src={link?.image || MetaData?.image}
+                        src={
+                          link?.image ||
+                          (link?.url === MetaData?.url && MetaData?.image) ||
+                          fromLogin?.image
+                        }
                         className="w-full h-full object-contain"
                       />
                     ) : (
-                      <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold ">
+                      <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold transition-all duration-300 bg-gradient-to-r from-[#ff66b2] to-[#ff8c00]">
                         {link.title ? (
-                          <h1 className="text-[2rem] text-white uppercase">
-                            {link?.title}
+                          <h1 className="text-[.9rem] text-white text-center uppercase">
+                            {link?.title || fromLogin?.title}
                           </h1>
                         ) : (
-                          <h1 className="text-[2rem] text-white uppercase ">
-                            {hostName}
+                          <h1 className="text-[.8rem] text-white dark:text-white uppercase ">
+                            {hostName || fromLogin?.title}
                           </h1>
                         )}
                       </div>
@@ -162,68 +287,110 @@ const PileBoard = () => {
               </div>
               <div className="pt-[.8rem] px-[.7rem] flex flex-col gap-[5px] justify-between">
                 <h2 className="font-bold text-[.7rem]">
-                  {link?.title || MetaData
-                    ? link?.title || MetaData?.title
-                    : hostName}
+                  {link?.title ||
+                    (link?.url === MetaData?.url && MetaData?.title) ||
+                    fromLogin?.title ||
+                    hostName}
                 </h2>
-                <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
-                  {link?.description || MetaData?.description
-                    ? link?.description?.slice(0, 152) ||
-                      MetaData?.description?.slice(0, 152)
-                    : hostNameSentence}
+                <p className="text-gray-500 dark:text-gray-400 text-[.6rem] text-ellipsis mt-[10px]">
+                  {link?.description?.slice(0, 152) ||
+                    (link?.url === MetaData?.url &&
+                      MetaData?.description?.slice(0, 152)) ||
+                    fromLogin?.description?.slice(0, 152) ||
+                    hostNameSentence}
                 </p>
                 <div className="flex items-center w-[100%] pr-[1rem]">
                   <div className="flex gap-4  mt-[10px] items-center w-[100%]">
                     <button
                       onClick={() => copy(link.url)}
-                      className="text-[15px]"
+                      className="p-1 rounded-md transition"
                     >
-                      <i className="bi bi-clipboard hover:text-gray-500 "></i>
+                      <i className="bi bi-clipboard hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
                     </button>
                     <button
                       onClick={() =>
-                        setTheModal({ isOpen: true, modalType: "share" })
+                        setTheModal({
+                          isOpen: true,
+                          modalType: "share",
+                          url: link.url,
+                        })
                       }
-                      className="text-[15px]"
+                      className="p-1 rounded-md transition"
                     >
-                      <i className="bi bi-share hover:text-gray-500 "></i>
+                      <i className="bi bi-share hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
                     </button>
-                    <button className=" rounded-full  text-[15px]">
+                    <button className="p-1 rounded-md transition">
                       <i
-                        onClick={() =>
+                        onClick={async () => {
                           softDelete([
-                            { _id: link?._id, category: link?.category },
-                          ])
-                        }
-                        className="bi bi-trash3 text-red-600 hover:text-gray-500   cursor-pointer"
+                            {
+                              _id: link?._id,
+                              category: link?.category,
+                              keyword: "",
+                            },
+                          ]);
+                          setFromLogin(undefined);
+                        }}
+                        className="bi bi-trash3 text-red-600 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer"
                       ></i>
                     </button>
                     <button
                       onClick={() => handleClick(link?._id)}
-                      className="relative rounded-full text-[15px]"
+                      className="p-1 rounded-md transition relative"
                     >
-                      <i className="bi bi-bookmark-check hover:text-gray-500"></i>
+                      <i className="bi bi-bookmark-check hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
                     </button>
-                    <button className="text-[15px]">
+                    <button className="p-1 rounded-md transition text-[15px]">
+                      {console.log(link.visibility)}
                       {link?.visibility === true ? (
                         <i
                           onClick={() =>
-                            changeVisibility({
-                              _id: link?._id,
-                              data: supaPileState?.category,
-                            })
+                            changeVisibility(
+                              {
+                                _id: link?._id,
+                                category: supaPileState?.category,
+                              },
+                              {
+                                onSuccess: (res) => {
+                                  const apiMsg = res?.data;
+                                  const friendlyMsg =
+                                    apiMsg === "pile visible"
+                                      ? "Pile is now visible"
+                                      : apiMsg === "pile not visible"
+                                      ? "Pile is now hidden"
+                                      : apiMsg;
+
+                                  showCustomToast(friendlyMsg);
+                                },
+                              }
+                            )
                           }
-                          className="bi bi-eye hover:text-gray-500 "
+                          className="bi bi-eye hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"
                         ></i>
                       ) : (
                         <i
                           onClick={() =>
-                            changeVisibility({
-                              _id: link?._id,
-                              data: supaPileState?.category,
-                            })
+                            changeVisibility(
+                              {
+                                _id: link?._id,
+                                category: supaPileState?.category,
+                              },
+                              {
+                                onSuccess: (res) => {
+                                  const apiMsg = res?.data;
+                                  const friendlyMsg =
+                                    apiMsg === "pile visible"
+                                      ? "Pile is now visible"
+                                      : apiMsg === "pile not visible"
+                                      ? "Pile is now hidden"
+                                      : apiMsg;
+
+                                  showCustomToast(friendlyMsg);
+                                },
+                              }
+                            )
                           }
-                          className="bi bi-eye-slash hover:text-gray-500 "
+                          className="bi bi-eye-slash hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"
                         ></i>
                       )}
                     </button>
@@ -234,16 +401,31 @@ const PileBoard = () => {
           );
         })}
       </div>
-      {hasNextPage && (
-        <div className="flex items-center justify-center">
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            className= "text-white text-sm px-4 py-2 mb-4 rounded-md border border-black bg-black disabled:opacity-50"
+      <CustomToast message={toast.message} show={toast.show} />
+      {!isPileButtonInView && (
+        <button
+          onClick={setLinkBoardPanelToggle}
+          className="fixed z-[2000] bottom-6 right-6 h-8 w-8 md:w-12 md:h-12 animate-fadeIn transition-all duration-500 ease-in-out transform hover:scale-105"
+        >
+          <div
+            className="absolute inset-0 rounded-full p-0.5"
+            style={{
+              background: "linear-gradient(to right, #ff66b2, #ff8c00)",
+            }}
           >
-            {isFetchingNextPage ? "Loading more..." : "Load More"}
-          </button>
-        </div>
+            <div className="w-full h-full rounded-full bg-white"></div>
+          </div>
+          <div
+            className="absolute top-0.5 left-0.5 right-0.5 h-[calc(50%-2px)] rounded-t-full"
+            style={{
+              background: "linear-gradient(to right, #ff66b2, #ff8c00)",
+            }}
+          ></div>
+          <div className="absolute bottom-0.5 left-0.5 right-0.5 h-[calc(50%-2px)] bg-white rounded-b-full"></div>
+          <div className="absolute top-1/2 left-1 right-1 h-0.5 bg-gray-800 transform -translate-y-1/2 shadow-sm"></div>
+          <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-white border-2 border-gray-800 rounded-sm transform -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-sm"></div>
+          <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-gray-800 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+        </button>
       )}
     </div>
   );

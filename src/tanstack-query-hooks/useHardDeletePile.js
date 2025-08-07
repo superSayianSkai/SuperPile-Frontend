@@ -25,17 +25,17 @@ const useHardDeletePile = () => {
       console.log("heheheh")
       console.log(_id )
       await queryClient.cancelQueries({queryKey:["archivedPile"]});
-      const previousPosts = queryClient.getQueryData(["archivedPile"]).data;
-      console.log(previousPosts)
-      const newpile = previousPosts.filter((previousPile) => _id!= previousPile._id);
-      console.log("i love you")
-      console.log(newpile)
-      queryClient.setQueryData(["archivedPile"],{
-            data:[
-            ...newpile
-            ]
-      })
-     return {newpile}
+      const previousData = queryClient.getQueryData(["archivedPile"]);
+      const previousPages = previousData?.pages || [];
+      const newPages = previousPages.map(page => ({
+        ...page,
+        piles: page.piles.filter(pile => pile._id !== _id)
+      }));
+      queryClient.setQueryData(["archivedPile"], {
+        ...previousData,
+        pages: newPages
+      });
+      return { newPages };
     },
   });
 };

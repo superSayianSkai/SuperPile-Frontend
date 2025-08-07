@@ -12,7 +12,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "IBM Plex Mono", monospace;
+  transition: all 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
 }
+
+
 
 .color {
   background: linear-gradient(to right, #ff66b2, #ff8c00);
@@ -27,6 +32,9 @@
   opacity: 0.7;
   animation: skeleton-loading 0.4s linear infinite alternate;
   -webkit-animation: skeleton-loading 0.4s linear infinite alternate;
+}
+.scroll{
+  scrollbar-width: none;
 }
 
 @keyframes skeleton-loading {

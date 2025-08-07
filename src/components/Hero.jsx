@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
-import useAuth from "../tanstack-query-hooks/useAuthPile";
+import { useAuthStore } from "../zustard/useAuthStore";
 import useStateStore from "../zustard/useStateStore";
 import debounce from "../utilities/debounce";
 
 const Hero = () => {
   const { setKeyword } = useStateStore();
   const debounceIT = useMemo(() => debounce(setKeyword, 200), []);
-  const name = useAuth().data?.data?.name;
+  const name = useAuthStore().user?.data?.name;
   const newName = name?.split(" ")[0];
   const [active, setActive] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -24,7 +24,6 @@ const Hero = () => {
 
   return (
     <>
-      {/* Custom CSS for shake animation */}
       <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
@@ -78,22 +77,19 @@ const Hero = () => {
         }
       `}</style>
 
-      <div className="flex flex-col items-center text-black relative my-[4rem] gap-[1.5rem] px-4">
+      <div className="flex flex-col items-center text-black relative my-[2rem] gap-[0.6rem] md:gap-[1.5rem] px-2 md:px-4 mt-20">
         {/* Enhanced Title */}
         <div className="text-center">
-          <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
-            {newName}&apos;s PileBoard
+          <h2 className="font-bold text-[1.5rem] sm:text-[1.8rem] md:text-[3rem] color">
+            {newName? `${newName}'s PileBoard` : "PileBoard" }
           </h2>
-          <p className="text-gray-600 text-xs md:text-sm mt-2 font-medium">
-            Organize, share, and manage your digital pile
-          </p>
         </div>
 
         {/* Enhanced Search Container */}
         <div className="relative group">
           <div
             onClick={() => setActive(true)}
-            className={`search-container rounded-2xl border-2 w-[320px] md:w-[400px] px-5 py-3 flex items-center gap-3 cursor-text transition-all duration-300 ${
+            className={`search-container rounded-full border-2 w-[280px] sm:w-[320px] md:w-[400px] px-4 py-2 sm:px-5 sm:py-2.5 md:py-3 flex items-center gap-2 sm:gap-3 cursor-text transition-all duration-300 ${
               active
                 ? "border-[#ff8c00] active pulse-glow"
                 : "border-gray-200 hover:border-gray-300"
@@ -113,7 +109,7 @@ const Hero = () => {
               onBlur={() => setActive(false)}
               placeholder="Search your pileboard..."
               onChange={handleSearch}
-              className="flex-1 bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 text-xs md:text-sm font-medium"
+              className="flex-1 bg-transparent border-none outline-none text-[.7rem] sm:text-[.75rem] md:text-[.85rem] text-gray-800 placeholder-gray-500 font-medium"
             />
 
             {/* Clear Button */}
@@ -121,7 +117,7 @@ const Hero = () => {
               <i
                 onClick={clearSearch}
                 type="button"
-                className="bi bi-x-circle-fill cursor-pointer text-sm text-gray-400 h-[20px] hover:text-gray-600 transition-colors duration-200"
+                className="bi bi-x-circle-fill cursor-pointer text-sm text-gray-400 md:h-[20px] hover:text-gray-600 transition-colors duration-200"
               ></i>
             )}
           </div>
@@ -130,7 +126,7 @@ const Hero = () => {
         </div>
 
         {/* Search Stats or Quick Actions */}
-        <div className="flex items-center gap-4 text-xs text-gray-600">
+        <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 md:gap-4 text-[.55rem] sm:text-[.65rem] md:text-[.8rem] text-gray-600 dark:text-gray-400">
           <div className="flex items-center gap-1.5">
             <i className="bi bi-lightning-charge text-[#ff8c00] text-xs"></i>
             <span>Quick search</span>

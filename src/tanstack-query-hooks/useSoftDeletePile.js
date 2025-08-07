@@ -2,62 +2,84 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const softDeletePile = async ([{ _id }]) => {
-  console.log(_id);
-  const result = await apiClient.put("/api/soft-delete-pile", [{ _id }]);
-  console.log(result);
+  return await apiClient.put("/api/soft-delete-pile", [{ _id }]);
 };
 
 const useSoftDeletePile = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: softDeletePile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pile", "archivedPile"] });
-    },
-    onMutate: async (newPile) => {
-      const id = newPile[0]._id;
-      const category = newPile[0].category;
-      const keyword = newPile[0].keyword;
-      console.log("checking out the keyword");
-      console.log(keyword);
-      queryClient.invalidateQueries({ queryKey: ["pile", category] });
-      console.log(id);
-      console.log(category);
-      await queryClient.cancelQueries({ queryKey: ["pile", "all"] });
 
-      let previousPosts =
-        queryClient.getQueryData(["pile", category])?.data ||
-        queryClient.getQueryData(["pile", "all"])?.data;
+    onMutate: async (pileInfo) => {
+      const { _id, category, keyword } = pileInfo[0];
+      const queryKey = ["pile", category, keyword ?? ""];
 
-      console.log(previousPosts);
-      console.log(id);
+      await queryClient.cancelQueries({ queryKey });
 
-      if (!previousPosts) {
-        console.warn("No cached posts found.");
-        return { newpile: [] };
+      const previousData = queryClient.getQueryData(queryKey);
+      let updatedPages = previousData?.pages ?? [];
+
+      if (updatedPages.length > 0) {
+        updatedPages = updatedPages.map((page) => ({
+          ...page,
+          piles: page.piles.filter((pile) => pile._id !== _id),
+        }));
+
+        queryClient.setQueryData(queryKey, {
+          ...previousData,
+          pages: updatedPages,
+        });
       }
 
-      const newpile = previousPosts.filter((post) => post._id !== id);
-      const removedPile = previousPosts.filter((post) => post._id === id);
+      // 🔁 Also update the "pile", "all", "" view for immediate UI consistency
+      if (category !== "all") {
+        const allKey = ["pile", "all", ""];
+        const allData = queryClient.getQueryData(allKey);
 
-      queryClient.setQueryData(["pile", category], { data: newpile });
+        if (allData?.pages) {
+          const allPages = allData.pages.map((page) => ({
+            ...page,
+            piles: page.piles.filter((pile) => pile._id !== _id),
+          }));
 
-      queryClient.setQueryData(["pile", "all"], {
-        data:
-          queryClient
-            .getQueryData(["pile", "all"])
-            ?.data?.filter((p) => p._id !== id) || [],
-      });
+          queryClient.setQueryData(allKey, {
+            ...allData,
+            pages: allPages,
+          });
+        }
+      }
 
-      queryClient.setQueryData(["archivedPile"], {
-        data: removedPile,
-      });
-
-      return { newpile };
+      return { previousData, queryKey };
     },
-    onError: (err) => {
-      console.log(err);
+
+    onError: (error, _, context) => {
+      if (context?.previousData && context?.queryKey) {
+        queryClient.setQueryData(context.queryKey, context.previousData);
+      }
+      console.error("❌ Soft delete failed:", error);
+    },
+
+    onSuccess: (_, pileInfo) => {
+      const removed = pileInfo[0];
+      const archivedKey = ["archivedPile"];
+      const existing = queryClient.getQueryData(archivedKey) ?? { pages: [], pageParams: [] };
+
+      const newFirstPage = {
+        piles: [removed, ...(existing.pages?.[0]?.piles || [])],
+      };
+
+      queryClient.setQueryData(archivedKey, {
+        ...existing,
+        pages: [newFirstPage, ...(existing.pages?.slice(1) || [])],
+        pageParams: existing.pageParams || [],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["pile", removed.category, removed.keyword ?? ""],
+      });
     },
   });
 };
+
 export default useSoftDeletePile;

@@ -1,8 +1,9 @@
 import { Link } from "react-router";
 import { menuIcons } from "../data/menuIcons";
 const Profile = () => {
+
   return (
-    <div className="bg-white shadow-xl absolute right-5 w-[200px] top-[5%] rounded-xl border-2 ">
+    <div className="bg-white dark:text-black shadow-xl absolute right-5 w-[200px] top-[5%] rounded-xl border-2 ">
       {menuIcons.map((icon, index) => (
         <Link
           to="archived"

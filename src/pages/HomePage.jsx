@@ -1,30 +1,33 @@
-import Header from "../components/Header";
 import Hero from "../components/Hero";
 import PileBoard from "../components/PileBoard";
-import { useContext} from "react";
+import { useContext,} from "react";
 import { StateContext } from "../context/SupaPileContext";
-import useAuth from "../tanstack-query-hooks/useAuthPile";
 import PilePanel from "../components/PilePanel";
-import Login from "../components/Login";
+import OnBoarding from "./OnBoarding";
+import { useAuthStore } from "../zustard/useAuthStore";
 const HomePage = () => {
-  const userData = useAuth()?.data;
-  const { LinkBoardPanel} = useContext(StateContext);
-  return ( 
-    <div
-      className={`h-[100vh] flex flex-col relative ${
-        LinkBoardPanel && userData ? "overflow-hidden" : ""
-      } `}
-    >
-      <Header />
-      <Hero />
-      {/* want to fix the hero later*/}
-      <PileBoard />
-      {LinkBoardPanel && !userData ? (
-        <Login />
-      ) : LinkBoardPanel && userData ? (
-        <PilePanel />
+  const { user: userData, isLoading, isError} = useAuthStore();
+  const { LinkBoardPanel } = useContext(StateContext);
+  return (
+    <div className="bg-white dark:bg-black dark:text-white ">
+      {isLoading ? (
+        null
+      ) : isError && !userData ? (
+        
+          <OnBoarding />
+      
       ) : (
-        ""
+        <div
+          className={`flex flex-col dark:bg-black relative ${
+            LinkBoardPanel && userData ? "overflow-hidden" : ""
+          } `}
+        >
+          <>
+            <Hero />
+            <PileBoard />
+            {LinkBoardPanel && <PilePanel />}
+          </>
+        </div>
       )}
     </div>
   );

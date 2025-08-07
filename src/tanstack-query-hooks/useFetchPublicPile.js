@@ -1,25 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
-export const getUserPublicPile = async ({ uuID }) => {
+export const getUserPublicPile = async ({ publicLinkToken}) => {
   try {
-    const response = await apiClient.get(`/share/${uuID}`);
+    const response = await apiClient.get(`/share/${publicLinkToken}`);
     return response.data;
   } catch (error) {
     console.log(error);
-    return new Error("No pile");
+    throw error;
   }
 };
 
-const useFetchUserPublicPile = (uuID) => {
+const useFetchUserPublicPile = (publicLinkToken) => {
   return useQuery({
-    queryKey: ["pub1lcPile", uuID],
-    queryFn: () => getUserPublicPile({ uuID }),
-    enabled: !!uuID, 
-    retry: (failureCount, error) => {
-      if (error.response?.status === 404) return false;
-      return failureCount < 10;
-    },
+    queryKey: ["pub1lcPile", publicLinkToken],
+    queryFn: () => getUserPublicPile({ publicLinkToken }),
+    enabled: !!publicLinkToken, 
+    retry: false,
   });
 };
 

@@ -1,26 +1,38 @@
 import apiClient from "../lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-const getArchivedPile = async () => {
-    const response = await apiClient.get("/api/archived-pile");
-    console.log(response.data); // optional debug
-    return response.data;
-  };
-  
+const getArchivedPile = async ({ lastId = null }) => {
+  try {
+    const response = await apiClient.get(
+      `/api/archived-pile?limit=18&lastId=${lastId}`
+    );
+    const { piles = [], hasMore, newLastId } = response.data.data;
+    console.log(response.data);
+    return {
+      piles,
+      hasMore,
+      lastId: newLastId,
+    };
+  } catch (error) {
+    console.error("Error fetching archived pile:", error?.response?.data?.message || error.message || error);
+    throw new Error(error?.response?.data?.message || "Failed to fetch archived piles.");
+  }
+};
 
-const useFetchArchivedPile=()=>{
-    return useQuery({
-        queryKey: ["archivedPile"],
-        queryFn: getArchivedPile,
-        // retry: (failureCount, error) => {
-        //     if (error.response?.status === 404) return false;
-        //     return failureCount < 10;
-        // },
-        // staleTime: 1000 * 60 * 5,
-        // enabled:!!id
-    });
-    
+const useFetchArchivedPile = () => {
+  return useInfiniteQuery({
+    queryKey: ["archivedPile"],
+    queryFn: ({ pageParam = null }) => getArchivedPile({ lastId: pageParam }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage || typeof lastPage !== "object") return undefined;
 
-}
+      const hasMore = lastPage.hasMore ?? false;
+      const lastId = lastPage.lastId ?? null;
 
-export default useFetchArchivedPile 
+      return hasMore && lastId ? lastId : undefined;
+    },
+    retry:false
+  });
+};
+
+export default useFetchArchivedPile;

@@ -4,9 +4,9 @@ export const menuIcons = [
     label: "Archived",
     link:"archived"
  },
-  {
-    iconClass: "bi bi-brightness-high",
-    label: "Theme",
+{
+  iconClass:"bi bi-download",
+  label: "updates",
 },
  {
     iconClass: "bi bi-box-arrow-right",

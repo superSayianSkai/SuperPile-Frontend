@@ -16,55 +16,79 @@ const useChangeCategory = () => {
   return useMutation({
     mutationFn: changeCategory,
 
-   onMutate: async ({ _id, category, fromCategory }) => {
-  await queryClient.cancelQueries({ queryKey: ["pile", fromCategory] });
-  await queryClient.cancelQueries({ queryKey: ["pile", category] });
+    onMutate: async ({ _id, category, fromCategory }) => {
+      const fromKey = ["pile", fromCategory, ""];
+      const toKey = ["pile", category, ""];
 
-  const previousFrom = queryClient.getQueryData(["pile", fromCategory]);
-  const previousTo = queryClient.getQueryData(["pile", category]);
+      await queryClient.cancelQueries({ queryKey: fromKey });
+      await queryClient.cancelQueries({ queryKey: toKey });
 
-  const removedPile = previousFrom?.data?.find((post) => post._id === _id);
+      const previousFrom = queryClient.getQueryData(fromKey);
+      const previousTo = queryClient.getQueryData(toKey);
 
-  // Remove from old category cache **only if it's NOT 'all'**
-  if (fromCategory !== "all") {
-    const updatedFromData = previousFrom?.data?.filter((post) => post._id !== _id) || [];
-    queryClient.setQueryData(["pile", fromCategory], {
-      data: updatedFromData,
-    });
-  }
+      let removedPile = null;
 
-  // Add to new category cache **only if new category is NOT 'all'**
-  // Because you don't want UI to show it added in 'all'
-  if (category !== "all" && category !== fromCategory && removedPile) {
-    queryClient.setQueryData(["pile", category], {
-      data: [...(previousTo?.data || []), removedPile].filter(Boolean),
-    });
-  }
+      // Remove from old category unless it's "all"
+      if (fromCategory !== "all" && previousFrom?.pages) {
+        const newFromPages = previousFrom.pages.map((page) => {
+          const filteredPiles = page.piles.filter((pile) => {
+            const match = pile._id === _id;
+            if (match) removedPile = pile;
+            return !match;
+          });
+          return { ...page, piles: filteredPiles };
+        });
 
-  return { previousFrom, previousTo };
-},
+        queryClient.setQueryData(fromKey, {
+          ...previousFrom,
+          pages: newFromPages,
+        });
+      } else if (fromCategory === "all" && previousFrom?.pages) {
+        // Still find removedPile to transfer to new category
+        for (const page of previousFrom.pages) {
+          const match = page.piles.find((pile) => pile._id === _id);
+          if (match) {
+            removedPile = match;
+            break;
+          }
+        }
+      }
+
+      // Add to new category
+      if (removedPile) {
+        const newToPages = previousTo?.pages?.length
+          ? [...previousTo.pages]
+          : [{ piles: [], nextPage: undefined }];
+
+        newToPages[0].piles = [removedPile, ...(newToPages[0].piles || [])].sort(
+          (a, b) => b._id.localeCompare(a._id)
+        );
+
+        queryClient.setQueryData(toKey, {
+          pages: newToPages,
+          pageParams: previousTo?.pageParams ?? [undefined],
+        });
+      }
+
+      return { previousFrom, previousTo };
+    },
   
 
 
     onError: (error, variables, context) => {
-      // Rollback to previous cache if mutation fails
       if (context?.previousFrom) {
-        queryClient.setQueryData(
-          ["pile", context.previousFrom],
-          context.previousFrom
-        );
+        const fromKey = ["pile", variables.fromCategory];
+        queryClient.setQueryData(fromKey, context.previousFrom);
       }
       if (context?.previousTo) {
-        queryClient.setQueryData(
-          ["pile", context.previousTo],
-          context.previousTo
-        );
+        const toKey = ["pile", variables.category];
+        queryClient.setQueryData(toKey, context.previousTo);
       }
       console.error("Failed to change category:", error);
     },
 
     onSuccess: ({ category }) => {
-      queryClient.invalidateQueries({ queryKey: ["pile", category] });
+      queryClient.invalidateQueries({ queryKey: ["pile", category, ""] });
     },
   });
 };

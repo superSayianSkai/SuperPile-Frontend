@@ -1,46 +1,46 @@
 import useFetchUserPublicPile from "../tanstack-query-hooks/useFetchPublicPile";
 import { useParams } from "react-router";
-import { toast } from "react-toastify";
+import { useAuthStore } from "../zustard/useAuthStore";
+import useClickedModal from "../zustard/useClickedModal";
+import CustomToast from "../components/ShowCustomToast";
+import ChangeCategoryContainer from "../components/ChangeCategoryContainer";
+import { SupaPileAUTHContext } from "../context/SupaPileContext";
+import { useContext } from "react";
+import { useState } from "react";
 const PublicPile = () => {
-  const { uuID } = useParams();
-  console.log(uuID);
-  const { data } = useFetchUserPublicPile(uuID);
+  const { handleSignIn } = useContext(SupaPileAUTHContext);
+
+  const { setTheModal, clicked } = useClickedModal();
+  const { publicLinkToken } = useParams();
+  console.log(publicLinkToken);
+  const { data } = useFetchUserPublicPile(publicLinkToken);
+  const { user: userData } = useAuthStore();
+
+  const pile = data?.data;
+
+  const [toast, setToast] = useState({ show: false, message: "" });
+
+  const showCustomToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => {
+      setToast({ show: false, message: "" });
+    }, 3000);
+  };
 
   const copy = (e) => {
     navigator.clipboard.writeText(e);
-    toast.success("copied to clipboard");
+    showCustomToast("Copied to clipboard");
   };
-  const pile = data?.data;
-  const shareNavigator = async () => {
-    const url = window.location.href;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "Check this out!", url });
-        return;
-      } catch (error) {
-        console.error("Sharing failed", error);
-      }
-    }
-
-    // Fallback: open WhatsApp Web with prefilled message
-    const encodedURL = encodeURIComponent(url);
-    const whatsappURL = `https://web.whatsapp.com/send?text=${encodedURL}`;
-    window.open(whatsappURL, "_blank");
-
-    // Optionally also copy to clipboard
-    try {
-      await navigator.clipboard.writeText(url);
-      alert("Link copied to clipboard!");
-    } catch (error) {
-      console.error("Clipboard copy failed:", error);
-      alert("Could not copy link. Please copy manually.");
-    }
+  const handleLinkSubmit = async (link) => {
+    localStorage.setItem("pending_link", link);
+    handleSignIn();
   };
+
   console.log(data);
   console.log("hjshs");
   return (
     <div className="py-[20px] lg:mx-[30px] mx-[1rem] md:px-0 ">
+      {clicked.isOpen && <ChangeCategoryContainer />}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
         {pile?.map((link) => {
           return (
@@ -73,39 +73,42 @@ const PublicPile = () => {
                 <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
                   {link?.description?.slice(0, 152)}
                 </p>
-                <div className="flex items-center w-[100%] pr-[1rem]">
-                  <div className="flex gap-4  mt-[10px] items-center w-[100%]">
-                    <button
-                      onClick={() => copy(link.url)}
-                      className="text-[15px]"
-                    >
-                      <i className="bi bi-clipboard hover:text-gray-500 "></i>
-                    </button>
-                    <button
-                      onClick={() =>
-                        shareNavigator({
-                          title: "whatsapp",
-                          text: link.url,
-                          url: "https://web.whatsapp.com/",
-                        })
-                      }
-                      className="text-[15px]"
-                    >
-                      <i className="bi bi-share hover:text-gray-500 "></i>
-                    </button>
+                {!userData && (
+                  <div className="flex items-center w-[100%] pr-[1rem]">
+                    <div className="flex gap-4  mt-[10px] items-center w-[100%]">
+                      <button
+                        onClick={() => copy(link.url)}
+                        className="text-[15px]"
+                      >
+                        <i className="bi bi-clipboard hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer "></i>
+                      </button>
+                      <button
+                        onClick={() =>
+                          setTheModal({
+                            isOpen: true,
+                            modalType: "share",
+                            url: link.url,
+                          })
+                        }
+                        className="text-[15px]"
+                      >
+                        <i className="bi bi-share hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer "></i>
+                      </button>
 
-                    <button
-                      // onClick={() => handleClick(link._id)}
-                      className="relative rounded-full text-[15px]"
-                    >
-                      <i className="bi bi-bookmark-check hover:text-gray-500"></i>
-                    </button>
+                      <button
+                        onClick={() => handleLinkSubmit(link?.url)}
+                        className="relative rounded-full text-[15px]"
+                      >
+                        <i className="bi bi-floppy hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           );
         })}
+        <CustomToast message={toast.message} show={toast.show} />
       </div>
     </div>
   );

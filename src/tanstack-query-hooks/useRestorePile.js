@@ -14,41 +14,43 @@ const useRestorePile =()=>{
         onSuccess:()=>{
             queryClient.invalidateQueries({queryKey:["pile" ,"all"]})
         },
-        onMutate: async ({_id, category}) => {
-            console.log(category)
-            await queryClient.cancelQueries(["pile","all"]);
-            const previousPosts = queryClient.getQueryData(["archivedPile"]).data;
-            console.log(previousPosts)
-            console.log(_id)
-            const newpile = previousPosts.filter((previousPile) => _id!= previousPile._id);
-            const removedPile = previousPosts.filter((post) => post._id === _id);
-            console.log(newpile)
-            console.log(removedPile)
+        onMutate: async ({ _id, category = "uncategorized" }) => {
+            await queryClient.cancelQueries(["pile", "all"]);
+            const archivedData = queryClient.getQueryData(["archivedPile"]);
+            // Infinite query shape: { pages: [{ piles: [...] }, ...], ... }
+            const previousPosts = archivedData?.pages?.[0]?.piles || [];
+            const removedPile = previousPosts.find((post) => post._id === _id);
+            if (!removedPile) return;
 
-            console.log("i love you")
-            // console.log(removedPile)
+            // Update 'archivedPile'
+            queryClient.setQueryData(["archivedPile"], (old) => ({
+                ...old,
+                pages: old.pages.map((page, index) => {
+                    if (index === 0) {
+                        return {
+                            ...page,
+                            piles: page.piles.filter((p) => p._id !== _id),
+                        };
+                    }
+                    return page;
+                }),
+            }));
 
-            if(category=="all"){
-                queryClient.setQueryData(["pile","all"], old => ({
-                  data: [...(old?.data || []), removedPile[0]]
+            // Update 'pile'
+            queryClient.setQueryData(["pile", "all"], (old) => ({
+                ...old,
+                data: [...(old?.data || []), removedPile],
+            }));
+
+            if (category !== "all") {
+                queryClient.setQueryData(["pile", category], (old) => ({
+                    ...old,
+                    data: [...(old?.data || []), removedPile],
                 }));
-            }else{
-                queryClient.setQueryData(["pile","all"], old => ({
-                    data: [...(old?.data || []), removedPile[0]]
-                  }));
-                queryClient.setQueryData(["pile", category], old => ({
-                    data: [...(old?.data || []), removedPile[0]]
-                  }));
-                  
             }
-            
-            queryClient.setQueryData(["archivedPile"],{
-                  data:[
-                  ...newpile
-                  ]
-            })
-           return {newpile}
-          },
+
+            return { newpile: previousPosts.filter((previousPile) => _id !== previousPile._id) };
+        },
           onError: (err) => {
             console.log(err);
           },

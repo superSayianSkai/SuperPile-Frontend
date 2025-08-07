@@ -1,15 +1,38 @@
+import CustomToast from "./ShowCustomToast";
 import { useContext, useRef, useState, useEffect } from "react";
 import { StateContext } from "../context/SupaPileContext";
 import useMeta from "../tanstack-query-hooks/useMeta";
 import usePostPile from "../tanstack-query-hooks/usePostPile";
 import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
-
+import useStateStore from "../zustard/useStateStore";
+import useFetchPile from "../tanstack-query-hooks/useFetchPile";
 const PilePanel = () => {
+  useEffect(() => {
+    console.log("hey there  ");
+  });
+  const { supaPileState } = useStateStore();
+  const { data: pileData, refetch } = useFetchPile({
+    category: supaPileState.category,
+    keyword: supaPileState.keyword,
+  });
   const regex = /https?:\/\/[\w.-]+\.[a-z]{2,}/;
   const textAreaRef = useRef();
   const secondTextAreaRef = useRef();
   const [isVisible, setIsVisible] = useState(false);
-  
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const triggerToast = (message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setHasError(true);
+    setTimeout(() => {
+      setShowToast(false);
+      setHasError(false);
+    }, 3000);
+  };
+
   const {
     setLinkBoardPanelToggle,
     modifyTheHostName,
@@ -20,16 +43,32 @@ const PilePanel = () => {
   const [meta, showMeta] = useState(false);
   const [categoryInput, setCategoryInput] = useState("all");
   const { data, isLoading } = useMeta({ link: metaLink });
-  const { mutate } = usePostPile();
-  const {data:categoryList}=useFetchCategory().data
-  console.log("hey hey hey ayotide")
-  console.log(categoryList)
+  const { mutate, error } = usePostPile();
+  const allPiles = pileData?.pages.flatMap((page) => page.piles) || [];
+  const pileUrls = allPiles.map((pile) => pile.url);
+  const isDuplicate = pileUrls.includes(metaLink);
+  console.log("Jesus is Lord");
+  console.log(isDuplicate);
+  const categoryData = useFetchCategory();
+  const categoryList = categoryData?.data?.data?.categories ?? [];
+  console.log("hshshshshshs");
+  console.log(categoryList);
+
+  console.log("hey hey hey ayotide");
+  console.log(categoryList);
   const titleMaxLength = 30;
   const descMaxLength = 104;
 
   // Trigger entrance animation
   useEffect(() => {
     setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   const theCategoryInput = (e) => {
@@ -49,8 +88,24 @@ const PilePanel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate({ url: metaLink, category: categoryInput });
+    if (hasError) return;
+    if (isDuplicate) {
+      triggerToast("This pile exist.");
+      return;
+    }
+    console.log("why why");
+    // 👇 Then trigger the mutation
+    mutate({
+      url: metaLink,
+      category: categoryInput,
+      keyword: supaPileState.keyword ?? "",
+    });
     setLinkBoardPanelToggle();
+    setTimeout(() => {
+      refetch();
+      console.log("kyle");
+      console.log(error);
+    }, [3000]);
   };
 
   const handleClose = () => {
@@ -68,37 +123,66 @@ const PilePanel = () => {
         <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
-      
+
       <div
         onClick={handleClose}
         className="absolute inset-0 backdrop-blur-sm z-10"
       ></div>
-      
-      <div className={`bg-white border border-gray-200 shadow-2xl w-[95%] max-w-2xl absolute rounded-3xl z-20 flex flex-col overflow-hidden transform transition-all duration-250 ease-out ${
-        isVisible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-8 scale-95 opacity-0'
-      }`}>
+
+      <div
+        className={`bg-white border border-gray-200 overflow-y-auto  ${
+          meta ? "w-[100%] max-sm:min-h-[100svh] max-sm:max-h-[100svh] md:rounded-3xl md:w-[95%]" : "rounded-3xl w-[95%]"
+        } shadow-2xl  sm:max-w-2xl max-w-full absolute  z-20 flex flex-col transform transition-all duration-250 ease-out ${
+          isVisible
+            ? "translate-y-0 scale-100 opacity-100"
+            : "translate-y-8 scale-95 opacity-0"
+        }`}
+      >
         {/* Modal Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100">
           <h2 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
-            Add New 
+            Add New
           </h2>
-          <button 
+          <button
             onClick={handleClose}
-            className="text-gray-600 hover:text-gray-800 transition-all duration-150 hover:scale-110 p-1 rounded-full hover:bg-gray-100"
+            className="text-gray-600 hover:text-gray-800 hover:opacity-50 transition-all duration-150 hover:scale-110 p-1 rounded-full hover:bg-gray-100"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
-        
+
         {/* Input Section */}
         <div className="px-6 py-5 bg-gray-50">
-          <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            <div className="flex-1 relative group">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+          >
+            <div className="flex-1 relative group w-full">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-500 group-focus-within:text-orange-500 transition-colors duration-150" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-pink-500 group-focus-within:text-orange-500 transition-colors duration-150"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
               <input
@@ -109,21 +193,32 @@ const PilePanel = () => {
             </div>
             <button
               type="submit"
-              className="group relative flex items-center justify-center p-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 rounded-xl transition-all duration-150 hover:scale-105 hover:shadow-lg overflow-hidden"
+              className="w-full sm:w-auto group relative flex items-center justify-center p-3 bg-black text-white font-medium rounded-xl transition-all duration-150 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden"
               aria-label="Submit link"
             >
               <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150"></div>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white relative z-10 group-hover:translate-x-0.5 transition-transform duration-150" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white relative z-10 group-hover:translate-x-0.5 transition-transform duration-150"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
               </svg>
             </button>
           </form>
         </div>
 
         {meta && (
-          <div className={`px-6 pb-6 bg-white transform transition-all duration-250 delay-100 ${
-            meta ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-          }`}>
+          <div
+            className={`px-6 pb-6 bg-white transform transition-all duration-250 delay-100 ${
+              meta ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            }`}
+          >
             <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200 transition-all duration-150">
               {isLoading ? (
                 <div className="animate-pulse space-y-4">
@@ -151,14 +246,27 @@ const PilePanel = () => {
                     ) : (
                       <div className="w-full md:w-48 h-40 rounded-xl flex items-center justify-center bg-gradient-to-br from-pink-100 to-orange-100 border border-gray-300">
                         <div className="text-center p-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mx-auto text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-10 w-10 mx-auto text-pink-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
-                          <p className="text-gray-600 mt-2 text-sm font-medium">No preview available</p>
+                          <p className="text-gray-600 mt-2 text-sm font-medium">
+                            No preview available
+                          </p>
                         </div>
                       </div>
                     )}
-                    <div className="flex-1">
+                    <div className="flex-1 overflow-hidden">
                       <h2
                         ref={textAreaRef}
                         className="font-bold text-xl text-gray-800 mb-2 line-clamp-2"
@@ -174,8 +282,19 @@ const PilePanel = () => {
                         {data.description ? data.description : hostNameSentence}
                       </p>
                       <div className="mt-3 flex items-center text-sm text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 mr-1 text-pink-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                          />
                         </svg>
                         <span className="truncate">{hostNameSentence}</span>
                       </div>
@@ -184,17 +303,19 @@ const PilePanel = () => {
                 </>
               )}
             </div>
-            
+
             {/* Category Section */}
-            <div className="mt-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <div className="mt-5 ">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category
+              </label>
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="relative flex-1 group">
-                  <input 
-                    value={categoryInput} 
-                    onChange={theCategoryInput} 
+                  <input
+                    value={categoryInput}
+                    onChange={theCategoryInput}
                     className="w-full px-4 py-3 bg-white text-gray-800 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition-all duration-150 placeholder-gray-500"
-                    maxLength={20} 
+                    maxLength={20}
                     placeholder="Enter category name"
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 text-sm">
@@ -203,29 +324,40 @@ const PilePanel = () => {
                 </div>
                 <button
                   onClick={handleSubmit}
-                  className="group relative px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all duration-150 flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg overflow-hidden"
+                  className="group relative px-6 py-3 bg-black text-white font-medium rounded-xl transition-all duration-150 flex items-center justify-center gap-2 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150"></div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 relative z-10"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span className="relative z-10">Add to Collection</span>
+                  <p className="relative z-10  group-hover:text-white">
+                    Add to Collection
+                  </p>
                 </button>
               </div>
             </div>
-            
+
             {/* Category Suggestions */}
-            <div className="mt-3">
+            <div className="mt-3 ">
               <p className="text-xs text-gray-500 mb-2">categories:</p>
-              <div className="flex flex-wrap gap-2">
-                {[...categoryList.categories].map((cat) => (
+              <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin pr-2 scroll">
+                {categoryList.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setCategoryInput(cat.toLowerCase())}
                     className={`px-3 py-1.5 text-sm rounded-full transition-all duration-150 hover:scale-105 ${
-                      categoryInput === cat.toLowerCase() 
-                        ? "bg-gradient-to-r from-pink-500 to-orange-500 text-white shadow-lg" 
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+                      categoryInput === cat.toLowerCase()
+                        ? "bg-gradient-to-r from-pink-500 to-orange-500 text-white shadow-lg"
+                        : "bg-black text-white border border-gray-300 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00]"
                     }`}
                   >
                     {cat}
@@ -236,7 +368,7 @@ const PilePanel = () => {
           </div>
         )}
       </div>
-      
+
       {/* Custom styles for animations */}
       <style>{`
         @keyframes bounce-up {
@@ -258,6 +390,7 @@ const PilePanel = () => {
           animation: bounce-up 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
       `}</style>
+      <CustomToast message={toastMessage} show={showToast} />
     </div>
   );
 };
