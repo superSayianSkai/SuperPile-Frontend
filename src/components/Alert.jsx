@@ -2,10 +2,6 @@ const Alert = ({
   children,
   width,
   height,
-  fontSize,
-  top,
-  right,
-  left,
 }) => {
   return (
     <div

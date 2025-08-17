@@ -5,16 +5,9 @@ import { ToastContainer } from "react-toastify";
 import App from "./App.jsx";
 import AuthProvider from "./context/AuthProvider.jsx";
 import StateProvider from "./context/StateProvider.jsx";
-import { QueryClient, QueryClientProvider} from "@tanstack/react-query";
-// import { persistQueryClient } from '@tanstack/react-query-persist-client'
-// import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-const queryClient = new QueryClient({
-
-})
-
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient({});
+import { register } from "./utils/serviceWorkerRegistration.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -22,8 +15,8 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <App />
-       {/* <ReactQueryDevtools initialIsOpen={false} position="" /> */}
-        </QueryClientProvider>  
+          {/* <ReactQueryDevtools initialIsOpen={false} position="" /> */}
+        </QueryClientProvider>
         <ToastContainer
           position="bottom-right"
           autoClose={1000}
@@ -39,3 +32,6 @@ createRoot(document.getElementById("root")).render(
     </StateProvider>
   </StrictMode>
 );
+
+// Register service worker
+register();

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { toPng } from "html-to-image";
+import {toJpeg} from "html-to-image";
 
 const BadgeDownloader = () => {
   // const ref = useRef(null);
@@ -27,12 +27,12 @@ const BadgeDownloader = () => {
     if (!ref.current) return;
 
     try {
-      const datUrl = await toPng(ref.current, {
+      const datUrl = await toJpeg(ref.current, {
         backgroundColor: "transparent",
         pixelRatio: 2,
       });
       const link = document.createElement("a");
-      link.download = "supapile-icon.png", 
+      link.download = "supapile-icon.jpeg",
       link.href = datUrl;
       link.click();
     } catch (err) {

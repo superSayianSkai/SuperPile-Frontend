@@ -72,7 +72,8 @@ const PilePanel = () => {
   }, []);
 
   const theCategoryInput = (e) => {
-    setCategoryInput(e.target.value);
+    const value = e.target.value;
+    setCategoryInput(value.toLowerCase());
   };
 
   const workOnSetTheMetaLink = (e) => {
@@ -120,8 +121,8 @@ const PilePanel = () => {
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black/70 to-gray-900/50">
         {/* Floating gradient orbs */}
-        <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        {/* <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div> */}
       </div>
 
       <div
@@ -131,7 +132,9 @@ const PilePanel = () => {
 
       <div
         className={`bg-white border border-gray-200 overflow-y-auto  ${
-          meta ? "w-[100%] max-sm:min-h-[100svh] max-sm:max-h-[100svh] md:rounded-3xl md:w-[95%]" : "rounded-3xl w-[95%]"
+          meta
+            ? "w-[100%] max-sm:min-h-[100svh] max-sm:max-h-[100svh] md:rounded-3xl md:w-[95%]"
+            : "rounded-3xl w-[95%]"
         } shadow-2xl  sm:max-w-2xl max-w-full absolute  z-20 flex flex-col transform transition-all duration-250 ease-out ${
           isVisible
             ? "translate-y-0 scale-100 opacity-100"
@@ -193,7 +196,7 @@ const PilePanel = () => {
             </div>
             <button
               type="submit"
-              className="w-full sm:w-auto group relative flex items-center justify-center p-3 bg-black text-white font-medium rounded-xl transition-all duration-150 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden"
+              className="w-full sm:w-auto group relative flex items-center justify-center p-4 md:p-3 bg-black text-white font-medium rounded-xl transition-all duration-150 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden"
               aria-label="Submit link"
             >
               <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150"></div>
@@ -215,11 +218,11 @@ const PilePanel = () => {
 
         {meta && (
           <div
-            className={`px-6 pb-6 bg-white transform transition-all duration-250 delay-100 ${
+            className={`pb-6 bg-white transform transition-all duration-250 delay-100 ${
               meta ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             }`}
           >
-            <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200 transition-all duration-150">
+            <div className="mx-6 bg-gray-50 rounded-2xl p-5 border border-gray-200 transition-all duration-150">
               {isLoading ? (
                 <div className="animate-pulse space-y-4">
                   <div className="flex flex-col md:flex-row gap-6">
@@ -305,7 +308,7 @@ const PilePanel = () => {
             </div>
 
             {/* Category Section */}
-            <div className="mt-5 ">
+            <div className="px-6  mt-5 ">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Category
               </label>
@@ -347,9 +350,9 @@ const PilePanel = () => {
             </div>
 
             {/* Category Suggestions */}
-            <div className="mt-3 ">
+            <div className="pl-6 mt-4 sm:mt-3 ">
               <p className="text-xs text-gray-500 mb-2">categories:</p>
-              <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin pr-2 scroll">
+              <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin pr-2 scroll border-black">
                 {categoryList.map((cat) => (
                   <button
                     key={cat}

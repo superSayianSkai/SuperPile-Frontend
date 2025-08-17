@@ -1,6 +1,7 @@
+import { getBaseUrl } from "../utils/getBaseUrl";
 export const Auth = () => {
-  const baseURL = import.meta.env.VITE_BASE_URL;
-
+    const baseURL = import.meta.env.VITE_BASE_URL_MOBILE;
+    console.log("Ayotide")
   //sign in to google start
   const handleSignIn = () => {
     // e.preventDefault();

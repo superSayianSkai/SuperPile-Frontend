@@ -24,12 +24,27 @@ const useAuth = () => {
         return data;
       } catch (error) {
         setLoading(false);
+        setUser(null); // Explicitly clear user data
         setError(true, error);
         throw error;
       }
     },
     retry: (failureCount, error) => {
-      if (error?.response?.status === 401) return false;
+      if (error?.response?.status === 401) {
+        // Force clear user state on 401
+        setUser(null);
+        setError(true, error);
+        
+        // Clear navigation cache to prevent stale auth pages
+        if ('caches' in window) {
+          caches.open('supapile-shell-v3').then(cache => {
+            cache.delete('/');
+            cache.delete('/login');
+          });
+        }
+        
+        return false;
+      }
       return failureCount < 2;
     },
     staleTime: 1000 * 60 * 5,

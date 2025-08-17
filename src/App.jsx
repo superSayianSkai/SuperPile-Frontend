@@ -8,6 +8,7 @@ import OnBoarding from "./pages/OnBoarding";
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
 import BadgeDownloader from "./components/BadgeDownloader";
+import Updates from "./pages/Updates";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -29,6 +30,7 @@ const App = () => {
         },
       ],
     },
+    { path: "/updates", element: <Updates /> },
     {
       path: "/badgeDownLoader",
       element: <BadgeDownloader />,

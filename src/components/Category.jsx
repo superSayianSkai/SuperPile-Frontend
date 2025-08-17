@@ -54,7 +54,7 @@ const Category = () => {
             </div>
           );
         })}
-      {showArrow && (
+      {showArrow && category.length > 3 && (
         <div className="flex absolute right-2 bottom-2 justify-center">
            <i className="bi bi-chevron-double-down text-sm bouncing-arrow bi bi-arrow-down animate-bounce text-transparent bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] bg-clip-text"></i>
         </div>

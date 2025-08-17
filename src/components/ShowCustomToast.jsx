@@ -1,4 +1,3 @@
-// src/components/CustomToast.jsx
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types"
 const CustomToast = ({ message = "", show = false, duration = 1000 }) => {
@@ -18,7 +17,7 @@ const CustomToast = ({ message = "", show = false, duration = 1000 }) => {
   if (!visible) return null;
 
   return (
-    <div className={`fixed flex  items-center dark:bg-white dark:text-black justify-center gap-2 bottom-2 md:bottom-4 md:left-8 bg-black text-white text-sm max-sm:rounded-md rounded-xl px-4  py-3 md:py-2 shadow-lg z-50 animate-slide-up ${message?"block":"hidden"} `}>
+    <div className={`fixed flex items-center dark:bg-white dark:text-black justify-center gap-2 bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white text-sm max-sm:rounded-md rounded-xl px-4 py-3 md:py-2 shadow-lg z-50 animate-slide-up  w-[350px] ${message?"block":"hidden"} `}>
       {message}
     </div>
   );

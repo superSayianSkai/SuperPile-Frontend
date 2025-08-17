@@ -3,11 +3,12 @@ import useClickedCategory from "../zustard/useClickedModal";
 import GenerateLink from "./GenerateLink";
 import ShareModal from "./ShareModal";
 const ChangeCategoryContainer = () => {
-  const {clicked } = useClickedCategory();
-  console.log("Jesus Loves me")
-  console.log(clicked)
+  const { clicked } = useClickedCategory();
+  console.log("Jesus Loves me");
+  console.log(clicked);
   return (
     <div
+      onClick={(e) => e.stopPropagation()}
       className="fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-[1000]"
     >
       <div onClick={(e) => e.stopPropagation()}>

@@ -1,0 +1,33 @@
+{
+    "name": "SupaPile",
+    "short_name": "SupaPile",
+    "start_url": "/?source=pwa",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000",
+    "icons": [
+        {
+            "src": "./icons/supapile-icon-192x192webp.webp",
+            "sizes": "192x192",
+            "type": "image/webp"
+        },
+        {
+            "src": "./icons/supapile-icon-512512webp.webp",
+            "sizes": "512x512",
+            "type": "image/webp"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "./screenshots/PC-supapile.png",
+            "sizes": "2877x1601",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "./screenshots/mobile-supapile.png",
+            "sizes": "632x1258",
+            "type": "image/png"
+        }
+    ]
+}
