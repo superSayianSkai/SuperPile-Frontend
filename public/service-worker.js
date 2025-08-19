@@ -44,7 +44,7 @@ self.addEventListener("fetch", (event) => {
   // Example: treat your API calls separately (adjust domain/path as needed)
   if (
     url.pathname.startsWith("/api/") ||
-    url.hostname === "api.yoursupapile.com"
+    url.hostname === "https://supapile-backend.up.railway.app"
   ) {
     // Skip caching for auth/login endpoints
     // Remove line 51 entirely and fix the condition:
@@ -67,31 +67,30 @@ self.addEventListener("fetch", (event) => {
   // For navigation (HTML) requests
   if (request.mode === "navigate") {
     const url = new URL(request.url);
-    
+
     // Skip caching for OAuth redirects and auth-related pages
     if (
-      url.searchParams.has('code') ||  // OAuth callback with code parameter
-      url.searchParams.has('state') || // OAuth state parameter
-      url.pathname === '/login' ||
-      url.pathname === '/' ||  // Home page after login
-      url.pathname.startsWith('/auth')
+      url.searchParams.has("code") || // OAuth callback with code parameter
+      url.searchParams.has("state") || // OAuth state parameter
+      url.pathname === "/login" ||
+      url.pathname === "/" || // Home page after login
+      url.pathname.startsWith("/auth")
     ) {
       // For OAuth flows, try multiple strategies
       event.respondWith(
         fetch(request, {
-          cache: 'no-cache',
-          credentials: 'same-origin'
-        })
-        .catch(async (error) => {
-          console.log('OAuth redirect fetch failed, trying cache:', error);
+          cache: "no-cache",
+          credentials: "same-origin",
+        }).catch(async (error) => {
+          console.log("OAuth redirect fetch failed, trying cache:", error);
           // Try cache first, then offline page
-          const cachedResponse = await caches.match('/');
+          const cachedResponse = await caches.match("/");
           return cachedResponse || caches.match(OFFLINE_PAGE);
         })
       );
       return;
     }
-    
+
     // Cache-first for other navigation
     event.respondWith(
       caches
@@ -156,28 +155,31 @@ async function networkFirst(request) {
 }
 
 // Add message listener for force refresh
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
-  if (event.data && event.data.type === 'FORCE_REFRESH') {
+  if (event.data && event.data.type === "FORCE_REFRESH") {
     // Clear all caches and force refresh
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => caches.delete(cacheName))
-      );
-    }).then(() => {
-      self.clients.matchAll().then(clients => {
-        clients.forEach(client => client.navigate(client.url));
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => caches.delete(cacheName))
+        );
+      })
+      .then(() => {
+        self.clients.matchAll().then((clients) => {
+          clients.forEach((client) => client.navigate(client.url));
+        });
       });
-    });
   }
   // Add logout handler
-  if (event.data && event.data.type === 'LOGOUT') {
+  if (event.data && event.data.type === "LOGOUT") {
     // Clear all caches on logout
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(cacheName => caches.delete(cacheName))
+        cacheNames.map((cacheName) => caches.delete(cacheName))
       );
     });
   }
