@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const getGeneratedLink = async ({ expiryOption }) => {
-  const response = await apiClient.post("/api/generate-public-link", {
+  const response = await apiClient.post("/api/v1/public-links", {
     expiryOption,
   });
   
@@ -27,11 +27,12 @@ const useGenerateLink = () => {
   
   return useMutation({
     mutationFn: getGeneratedLink,
-    onSuccess: () => {
-      // Invalidate and refetch the current link query after a short delay
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["currentPublicLink"] });
-      }, 500);
+    onSuccess: (data) => {
+      // Update the current link query cache immediately with the new data
+      queryClient.setQueryData(["currentPublicLink"], data);
+      
+      // Also invalidate to ensure fresh data on next fetch
+      queryClient.invalidateQueries({ queryKey: ["currentPublicLink"] });
     },
   });
 };

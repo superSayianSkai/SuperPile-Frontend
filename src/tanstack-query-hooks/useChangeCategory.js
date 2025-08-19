@@ -2,8 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const changeCategory = async ({ _id, category }) => {
-  const response = await apiClient.post("/api/change-pile-category", {
-    _id,
+  const response = await apiClient.patch(`/api/v1/piles/${_id}`, {
     category,
   });
   console.log(response);

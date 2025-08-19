@@ -34,7 +34,7 @@ const Profile = () => {
       // Redirect to backend logout endpoint to clear server-side session
       const baseURL = import.meta.env.VITE_BASE_URL;
       console.log(baseURL)  
-      window.location.href = `${baseURL}/auth/logout`;
+      window.location.href = `${baseURL}/auth/v1/logout`;
       
     } catch (error) {
       console.error('Logout error:', error);

@@ -1,7 +1,7 @@
 import apiClient from "../lib/axios";
 import { useQuery } from "@tanstack/react-query";
 const fetchCategory=async() => {
-   const response= await apiClient.get("/api/list-of-category")
+   const response= await apiClient.get("/api/v1/piles/categories")
    console.log("i am tired")
    console.log(response.data.data.categories)
    return response.data;

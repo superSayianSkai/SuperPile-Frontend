@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import CustomToast from "../components/ShowCustomToast.jsx";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../zustard/useAuthStore.js";
+
 const ArchivedPage = () => {
   const navigate = useNavigate();
   const {
@@ -29,9 +30,18 @@ const ArchivedPage = () => {
   const { ref, inView } = useInView();
 
   const [toast, setToast] = useState({ show: false, message: "" });
+  // Add state to track image load errors
+  const [imageErrors, setImageErrors] = useState(new Set());
+  
   console.log("antartica");
   console.log(isError);
   console.log(error);
+  
+  const handleImageError = (linkId, imageUrl) => {
+    console.log(`Image failed to load: ${imageUrl}`);
+    setImageErrors(prev => new Set([...prev, linkId]));
+  };
+
   const showCustomToast = (message) => {
     setToast({ show: true, message });
     setTimeout(() => {
@@ -94,6 +104,8 @@ const ArchivedPage = () => {
             ?.slice()
             .reverse()
             .map((link) => {
+              const hasImageError = imageErrors.has(link._id);
+              
               return (
                 <div key={link._id}>
                   <div
@@ -102,10 +114,19 @@ const ArchivedPage = () => {
                   >
                     <a href={link.url} target="_blank" className="">
                       <div className="w-full aspect-[16/9] bg-black">
-                        {link.image != "" ? (
+                        {(link.image !== "" && !hasImageError) ? (
                           <img
                             src={link.image}
                             className="w-full h-full object-contain"
+                            onError={() => handleImageError(link._id, link.image)}
+                            onLoad={() => {
+                              // Remove from error set if image loads successfully after retry
+                              setImageErrors(prev => {
+                                const newSet = new Set(prev);
+                                newSet.delete(link._id);
+                                return newSet;
+                              });
+                            }}
                           />
                         ) : (
                           <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] ">

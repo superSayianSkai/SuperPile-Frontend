@@ -6,7 +6,7 @@ const { setPostSuccess } = usePostStore.getState();
 const postURL = async ({ url, category }) => {
   console.log(category);
   try {
-    const response = await apiClient.post("/api/post-pile", { url, category });
+    const response = await apiClient.post("/api/v1/piles", { url, category });
     console.log("hey check this");
     console.log(response);
     return response.data;

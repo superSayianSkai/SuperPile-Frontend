@@ -3,7 +3,7 @@ import apiClient from "../lib/axios";
 import { useAuthStore } from "../zustard/useAuthStore";
 
 const getUserAuthorised = async () => {
-  const response = await apiClient.get("/auth/me");
+  const response = await apiClient.get("/auth/user");
   return response.data;
 };
 

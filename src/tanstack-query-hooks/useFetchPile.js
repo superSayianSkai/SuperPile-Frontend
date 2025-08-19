@@ -2,7 +2,13 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 export const getUserPile = async ({ lastId = null, category = "all", keyword = "" }) => {
-  let URL = `/api/read-pile/${category}?limit=18`;
+  let URL = `/api/v1/piles?limit=18`;
+  
+  // Add category as a query parameter if it's not "all"
+  if (category && category !== "all") {
+    URL += `&category=${category}`;
+  }
+  
   if (keyword) URL += `&keyword=${keyword}`;
   if (lastId) URL += `&lastId=${lastId}`;
 

@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 const getArchivedPile = async ({ lastId = null }) => {
   try {
     const response = await apiClient.get(
-      `/api/archived-pile?limit=18&lastId=${lastId}`
+      `/api/v1/piles/archived?limit=18&lastId=${lastId}`
     );
     const { piles = [], hasMore, newLastId } = response.data.data;
     console.log(response.data);

@@ -3,7 +3,7 @@ import apiClient from "../lib/axios"
 
 export const restore=async({_id}) =>{
     console.log(_id)
-    const response= await apiClient.put("/api/restore-pile", {_id})
+    const response= await apiClient.patch(`/api/v1/piles/${_id}/restore`)
     console.log(response.data)
 }
 

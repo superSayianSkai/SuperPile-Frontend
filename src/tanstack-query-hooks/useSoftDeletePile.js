@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const softDeletePile = async ([{ _id }]) => {
-  return await apiClient.put("/api/soft-delete-pile", [{ _id }]);
+  return await apiClient.delete(`/api/v1/piles/${ _id }`);
 };
 
 const useSoftDeletePile = () => {

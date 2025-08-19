@@ -2,8 +2,21 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const getCurrentLink = async () => {
-  const response = await apiClient.get("/api/current-public-link");
-  return response.data;
+  const response = await apiClient.get("/api/v1/public-links");
+  
+  // Add timeLeft calculation to the response, similar to useGenerateLink
+  const data = response.data;
+  if (data.success && data.expiresAt) {
+      const now = Date.now();
+    const timeLeft = data.expiresAt - now;
+    data.timeLeft = {
+      total: timeLeft,
+      minutes: Math.floor(timeLeft / (1000 * 60)),
+      seconds: Math.floor((timeLeft % (1000 * 60)) / 1000)
+    };
+  }
+  
+  return data;
 };
 
 const useGetCurrentLink = () => {

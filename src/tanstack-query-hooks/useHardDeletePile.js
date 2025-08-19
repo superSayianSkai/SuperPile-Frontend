@@ -6,7 +6,7 @@ export const deleteUserPile = async ({ _id }) => {
   console.log("hey love")
   console.log({_id})
   try {
-    const data = await apiClient.put(`/api/hard-delete-pile`, {_id});
+    const data = await apiClient.delete(`/api/v1/piles/${_id}/permanent`,);
     console.log(data)
     return data;
   } catch (error) {

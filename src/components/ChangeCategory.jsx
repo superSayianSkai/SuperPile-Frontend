@@ -22,7 +22,8 @@ const ChangeCategory = () => {
 
   const { mutate } = useChangeCategory();
   let clickedPileCategory = clicked.pile;
-  console.log();
+  console.log(clickedPileCategory)
+  console.log("hahahahah");
   const handleChange = async (e) => {
     console.log(e);
     const ticked = e.target.value;

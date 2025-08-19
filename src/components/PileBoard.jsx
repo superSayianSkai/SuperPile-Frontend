@@ -36,6 +36,9 @@ const PileBoard = () => {
   const queryClient = useQueryClient();
   console.log("selena chromez");
   const [showFirst, setShowFirst] = useState(true);
+  // Add state to track image load errors
+  const [imageErrors, setImageErrors] = useState(new Set());
+  
   const { setTheModal, clicked } = useClickedModal();
   const { mutate: fetchMutate } = useMutation({
     mutationFn: fetchCickedCategory,
@@ -49,6 +52,12 @@ const PileBoard = () => {
 
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
+  
+  const handleImageError = (linkId, imageUrl) => {
+    console.log(`Image failed to load: ${imageUrl}`);
+    setImageErrors(prev => new Set([...prev, linkId]));
+  };
+
   const softDelete = (e) => {
     mutate(e, {
       onSuccess: (res) => {
@@ -197,7 +206,7 @@ const PileBoard = () => {
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
                     showFirst
                       ? "md:opacity-100 md:animate-fadeIn"
-                      : "md:opacity-0 animate-fadeOut"
+                      : "md:opacity-0 md:animate-fadeOut"
                   } text-white transition`}
                 >
                   Pile
@@ -250,6 +259,11 @@ const PileBoard = () => {
           )}
           {allPiles?.map((link, index) => {
             const isLast = index === allPiles.length - 1;
+            const hasImageError = imageErrors.has(link?._id);
+            const imageUrl = link?.image || 
+                           (link?.url === MetaData?.url && MetaData?.image) || 
+                           fromLogin?.image;
+            
             return (
               <div
                 key={link?._id || MetaData?._id}
@@ -263,17 +277,19 @@ const PileBoard = () => {
                 >
                   <a href={link?.url} target="_blank" className="">
                     <div className="w-full aspect-[16/9] bg-black">
-                      {link?.image !== "" ||
-                      (link?.url === MetaData?.url &&
-                        MetaData?.image?.length > 0) ||
-                      fromLogin?.image?.length > 0 ? (
+                      {(imageUrl && !hasImageError) ? (
                         <img
-                          src={
-                            link?.image ||
-                            (link?.url === MetaData?.url && MetaData?.image) ||
-                            fromLogin?.image
-                          }
+                          src={imageUrl}
                           className="w-full h-full object-contain"
+                          onError={() => handleImageError(link?._id, imageUrl)}
+                          onLoad={() => {
+                            // Remove from error set if image loads successfully after retry
+                            setImageErrors(prev => {
+                              const newSet = new Set(prev);
+                              newSet.delete(link?._id);
+                              return newSet;
+                            });
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full object-contain bg-black flex justify-center items-center font-bold transition-all duration-300 bg-gradient-to-r from-[#ff66b2] to-[#ff8c00]">

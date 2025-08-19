@@ -6,14 +6,13 @@ import { X, Copy, Check, Clock } from "lucide-react";
 
 const GenerateLink = () => {
   const { mutate, data: generateData, isPending, error } = useGenerateLink();
-  const { data: currentLinkData, isFetching: isCheckingCurrent } =
-    useGetCurrentLink();
-  console.log("Just got a new oraimo");
-  console.log(isCheckingCurrent);
+  const { data: currentLinkData, isFetching: isCheckingCurrent } = useGetCurrentLink();
   const [copied, setCopied] = useState(false);
   const [selectedExpiry, setSelectedExpiry] = useState("2.5min");
   const { setTheModal } = useClickedModal();
 
+  // console.log("solo leveling")
+  // console.log(currentLinkData)
   // Expiry options that match backend
   const expiryOptions = [
     { value: "2.5min", label: "2.5 Minutes", duration: 150 },
@@ -21,12 +20,12 @@ const GenerateLink = () => {
     { value: "24hr", label: "24 Hours", duration: 86400 },
   ];
 
-  // SIMPLE: Always prioritize generateData if it exists and is successful
-  const activeLink = generateData?.success
-    ? generateData
-    : currentLinkData?.success
+  console.log("baby girl you know what i want")
+  console.log(`check this out :${currentLinkData?.success}`)
+  const activeLink = currentLinkData?.success
     ? currentLinkData
     : null;
+    console.log(`check this out :`, activeLink?.data)
   const hasActiveLink = activeLink?.success && activeLink?.data;
 
   // Calculate time left from the active link
@@ -37,7 +36,29 @@ const GenerateLink = () => {
     return timeLeft > 0 ? Math.floor(timeLeft / 1000) : 0;
   };
 
-  const timeLeft = hasActiveLink ? calculateTimeLeft(activeLink.expiresAt) : 0;
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  // Calculate initial time left
+  useEffect(() => {
+    if (hasActiveLink) {
+      const initialTimeLeft = calculateTimeLeft(activeLink.expiresAt);
+      setTimeLeft(initialTimeLeft);
+    }
+  }, [hasActiveLink, activeLink?.expiresAt]);
+
+  // Update time every second
+  useEffect(() => {
+    if (!hasActiveLink || timeLeft <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft(prev => {
+        const newTimeLeft = prev - 1;
+        return newTimeLeft > 0 ? newTimeLeft : 0;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [hasActiveLink, timeLeft > 0]);
 
   const handleGenerateNewLink = (expiryOption = selectedExpiry) => {
     mutate(
@@ -84,11 +105,12 @@ const GenerateLink = () => {
     if (!hasActiveLink || timeLeft <= 0) return;
 
     const interval = setInterval(() => {
-      // This will trigger a re-render and recalculate timeLeft
+      // Force re-render to recalculate timeLeft
+      // This is intentionally empty as timeLeft is calculated from activeLink.expiresAt
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [hasActiveLink, timeLeft]);
+  }, [hasActiveLink]); // Remove timeLeft from dependency array
 
   return (
     <div
@@ -149,7 +171,7 @@ const GenerateLink = () => {
         )}
 
         {/* Link Generation Section */}
-        {!isCheckingCurrent || generateData ? (
+        {!isCheckingCurrent || generateData || currentLinkData ? (
           <div className="space-y-6">
             {/* Error Message Display */}
             {error && (

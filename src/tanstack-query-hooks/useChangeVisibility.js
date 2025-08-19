@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
-const changeVisibility = async ({ _id, category }) => {
-  console.log(_id, category);
+const changeVisibility = async ({ _id }) => {
   try {
-    const response = await apiClient.put("/api/change-visibility", { _id, category });
+    const response = await apiClient.patch(
+      `/api/v1/piles/${_id}/visibility`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -18,8 +19,14 @@ export const useChangeVisibility = () => {
     onMutate: async ({ _id, category }) => {
       await queryClient.cancelQueries(["pile", category]);
 
-      const previousCategoryData = queryClient.getQueryData(["pile", category, ""]);
-      const matchingPile = previousCategoryData?.pages.flatMap(page => page.piles).find(pile => pile._id === _id);
+      const previousCategoryData = queryClient.getQueryData([
+        "pile",
+        category,
+        "",
+      ]);
+      const matchingPile = previousCategoryData?.pages
+        .flatMap((page) => page.piles)
+        .find((pile) => pile._id === _id);
       const newVisibility = matchingPile ? !matchingPile.visibility : true;
 
       queryClient.setQueryData(["pile", category, ""], (oldData) => {
@@ -28,9 +35,9 @@ export const useChangeVisibility = () => {
         }
         return {
           ...oldData,
-          pages: oldData.pages.map(page => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
-            piles: page.piles.map(pile =>
+            piles: page.piles.map((pile) =>
               pile._id === _id ? { ...pile, visibility: newVisibility } : pile
             ),
           })),
@@ -41,7 +48,10 @@ export const useChangeVisibility = () => {
     },
     onError: (err, variables, context) => {
       if (context?.previousCategoryData && context?.category) {
-        queryClient.setQueryData(["pile", context.category, ""], context.previousCategoryData);
+        queryClient.setQueryData(
+          ["pile", context.category, ""],
+          context.previousCategoryData
+        );
       }
       console.log("Mutation error:", err);
     },
@@ -55,7 +65,9 @@ export const useChangeVisibility = () => {
         const updatedPages = oldData.pages.map((page) => ({
           ...page,
           piles: page.piles.map((pile) =>
-            pile._id === data._id ? { ...pile, visibility: data.visibility } : pile
+            pile._id === data._id
+              ? { ...pile, visibility: data.visibility }
+              : pile
           ),
         }));
 

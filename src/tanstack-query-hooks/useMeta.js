@@ -5,9 +5,9 @@ const getMetaData = async ({ link }) => {
   const encodedUrl = encodeURIComponent(link);
   try {
     console.log(encodedUrl);
-    const { data } = await apiClient.get(`/metaScrapper?url=${encodedUrl}`);
+    const { data } = await apiClient.get(`/api/v1/services?url=${encodedUrl}`);
     const metaInfo = {
-      image: data?.data.image,
+      image: data?.data.image?.trim().replace(/`/g, ''), // Clean the image URL
       title: data?.data.title,
       description: data?.data.description,
       url: link,
