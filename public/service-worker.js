@@ -44,7 +44,7 @@ self.addEventListener("fetch", (event) => {
   // Example: treat your API calls separately (adjust domain/path as needed)
   if (
     url.pathname.startsWith("/api/") ||
-    url.hostname === "supapile-backend.up.railway.app"  // Fixed: removed https://
+    url.hostname === "supapile-backend.up.railway.app/"  // Fixed: removed https://
   ) {
     // Skip caching for auth/login endpoints
     // Remove line 51 entirely and fix the condition:
