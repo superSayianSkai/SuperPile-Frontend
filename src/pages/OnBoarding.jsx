@@ -1,5 +1,5 @@
-import piloDark from "../assets/Images/supapileCat.png";
-import piloLight from "../assets/Images/supapile.jpeg";
+import piloDark from "../assets/Images/supapileCat2.png";
+import piloLight from "../assets/Images/supapile.webp";
 import useStateStore from "../zustard/useStateStore";
 import { SupaPileAUTHContext } from "../context/SupaPileContext";
 import { useState } from "react";
