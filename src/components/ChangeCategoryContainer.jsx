@@ -9,9 +9,9 @@ const ChangeCategoryContainer = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-[1000] h-[100svh]"
+      className="fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-[1000] h-screen max-h-screen overflow-hidden"
     >
-      <div onClick={(e) => e.stopPropagation()}>
+      <div onClick={(e) => e.stopPropagation()} className="h-full overflow-y-auto">
         {clicked.modalType === "changeCategory" ? (
           <ChangeCategory />
         ) : clicked.modalType === "generateLink" ? (
