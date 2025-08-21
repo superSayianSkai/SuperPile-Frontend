@@ -119,7 +119,7 @@ const GenerateLink = () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white z-[2000] absolute max-sm:bottom-0 dark:text-black rounded-tr-2xl rounded-tl-2xl md:rounded-2xl p-8 w-full max-w-[550px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] transform transition-all"
+        className="bg-white z-[2000] absolute max-sm:bottom-0 dark:text-black rounded-tr-2xl rounded-tl-2xl md:rounded-2xl px-7 py-8 w-full max-w-[550px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] transform transition-all"
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -259,7 +259,7 @@ const GenerateLink = () => {
                   <button
                     key={option.value}
                     onClick={() => setSelectedExpiry(option.value)}
-                    className={`relative p-3 rounded-full transition-all text-[.8rem] sm:text-sm font-medium ${
+                    className={`relative p-3 rounded-full transition-all text-[.6rem] sm:text-sm font-medium ${
                       selectedExpiry === option.value
                         ? "bg-gradient-to-r from-pink-50 to-orange-50 text-black"
                         : "border-2 border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-gray-100"
@@ -280,7 +280,7 @@ const GenerateLink = () => {
             <button
               onClick={() => handleGenerateNewLink()}
               disabled={isPending}
-              className="w-full py-4 px-6 bg-black hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 transition-all text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-4 px-6 bg-black hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 transition-all text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed text-[.8rem] sm:text-[1rem]"
             >
               <div className="flex items-center justify-center gap-2">
                 {isPending ? (

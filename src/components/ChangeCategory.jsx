@@ -49,7 +49,7 @@ const ChangeCategory = () => {
   return (
     <div
       onClick={() => setTheModal()}
-      className="relative z-10  w-[100%] rounded-xl h-[100vh] overflow-y-scroll inset-0 cursor-pointer flex justify-center items-center"
+      className="relative z-10  w-[100%] rounded-xl h-[100svh] overflow-y-scroll inset-0 cursor-pointer flex justify-center items-center"
     >
       <div onClick={(e) => e.stopPropagation()} className="w-[90%]  md:w-[400px] h-[400px] rounded-xl overflow-scroll">
         <div className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]">

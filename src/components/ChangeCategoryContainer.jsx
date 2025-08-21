@@ -9,7 +9,7 @@ const ChangeCategoryContainer = () => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-[1000]"
+      className="fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-[1000] h-[100svh]"
     >
       <div onClick={(e) => e.stopPropagation()}>
         {clicked.modalType === "changeCategory" ? (
