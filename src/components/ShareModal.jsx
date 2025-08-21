@@ -94,7 +94,7 @@ const ShareModal = ({ pile }) => {
   return (
       <div
         onClick={() => setTheModal()}
-        className="relative z-10 h-[100vh] w-[100%] inset-0 cursor-pointer flex justify-center items-center"
+        className="relative z-10 w-[100%] h-[100svh] inset-0 cursor-pointer flex justify-center items-center"
       >
       <div
         onClick={(e) => {

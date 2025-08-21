@@ -76,12 +76,38 @@ const GenerateLink = () => {
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(activeLink.data);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      // Primary method: Modern clipboard API
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(activeLink.data);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        // Fallback method for older browsers or non-secure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = activeLink.data;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
+          // Show user-friendly error message
+          alert('Copy failed. Please manually select and copy the link.');
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
     } catch (error) {
-      console.log(error);
-      console.error("Failed to copy link");
+      console.error('Copy failed:', error);
+      // Show user-friendly error message
+      alert('Copy failed. Please manually select and copy the link.');
     }
   };
 
@@ -115,7 +141,7 @@ const GenerateLink = () => {
   return (
     <div
       onClick={() => setTheModal()}
-      className="relative z-10 h-[100vh] w-[100%] inset-0 cursor-pointer flex justify-center items-center"
+      className="relative z-10 h-[100svh] w-[100%] inset-0 cursor-pointer flex justify-center items-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -142,7 +168,7 @@ const GenerateLink = () => {
         </p>
 
         {/* Loading state while checking for current link */}
-        {isCheckingCurrent && !generateData && (
+        {isCheckingCurrent && !currentLinkData && (
           <div className="flex items-center justify-center py-8">
             <svg
               className="animate-spin h-8 w-8 text-pink-500"
@@ -254,7 +280,6 @@ const GenerateLink = () => {
                   : "Link Duration"}
               </label>
               <div className="grid grid-cols-3 gap-3">
-                {/* font-medium rounded-xl transition-all duration-150 flex items-center justify-center gap-2 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden */}
                 {expiryOptions.map((option) => (
                   <button
                     key={option.value}

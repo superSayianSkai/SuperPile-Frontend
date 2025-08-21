@@ -58,7 +58,7 @@ html {
 
 html.dark {
   background-color: black;
-  color: white;
   transition: background-color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52),
     color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52);
+  color: white;
 }
