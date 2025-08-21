@@ -10,6 +10,13 @@ const PWAInstallNotification = () => {
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
     document.body.scroll = "no";
+    return () => {
+      document.documentElement.style.overflow = "auto";
+      document.body.scroll = "yes";
+    };
+  }, []);
+
+  useEffect(() => {
     // Debug logging
 
     console.log("PWA Install Notification: Component mounted");
@@ -96,8 +103,6 @@ const PWAInstallNotification = () => {
         "beforeinstallprompt",
         handleBeforeInstallPrompt
       );
-      document.documentElement.style.overflow = "auto";
-      document.body.scroll = "yes";
       clearTimeout(testTimer);
     };
   }, [deferredPrompt]);
