@@ -8,7 +8,10 @@ const PWAInstallNotification = () => {
   const [debugInfo, setDebugInfo] = useState("");
 
   useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
+    document.body.scroll = "no";
     // Debug logging
+
     console.log("PWA Install Notification: Component mounted");
 
     // Detect device type
@@ -93,6 +96,8 @@ const PWAInstallNotification = () => {
         "beforeinstallprompt",
         handleBeforeInstallPrompt
       );
+      document.documentElement.style.overflow = "auto";
+      document.body.scroll = "yes";
       clearTimeout(testTimer);
     };
   }, [deferredPrompt]);
@@ -154,7 +159,8 @@ const PWAInstallNotification = () => {
               Install SupaPile App
             </h2>
             <p className="text-sm text-gray-600">
-              Add SupaPile to your home screen for quick access and a better experience!
+              Add SupaPile to your home screen for quick access and a better
+              experience!
             </p>
           </div>
 

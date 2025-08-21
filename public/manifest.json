@@ -5,6 +5,15 @@
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000",
+    "share_target": {
+        "action": "/share",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    },
     "icons": [
         {
             "src": "./icons/supapile-icon-192x192webp.webp",

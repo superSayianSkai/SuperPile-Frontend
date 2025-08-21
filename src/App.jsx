@@ -9,6 +9,8 @@ import Login from "./components/Login";
 import Layout from "./Layout/Layout";
 import BadgeDownloader from "./components/BadgeDownloader";
 import Updates from "./pages/Updates";
+import ShareHandler from "./pages/ShareHandler"; // Add this import
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -19,6 +21,7 @@ const App = () => {
         { path: "/login", element: <Login /> },
         { path: "/onBoarding", element: <OnBoarding /> },
         { path: "/archived", element: <ArchivedPage /> },
+        { path: "/share", element: <ShareHandler /> }, // Add this route
         {
           path: "/api/share/:publicLinkToken",
           element: (
