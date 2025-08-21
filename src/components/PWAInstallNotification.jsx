@@ -5,8 +5,7 @@ const PWAInstallNotification = () => {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [debugInfo, setDebugInfo] = useState("");
-
+ 
   useEffect(() => {
     // Only disable scroll when the notification is actually showing
     if (showInstallPrompt && !isDismissed) {
@@ -34,7 +33,6 @@ const PWAInstallNotification = () => {
     setIsIOS(iOS);
 
     console.log("Device detection:", { iOS, isAndroid, isChrome });
-    setDebugInfo(`iOS: ${iOS}, Android: ${isAndroid}, Chrome: ${isChrome}`);
 
     // Check if already dismissed
     const dismissed = localStorage.getItem("pwa-install-dismissed");
@@ -113,32 +111,47 @@ const PWAInstallNotification = () => {
   }, [deferredPrompt]);
 
   const handleInstallClick = async () => {
+    console.log('Install button clicked!');
+    console.log('Current state:', {
+      isIOS,
+      deferredPrompt: !!deferredPrompt,
+      showInstallPrompt,
+      isDismissed
+    });
+  
     if (isIOS) {
-      // For iOS, we can't trigger install programmatically
+      // For iOS, show manual installation instructions
       console.log("PWA Install: iOS - showing manual instructions");
+      alert('To install this app on iOS:\n1. Tap the Share button in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm');
       return;
     }
-
+  
     if (!deferredPrompt) {
       console.log("PWA Install: No deferred prompt available");
+      // Fallback for browsers that don't support beforeinstallprompt
+      alert('To install this app:\n1. Open browser menu (⋮)\n2. Look for "Install app" or "Add to Home screen"\n3. Follow the prompts');
       return;
     }
-
+  
     try {
-      // Show the install prompt
       console.log("PWA Install: Showing install prompt");
-      deferredPrompt.prompt();
-
-      // Wait for the user to respond to the prompt
+      await deferredPrompt.prompt();
+  
       const { outcome } = await deferredPrompt.userChoice;
-
       console.log("PWA Install: User choice:", outcome);
-
-      // Clear the deferredPrompt
+  
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+  
       setDeferredPrompt(null);
       setShowInstallPrompt(false);
     } catch (error) {
       console.error("PWA Install: Error during installation:", error);
+      // Show fallback instructions
+      alert('Installation failed. Please try installing manually from your browser menu.');
     }
   };
 
