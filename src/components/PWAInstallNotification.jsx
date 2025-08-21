@@ -4,8 +4,23 @@ const PWAInstallNotification = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [debugInfo, setDebugInfo] = useState('');
 
   useEffect(() => {
+    // Debug logging
+    console.log('PWA Install Notification: Component mounted');
+    
+    // Detect device type
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    const isChrome = /Chrome/.test(navigator.userAgent);
+    
+    setIsIOS(iOS);
+    
+    console.log('Device detection:', { iOS, isAndroid, isChrome });
+    setDebugInfo(`iOS: ${iOS}, Android: ${isAndroid}, Chrome: ${isChrome}`);
+
     // Check if already dismissed
     const dismissed = localStorage.getItem("pwa-install-dismissed");
     const dismissedTime = localStorage.getItem("pwa-install-dismissed-time");
@@ -13,15 +28,40 @@ const PWAInstallNotification = () => {
     if (dismissed && dismissedTime) {
       const now = new Date().getTime();
       const dismissTime = parseInt(dismissedTime);
-      // Show again after 7 days
-      if (now - dismissTime < 7 * 24 * 60 * 60 * 1000) {
+      // Show again after 1 day for testing (change back to 7 days later)
+      if (now - dismissTime < 1 * 24 * 60 * 60 * 1000) {
+        console.log('PWA Install: Previously dismissed, not showing');
         setIsDismissed(true);
         return;
+      } else {
+        // Clear old dismissal
+        localStorage.removeItem("pwa-install-dismissed");
+        localStorage.removeItem("pwa-install-dismissed-time");
       }
     }
 
-    // Listen for the beforeinstallprompt event
+    // Check if app is already installed
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isInWebAppiOS = window.navigator.standalone === true;
+    const isInstalled = isStandalone || isInWebAppiOS;
+    
+    console.log('Installation status:', { isStandalone, isInWebAppiOS, isInstalled });
+
+    if (isInstalled) {
+      console.log('PWA Install: App already installed');
+      return;
+    }
+
+    // For iOS, show manual install instructions immediately
+    if (iOS) {
+      console.log('PWA Install: iOS detected, showing manual instructions');
+      setShowInstallPrompt(true);
+      return;
+    }
+
+    // For Android/Chrome, listen for beforeinstallprompt
     const handleBeforeInstallPrompt = (e) => {
+      console.log('PWA Install: beforeinstallprompt event fired', e);
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Save the event so it can be triggered later
@@ -29,41 +69,55 @@ const PWAInstallNotification = () => {
       setShowInstallPrompt(true);
     };
 
-    // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = window.navigator.standalone === true;
-    const isInstalled = isStandalone || isInWebAppiOS;
-
-    if (!isInstalled) {
-      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    }
+    // Add event listener
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    
+    // For testing: show prompt after 3 seconds if no beforeinstallprompt event
+    const testTimer = setTimeout(() => {
+      if (!deferredPrompt && !iOS && !isInstalled) {
+        console.log('PWA Install: No beforeinstallprompt event after 3s, showing anyway for testing');
+        setShowInstallPrompt(true);
+      }
+    }, 3000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      clearTimeout(testTimer);
     };
-  }, []);
+  }, [deferredPrompt]);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    // Show the install prompt
-    deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
+    if (isIOS) {
+      // For iOS, we can't trigger install programmatically
+      console.log('PWA Install: iOS - showing manual instructions');
+      return;
     }
-    
-    // Clear the deferredPrompt
-    setDeferredPrompt(null);
-    setShowInstallPrompt(false);
+
+    if (!deferredPrompt) {
+      console.log('PWA Install: No deferred prompt available');
+      return;
+    }
+
+    try {
+      // Show the install prompt
+      console.log('PWA Install: Showing install prompt');
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      console.log('PWA Install: User choice:', outcome);
+      
+      // Clear the deferredPrompt
+      setDeferredPrompt(null);
+      setShowInstallPrompt(false);
+    } catch (error) {
+      console.error('PWA Install: Error during installation:', error);
+    }
   };
 
   const handleDismiss = () => {
+    console.log('PWA Install: User dismissed prompt');
     const now = new Date().getTime();
     localStorage.setItem("pwa-install-dismissed", "true");
     localStorage.setItem("pwa-install-dismissed-time", now.toString());
@@ -71,8 +125,13 @@ const PWAInstallNotification = () => {
     setIsDismissed(true);
   };
 
-  // Don't show if dismissed or no prompt available
-  if (!showInstallPrompt || isDismissed || !deferredPrompt) {
+  // Debug: always show for testing (remove this condition later)
+  // if (!showInstallPrompt || isDismissed) {
+  //   return null;
+  // }
+
+  // Normal condition (use this for production)
+  if (!showInstallPrompt || isDismissed) {
     return null;
   }
 
@@ -92,24 +151,50 @@ const PWAInstallNotification = () => {
             <h2 className="text-xl font-bold text-gray-900 mb-2">
               Install SupaPile App
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Add SupaPile to your home screen for quick access and a better experience!
-            </p>
+            {isIOS ? (
+              <div className="text-sm text-gray-600 mb-4">
+                <p className="mb-2">To install this app on your iPhone/iPad:</p>
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span>1. Tap the</span>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"/>
+                  </svg>
+                  <span>Share button</span>
+                </div>
+                <p>2. Then select "Add to Home Screen"</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Add SupaPile to your home screen for quick access and a better experience!
+                </p>
+                {/* Debug info - remove in production */}
+                <p className="text-xs text-gray-400 mb-2">
+                  Debug: {debugInfo}
+                </p>
+                <p className="text-xs text-gray-400 mb-2">
+                  Prompt available: {deferredPrompt ? 'Yes' : 'No'}
+                </p>
+              </div>
+            )}
           </div>
           
           {/* Buttons */}
           <div className="flex gap-3 w-full">
-            <button
-              onClick={handleInstallClick}
-              className="flex-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
-            >
-              Install App
-            </button>
+            {!isIOS && (
+              <button
+                onClick={handleInstallClick}
+                className="flex-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white px-4 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                disabled={!deferredPrompt && !isIOS}
+              >
+                {deferredPrompt ? 'Install App' : 'Install (Testing)'}
+              </button>
+            )}
             <button
               onClick={handleDismiss}
-              className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+              className={`${isIOS ? 'w-full' : 'flex-1'} bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all`}
             >
-              Not Now
+              {isIOS ? 'Got it' : 'Not Now'}
             </button>
           </div>
         </div>
