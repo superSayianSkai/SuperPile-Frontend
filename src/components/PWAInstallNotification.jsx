@@ -8,19 +8,19 @@ const PWAInstallNotification = () => {
   const [debugInfo, setDebugInfo] = useState("");
 
   useEffect(() => {
-    useEffect(() => {
-      // Only disable scroll when the notification is actually showing
-      if (showInstallPrompt && !isDismissed) {
-        document.documentElement.style.overflow = "hidden";
-        document.body.scroll = "no";
-      }
-      
-      return () => {
-        // Always restore scroll when component unmounts or notification hides
-        document.documentElement.style.overflow = "auto";
-        document.body.scroll = "yes";
-      };
-    }, [showInstallPrompt, isDismissed]); // Add dependencies to re-run when these change
+    // Only disable scroll when the notification is actually showing
+    if (showInstallPrompt && !isDismissed) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.scroll = "no";
+    }
+    
+    return () => {
+      // Always restore scroll when component unmounts or notification hides
+      document.documentElement.style.overflow = "auto";
+      document.body.scroll = "yes";
+    };
+  }, [showInstallPrompt, isDismissed]); // Add dependencies to re-run when these change
+  useEffect(() => {
 
     // Debug logging
 
