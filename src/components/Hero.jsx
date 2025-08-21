@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { useAuthStore } from "../zustard/useAuthStore";
 import useStateStore from "../zustard/useStateStore";
 import debounce from "../utilities/debounce";
+import useOnClickOutside from "../hooks/useOnClickOutside";
 
 const Hero = () => {
   const { setKeyword } = useStateStore();
@@ -10,6 +11,10 @@ const Hero = () => {
   const newName = name?.split(" ")[0];
   const [active, setActive] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const searchContainerRef = useRef(null);
+
+  // Use the existing hook to handle click outside
+  useOnClickOutside(() => setActive(false), searchContainerRef, active);
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -45,19 +50,19 @@ const Hero = () => {
         }
         
         .search-container {
-          background: linear-gradient(145deg, #f8fafc, #e2e8f0);
           backdrop-filter: blur(10px);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+       
         }
         
         .search-container:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+          {/* transform: translateY(-2px); */}
+          {/* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */}
         }
         
         .search-container.active {
           background: linear-gradient(145deg, #ffffff, #f1f5f9);
-          box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2), 0 10px 25px rgba(0, 0, 0, 0.15);
+          border: 2px solid #ff8c00;
+          {/* box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2), 0 10px 25px rgba(0, 0, 0, 0.15); */}
         }
         
         .title-gradient {
@@ -77,22 +82,21 @@ const Hero = () => {
         }
       `}</style>
 
-      <div className="flex flex-col items-center text-black relative my-[2rem] gap-[0.6rem] md:gap-[1.5rem] px-2 md:px-4 mt-20">
+      <div className="flex flex-col items-center text-black relative my-[2rem] gap-[0.6rem] md:gap-[1rem] px-2 md:px-4 mt-20">
         {/* Enhanced Title */}
         <div className="text-center">
           <h2 className="font-bold text-[1.5rem] sm:text-[1.8rem] md:text-[3rem] color">
-            {newName? `${newName}'s PileBoard` : "PileBoard" }
+            {newName ? `${newName}'s PileBoard` : "PileBoard"}
           </h2>
         </div>
 
         {/* Enhanced Search Container */}
         <div className="relative group">
           <div
+            ref={searchContainerRef}
             onClick={() => setActive(true)}
-            className={`search-container rounded-full border-2 w-[280px] sm:w-[320px] md:w-[400px] px-4 py-2 sm:px-5 sm:py-2.5 md:py-3 flex items-center gap-2 sm:gap-3 cursor-text transition-all duration-300 ${
-              active
-                ? "border-[#ff8c00] active pulse-glow"
-                : "border-gray-200 hover:border-gray-300"
+            className={`search-container bg-gray-100 border-white rounded-full border-2  outline-none w-[300px] sm:w-[320px] md:w-[350px] pl-4 py-2 sm:px-5 sm:py-2.5 md:py-[.7rem] flex items-center gap-2 sm:gap-3 cursor-text transition-all duration-200 ${
+              active ? "border-[#ff8c00] active" : "hover:border-gray-300"
             }`}
           >
             {/* Search Icon with Shake Animation */}
@@ -102,11 +106,9 @@ const Hero = () => {
               }`}
             ></i>
 
-            {/* Search Input */}
             <input
               value={searchValue}
               onFocus={() => setActive(true)}
-              onBlur={() => setActive(false)}
               placeholder="Search your pileboard..."
               onChange={handleSearch}
               className="flex-1 bg-transparent border-none outline-none text-[.7rem] sm:text-[.75rem] md:text-[.85rem] text-gray-800 placeholder-gray-500 font-medium"
@@ -120,24 +122,6 @@ const Hero = () => {
                 className="bi bi-x-circle-fill cursor-pointer text-sm text-gray-400 md:h-[20px] hover:text-gray-600 transition-colors duration-200"
               ></i>
             )}
-          </div>
-
-
-        </div>
-
-        {/* Search Stats or Quick Actions */}
-        <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 md:gap-4 text-[.55rem] sm:text-[.65rem] md:text-[.8rem] text-gray-600 dark:text-gray-400">
-          <div className="flex items-center gap-1.5">
-            <i className="bi bi-lightning-charge text-[#ff8c00] text-xs"></i>
-            <span>Quick search</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-           <i className="bi bi-bookmark text-[#ff8c00] text-xs"></i>
-            <span>Save pile</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <i className="bi bi-share text-[#ff8c00] text-xs"></i>
-            <span>Share piles</span>
           </div>
         </div>
       </div>

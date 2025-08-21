@@ -17,8 +17,6 @@
   scrollbar-width: thin;
 }
 
-
-
 .color {
   background: linear-gradient(to right, #ff66b2, #ff8c00);
   background-clip: text; /* Clips the background to the text */
@@ -33,7 +31,7 @@
   animation: skeleton-loading 0.4s linear infinite alternate;
   -webkit-animation: skeleton-loading 0.4s linear infinite alternate;
 }
-.scroll{
+.scroll {
   scrollbar-width: none;
 }
 
@@ -48,4 +46,19 @@
 
 .scroll {
   scrollbar-width: none;
+}
+
+/* Add these styles after your existing CSS */
+html {
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52),
+    color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52);
+}
+
+html.dark {
+  background-color: black;
+  color: white;
+  transition: background-color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52),
+    color 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52);
 }
