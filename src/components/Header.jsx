@@ -20,7 +20,7 @@ const Header = () => {
 
   return (
     <header className="sticky max-w-[95rem] mx-auto top-0 z-[1000] bg-white/80 dark:bg-black/60 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center min-h-16 h-16 md:h-16 ">
           {/* Logo Section */}
           <Link
@@ -77,7 +77,7 @@ const Header = () => {
 
           {/* User Section */}
           {userData ? (
-            <div className="flex items-center justify-center px-4">
+            <div className="flex items-center justify-center px-2">
               {isLoading ? (
                 <div className="animate-pulse">
                   <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
