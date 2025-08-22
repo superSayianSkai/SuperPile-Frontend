@@ -202,7 +202,7 @@ const PileBoard = () => {
               <button
                 id="my-button"
                 onClick={setLinkBoardPanelToggle}
-                className="group text-[.6rem] dark:bg-white dark:text-black md:text-[.8rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-6 py-1 mb-2 relative h-6 overflow-hidden transition-colors"
+                className="group text-[.6rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-6 py-1 mb-2 relative h-6 overflow-hidden transition-colors"
               >
                 <div
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
@@ -219,7 +219,7 @@ const PileBoard = () => {
                     showFirst
                       ? "opacity-0 animate-fadeOut"
                       : "opacity-100 animate-fadeIn"
-                  } flex items-center gap-1 text-[.8rem]`}
+                  } flex items-center gap-1 text-[.7rem]`}
                 >
                   <i className="bi bi-command"></i>
                   <i className="bi bi-plus"></i>

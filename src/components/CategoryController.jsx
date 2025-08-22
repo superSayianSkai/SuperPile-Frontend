@@ -9,9 +9,13 @@ const CategoryController = ({id}) => {
   const toogleRef= useRef()
   useOnClickOutside(closeModal,toogleRef, id)
   return (
-    <div ref={toogleRef} onClick={()=>toggleCategory(id)}  className="user-none flex gap-2 items-center justify-center cursor-pointer relative">
-          <h2 className="font-bold text-[.8rem] md:text-[.8rem] capitalize">{tick}</h2>
-          <i className="bi bi-chevron-down  text-[.8rem]"></i>
+    <div ref={toogleRef} onClick={()=>toggleCategory(id)}  className="user-select-none flex gap-2 items-center justify-center cursor-pointer relative">
+          <h2 className="font-bold user-select-none text-[.8rem] md:text-[.8rem] capitalize">{tick}</h2>
+          <i className={`text-[1rem] transition-transform duration-300 ease-in-out ${
+            modals.pickCategory 
+              ? 'bi bi-x rotate-180' 
+              : 'bi bi-plus rotate-0'
+          }`}></i>
           {
             modals.pickCategory &&(
               <Category />

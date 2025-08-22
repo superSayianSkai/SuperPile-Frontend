@@ -360,7 +360,7 @@ const PilePanel = () => {
                     className={`px-3 py-1.5 text-sm rounded-full transition-all duration-150 hover:scale-105 ${
                       categoryInput === cat.toLowerCase()
                         ? "bg-gradient-to-r from-pink-500 to-orange-500 text-white shadow-lg"
-                        : "bg-black text-white border border-gray-300 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00]"
+                        : "bg-[#F4F4F4] text-black border border-gray-300 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white"
                     }`}
                   >
                     {cat}

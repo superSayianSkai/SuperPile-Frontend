@@ -31,7 +31,7 @@ const Category = () => {
   return (
     <div
       ref={categoryRef}
-      className="border-2 bg-white text-black w-[200px] max-h-[130px] overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-lg flex flex-col gap-2 absolute top-6 cursor-pointer"
+      className="border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black w-[280px] max:w-[330px] flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-2xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
     >
       {category
         ?.slice()
@@ -41,22 +41,22 @@ const Category = () => {
             <div
               onClick={() => pressSomething(c)}
               key={index}
-              className="flex justify-between capitalize hover:bg-gray-200 px-3 py-2 hover:bg-transparent group"
+              className={`flex justify-between ${tick===c && "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white "}  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
             >
               <span>
-                <h1 className="text-[.8rem] w-[100%] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ff66b2] group-hover:to-[#ff8c00]">
+                <h1 className="text-[.8rem] lowercase w-[100%">
                   {c}
                 </h1>
               </span>
               {tick === c && (
-                <i className="bi bi-check2 text-[.8rem] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ff66b2] group-hover:to-[#ff8c00]"></i>
+                <i className="bi bi-check2 text-[.8rem] "></i>
               )}
             </div>
           );
         })}
-      {showArrow && category.length > 3 && (
+      {showArrow && category.length > 14 && (
         <div className="flex absolute right-2 bottom-2 justify-center">
-           <i className="bi bi-chevron-double-down text-sm bouncing-arrow bi bi-arrow-down animate-bounce text-transparent bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] bg-clip-text"></i>
+           <i className="bi bi-chevron-double-down text-sm dark:text-white bouncing-arrow bi bi-arrow-down animate-bounce "></i>
         </div>
       )}
     </div>
