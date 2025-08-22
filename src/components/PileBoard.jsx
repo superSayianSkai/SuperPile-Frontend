@@ -39,7 +39,7 @@ const PileBoard = () => {
   const [showFirst, setShowFirst] = useState(true);
   // Add state to track image load errors
   const [imageErrors, setImageErrors] = useState(new Set());
-  
+
   const { setTheModal, clicked } = useClickedModal();
   const { mutate: fetchMutate } = useMutation({
     mutationFn: fetchCickedCategory,
@@ -53,10 +53,10 @@ const PileBoard = () => {
 
   let { data: MetaData } = useMeta({ link: metaLink });
   const { mutate } = useSoftDeletePile();
-  
+
   const handleImageError = (linkId, imageUrl) => {
     console.log(`Image failed to load: ${imageUrl}`);
-    setImageErrors(prev => new Set([...prev, linkId]));
+    setImageErrors((prev) => new Set([...prev, linkId]));
   };
 
   const softDelete = (e) => {
@@ -165,30 +165,6 @@ const PileBoard = () => {
     savePendingLinkWithMeta();
   }, []);
 
-  if (isLoading) {
-    return (
-        <div className="w-full grid sm:grid-cols-2 m-[1rem] lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-10 px-4 max-w-[90rem] mx-auto">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="border-[1px] border-slate-300 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
-            >
-              {/* Thumbnail skeleton */}
-              <div className="w-full aspect-[16/9] bg-gray-300" />
-
-              {/* Title and text */}
-              <div className="px-4 py-3 space-y-2">
-                <div className="h-4 bg-gray-300 rounded w-3/4" />
-                <div className="h-3 bg-gray-200 rounded w-full" />
-                <div className="h-3 bg-gray-200 rounded w-5/6" />
-                <div className="h-3 bg-gray-200 rounded w-2/3" />
-              </div>
-            </div>
-          ))}
-        </div>
-      
-    );
-  }
   return (
     <div className="w-[100%] max-w-[90rem] mx-auto">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
@@ -229,7 +205,29 @@ const PileBoard = () => {
             </div>
           </div>
         </div>
+
         {/* Show user-friendly message if no piles */}
+        {isLoading && (
+          <div className="w-full grid sm:grid-cols-2 m-[1rem] lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-10 px-2gi max-w-[90rem] mx-auto">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="border-[1px] border-slate-300 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
+              >
+                {/* Thumbnail skeleton */}
+                <div className="w-full aspect-[16/9] bg-gray-300" />
+
+                {/* Title and text */}
+                <div className="px-4 py-3 space-y-2">
+                  <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  <div className="h-3 bg-gray-200 rounded w-full" />
+                  <div className="h-3 bg-gray-200 rounded w-5/6" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3" />
+                </div>
+              </div>
+            ))  }
+          </div>
+        )}
         {allPiles.length === 0 && !fromLoginLoading && (
           <div className="text-center text-gray-500 mt-10">
             No piles found. Try adding some!
@@ -262,10 +260,11 @@ const PileBoard = () => {
           {allPiles?.map((link, index) => {
             const isLast = index === allPiles.length - 1;
             const hasImageError = imageErrors.has(link?._id);
-            const imageUrl = link?.image || 
-                           (link?.url === MetaData?.url && MetaData?.image) || 
-                           fromLogin?.image;
-            
+            const imageUrl =
+              link?.image ||
+              (link?.url === MetaData?.url && MetaData?.image) ||
+              fromLogin?.image;
+
             return (
               <div
                 key={link?._id || MetaData?._id}
@@ -279,14 +278,14 @@ const PileBoard = () => {
                 >
                   <a href={link?.url} target="_blank" className="">
                     <div className="w-full aspect-[16/9] bg-black">
-                      {(imageUrl && !hasImageError) ? (
+                      {imageUrl && !hasImageError ? (
                         <img
                           src={imageUrl}
                           className="w-full h-full object-contain"
                           onError={() => handleImageError(link?._id, imageUrl)}
                           onLoad={() => {
                             // Remove from error set if image loads successfully after retry
-                            setImageErrors(prev => {
+                            setImageErrors((prev) => {
                               const newSet = new Set(prev);
                               newSet.delete(link?._id);
                               return newSet;
