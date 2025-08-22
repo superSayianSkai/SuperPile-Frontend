@@ -12,38 +12,75 @@ const ShareHandler = () => {
   const { mutate, isPending } = usePostPile();
   const { setPostData } = usePostStore();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("Adding shared link...");
-  const [debugInfo, setDebugInfo] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("Processing shared link...");
+
+  // Function to extract and validate URL
+  const extractAndValidateUrl = (rawUrl) => {
+    if (!rawUrl) return null;
+
+    let cleanUrl = rawUrl.trim();
+
+    // Handle malformed URLs like "hrttps////example.com" or "take a look hrttps////..."
+    // Extract URL from text that might contain prefixes
+    const urlMatch = cleanUrl.match(/(https?:\/\/[^\s]+)/i);
+    if (urlMatch) {
+      cleanUrl = urlMatch[1];
+    }
+
+    // Fix common malformed patterns
+    cleanUrl = cleanUrl
+      .replace(/^hrttps?:\/+/i, 'https://') // Fix hrttps://// -> https://
+      .replace(/^https?:\/+/i, (match) => {
+        return match.toLowerCase().startsWith('https') ? 'https://' : 'http://';
+      })
+      .replace(/\/+/g, '/') // Replace multiple slashes with single slash
+      .replace(/:(\/[^/])/g, '://$1'); // Fix protocol formatting
+
+    // Validate URL format
+    try {
+      const url = new URL(cleanUrl);
+      
+      // Enforce HTTPS only
+      if (url.protocol !== 'https:') {
+        return { error: 'Only HTTPS URLs are allowed for security reasons.' };
+      }
+
+      return { url: url.href };
+    } catch (error) {
+      return { error: 'Invalid URL format.' };
+    }
+  };
 
   useEffect(() => {
-    // Get all parameters for debugging
-    const allParams = Object.fromEntries(searchParams);
-    const currentUrl = window.location.href;
-    
     // Try multiple common parameter names used by different apps
-    const url = searchParams.get("url") || 
-                searchParams.get("text") || 
-                searchParams.get("link") || 
-                searchParams.get("u") ||
-                searchParams.get("href") ||
-                searchParams.get("uri") ||
-                searchParams.get("body");
-    
-    // Set debug info to display on screen
-    setDebugInfo({
-      currentUrl,
-      allParams,
-      extractedUrl: url,
-      parameterKeys: Object.keys(allParams)
-    });
+    const rawUrl = searchParams.get("url") || 
+                   searchParams.get("text") || 
+                   searchParams.get("link") || 
+                   searchParams.get("u") ||
+                   searchParams.get("href") ||
+                   searchParams.get("uri") ||
+                   searchParams.get("body");
 
-    if (url) {
+    const urlResult = extractAndValidateUrl(rawUrl);
+
+    if (urlResult?.error) {
+      // Show error for invalid or HTTP URLs
+      setStatusMessage(urlResult.error);
+      CustomToast(urlResult.error);
+      
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 3000);
+      return;
+    }
+
+    if (urlResult?.url) {
       setIsProcessing(true);
-      setStatusMessage("Processing shared link...");
+      setStatusMessage("Adding shared link...");
 
       // Add to your pile/collection using the mutate function
       mutate(
-        { url, category: "all" },
+        { url: urlResult.url, category: "all" },
         {
           onSuccess: (data) => {
             if (data?.message === "This link already exists in your pile.") {
@@ -85,13 +122,13 @@ const ShareHandler = () => {
         }
       );
     } else {
-      // No URL found - show debug info
-      setStatusMessage("No link found - Debug Mode");
+      // No URL found
+      setStatusMessage("No valid link to process");
+      CustomToast("No valid link found to add to your pile.");
       
-      // Don't redirect immediately, let user see debug info
       setTimeout(() => {
         navigate("/", { replace: true });
-      }, 10000); // 10 seconds to read debug info
+      }, 2000);
     }
   }, [searchParams, navigate, mutate, queryClient, setPostData]);
 
@@ -112,46 +149,6 @@ const ShareHandler = () => {
             </div>
             <p className="text-gray-600 mb-4">{statusMessage}</p>
           </>
-        )}
-        
-        {/* Debug Information Display */}
-        {debugInfo && (
-          <div className="mt-6 p-4 bg-gray-100 rounded-lg text-left text-xs">
-            <h3 className="font-bold mb-2 text-center">Debug Info (Mobile)</h3>
-            
-            <div className="mb-3">
-              <strong>Current URL:</strong>
-              <div className="break-all bg-white p-2 rounded mt-1">
-                {debugInfo.currentUrl}
-              </div>
-            </div>
-            
-            <div className="mb-3">
-              <strong>Found Parameters:</strong>
-              <div className="bg-white p-2 rounded mt-1">
-                {debugInfo.parameterKeys.length > 0 ? (
-                  debugInfo.parameterKeys.map(key => (
-                    <div key={key} className="mb-1">
-                      <span className="font-mono">{key}:</span> {debugInfo.allParams[key]}
-                    </div>
-                  ))
-                ) : (
-                  <span className="text-red-500">No parameters found</span>
-                )}
-              </div>
-            </div>
-            
-            <div className="mb-3">
-              <strong>Extracted URL:</strong>
-              <div className="bg-white p-2 rounded mt-1">
-                {debugInfo.extractedUrl || <span className="text-red-500">None found</span>}
-              </div>
-            </div>
-            
-            <div className="text-center mt-4 text-gray-500">
-              Redirecting in 10 seconds...
-            </div>
-          </div>
         )}
       </div>
     </div>
