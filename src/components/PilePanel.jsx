@@ -15,13 +15,14 @@ const PilePanel = () => {
     category: supaPileState.category,
     keyword: supaPileState.keyword,
   });
-  const regex = /https?:\/\/[\w.-]+\.[a-z]{2,}/;
+ const regex = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/;
   const textAreaRef = useRef();
   const secondTextAreaRef = useRef();
   const [isVisible, setIsVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const triggerToast = (message) => {
     setToastMessage(message);
@@ -82,7 +83,10 @@ const PilePanel = () => {
       showMeta(true);
       setTheMetaLink(input);
       modifyTheHostName(input);
+      console.log(regex.test(input));
+      setSearchValue(input);
     } else {
+       setSearchValue("");
       showMeta(false);
     }
   };
@@ -195,8 +199,12 @@ const PilePanel = () => {
               />
             </div>
             <button
+              disabled={!regex.test(searchValue)}
               type="submit"
-              className="w-full sm:w-auto group relative flex items-center justify-center p-4 md:p-3 bg-black text-white font-medium rounded-xl transition-all duration-150 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden"
+              className={`w-full sm:w-auto group relative flex ${
+                !regex.test(searchValue) &&
+                "bg-black text-white hidden dark:text-white dark:border-white dark:border-[1px] cursor-not-allowed opacity-50 pointer-events-none"
+              } items-center justify-center p-4 md:p-3 bg-black text-white font-medium rounded-xl transition-all duration-150 hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:scale-105 hover:shadow-lg overflow-hidden`}
               aria-label="Submit link"
             >
               <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150"></div>
