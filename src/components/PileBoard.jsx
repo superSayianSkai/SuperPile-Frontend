@@ -166,7 +166,7 @@ const PileBoard = () => {
   }, []);
 
   return (
-    <div className="w-[100%] max-w-[90rem] mx-auto">
+    <div className="w-[100%] max-w-[90rem] mx-auto mt-[2rem]">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
         {clicked.isOpen && <ChangeCategoryContainer />}
         <ExtensionNotification />
@@ -208,7 +208,7 @@ const PileBoard = () => {
 
         {/* Show user-friendly message if no piles */}
         {isLoading && (
-          <div className="w-full grid sm:grid-cols-2 m-[1rem] lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-10 px-2gi max-w-[90rem] mx-auto">
+          <div className="w-full grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-8   px-2gi max-w-[90rem] mx-auto">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
