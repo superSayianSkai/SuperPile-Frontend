@@ -30,18 +30,18 @@ const Updates = () => {
       <article className="max-w-4xl mx-auto overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Product Launch Header */}
         <header className="py-4 sm:py-6">
-          <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
-            <div className="bg-black hidden dark:block dark:bg-white rounded-lg px-3 sm:px-4 py-2 shadow-md">
+          <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
+            <div className="bg-black hidden dark:block dark:bg-white rounded-lg px-3 sm:px-4 py-1 h-[35px] shadow-md">
               <div className="text-center">
-                <div className="text-sm sm:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">
+                <div className="text-sm sm:text-[.8rem] font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">
                   1.0
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-r block dark:hidden from-pink-500 to-orange-500 rounded-lg px-3 sm:px-4 py-2 shadow-md">
+            <div className="bg-gradient-to-r block dark:hidden from-pink-500 to-orange-500 rounded-lg px-3  sm:px-4 py-2 h-[35px] shadow-md">
               <div className="text-center">
-                <div className="text-sm sm:text-base font-bold text-white dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-pink-500 dark:to-orange-500">
+                <div className="text-sm font-bold text-white dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-pink-500 dark:to-orange-500">
                   1.0
                 </div>
               </div>
