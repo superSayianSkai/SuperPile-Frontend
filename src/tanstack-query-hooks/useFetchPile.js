@@ -31,10 +31,8 @@ export const getUserPile = async ({ lastId = null, category = "all", keyword = "
 const useFetchPile = ({ category, keyword }) => {
   return useInfiniteQuery({
     queryKey: ["pile", category, keyword ?? ""],
-
     queryFn: ({ pageParam = null }) =>
       getUserPile({ lastId: pageParam, category, keyword }),
-
     getNextPageParam: (lastPage) => {
       return lastPage?.hasMore ? lastPage.lastId : undefined;
     },
@@ -45,10 +43,11 @@ const useFetchPile = ({ category, keyword }) => {
     },
 
     enabled: Boolean(category),
-    keepPreviousData: true,
+    keepPreviousData: false, // Show loading state instead of stale data
+    staleTime: 0,
+    cacheTime: 0, // Don't cache query results
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    staleTime: 0,
   });
 };
 

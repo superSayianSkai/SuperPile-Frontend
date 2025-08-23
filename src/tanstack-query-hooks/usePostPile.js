@@ -89,9 +89,23 @@ const usePostPile = () => {
       const { url, category } = variables;
       if (!data || typeof data !== "object" || !data.url) return;
 
-      setPostData(data); // Store the posted data in Zustand
+      setPostData(data);
       setPostSuccess(true);
 
+      // Clear service worker cache for pile endpoints
+      if ('serviceWorker' in navigator && 'caches' in window) {
+        caches.open('supapile-api-v3').then(cache => {
+          cache.keys().then(keys => {
+            keys.forEach(key => {
+              if (key.url.includes('/api/v1/piles')) {
+                cache.delete(key);
+              }
+            });
+          });
+        });
+      }
+
+      // Update cache and invalidate queries
       const updateCache = (oldData) => {
         if (!oldData) return;
 
@@ -109,14 +123,11 @@ const usePostPile = () => {
       };
 
       queryClient.setQueryData(["pile", "all", ""], updateCache);
-      
       if (category !== "all") {
         queryClient.setQueryData(["pile", category, ""], updateCache);
       }
-      console.log("i am kangchi")
-      console.log(category)
-      // Invalidate all pile-related queries dynamically
-    queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
+      
+      queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
     },
 
     onError: (err, _variables, context) => {
