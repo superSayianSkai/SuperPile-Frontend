@@ -91,33 +91,33 @@ const Updates = () => {
           <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
             <div className="space-y-4 sm:space-y-6 dark:text-white text-gray-700 leading-relaxed">
               <div className="text-sm sm:text-base dark:text-white space-y-3 sm:space-y-4">
-                <p>
+                <p className="leading-[1.8rem]">
                   I love to curate websites, especially the ones I find useful
-                  or can learn from. For the longest time, I'd just dump them
-                  into my WhatsApp "me" chat for later… but over time, it became
+                  or can learn from. For the longest time, I&apos;d just dump them
+                  into my WhatsApp &quot;me&quote; chat for later… but over time, it became
                   a chaotic mess.
                 </p>
 
-                <p>
+                <p className="leading-[1.8rem]">
                   I tried switching to bookmarks, but honestly, it was worse,
-                  I'd forget about them completely, and the whole setup just
-                  didn't work for me.
+                  I&apos;d forget about them completely, and the whole setup just
+                  didn&apos;t work for me.
                 </p>
 
-                <p>
+                <p className="leading-[1.8rem]">
                   At work, people often asked if I had good resources to share.
-                  Most times, I'd be scrolling endlessly through my messy
+                  Most times, I&apos;d be scrolling endlessly through my messy
                   WhatsApp chat just to find one link.
                 </p>
 
-                <p>
+                <p className="leading-[1.8rem]">
                   Then one day, a colleague told me she hated how her own links
                   on WhatsApp were scattered and clunky. Another colleague said
                   the same thing not long after.
                 </p>
 
-                <p className="font-semibold">
-                  That's when I decided to build SupaPile, a place to store
+                <p className="font-semibold leading-[1.8rem]">
+                  That&apos;s when I decided to build Supapile, a place to store
                   links beautifully and share them effortlessly.
                 </p>
               </div>
@@ -131,16 +131,16 @@ const Updates = () => {
                   <span className="text-black dark:text-white mr-2 flex-shrink-0">
                     •
                   </span>
-                  <span className="text-sm sm:text-base">
+                  <span className="text-sm sm:text-base leading-[1.8rem]">
                     Save and categorize your favorite links faster than
                     lightning.
                   </span>
                 </li>
-                <li className="flex items-start">
+                <li className="flex items-start leading-[1.8rem]">
                   <span className="text-black dark:text-white mr-2 flex-shrink-0">
                     •
                   </span>
-                  <span className="text-sm sm:text-base">
+                  <span className="text-sm sm:text-base leading-[1.8rem]">
                     Share links on your Pileboard with friends
                   </span>
                 </li>
@@ -148,7 +148,7 @@ const Updates = () => {
                   <span className="text-black dark:text-white mr-2 flex-shrink-0">
                     •
                   </span>
-                  <span className="text-sm sm:text-base">
+                  <span className="text-sm sm:text-base leading-[1.8rem]">
                     Use the Supapile extension to save links from any site
                     instantly—no need to open SupaPile
                   </span>
@@ -157,24 +157,24 @@ const Updates = () => {
                   <span className="text-black dark:text-white mr-2 flex-shrink-0">
                     •
                   </span>
-                  <span className="text-sm sm:text-base">
+                  <span className="text-sm sm:text-base leading-[1.8rem]">
                     Add SupaPile to your device like an app so you can open it
                     instantly
                   </span>
                 </li>
               </ul>
 
-              <h3 className="text-xl sm:text-2xl dark:text-white font-semibold text-gray-800 mt-6 sm:mt-8 mb-3 sm:mb-4">
+              <h3 className="text-xl sm:text-2xl dark:text-white font-semibold text-gray-800 mt-8 mb-3 sm:mb-4">
                 Design Philosophy
               </h3>
 
               <div className="text-sm sm:text-base dark:text-white space-y-3 sm:space-y-4">
-                <p>
-                  I'll be honest with you - the SupaPile icon and concept draws
+                <p className="leading-[2rem]">
+                  I&apos;ll be honest with you - the SupaPile icon and concept draws
                   heavy inspiration from Pokémon. You know how trainers collect,
-                  organize, and share their Pokémon? Well, that's exactly what I
-                  wanted SupaPile to do for your favorite links. The
-                  Pokeball-inspired design reflects this "gotta catch 'em all"
+                  organize, and share their Pokémon? Well, that&apos;s exactly what I
+                  wanted Supapile to do for your favorite links. The
+                  Pokeball-inspired design reflects this &quot;gotta catch &apos;em all&quot;
                   mentality, but for web resources! I thought it was a fun way
                   to make link management feel more like an adventure.
                 </p>
@@ -183,8 +183,8 @@ const Updates = () => {
           </div>
         </div>
 
-        <p className="text-gray-700 max-w-4xl mx-auto dark:text-gray-300 mt-6 sm:mt-8 text-sm sm:text-base">
-          I hope you'll enjoy using SupaPile!{" "}
+        <p className="text-gray-700 max-w-4xl mx-auto dark:text-gray-300 mt-6 sm:mt-8 text-sm sm:text-base leading-[1.8rem]">
+          I hope you&apos;ll enjoy using SupaPile!{" "}
           <button
             className="underline cursor-pointer hover:opacity-50 text-inherit bg-transparent border-none p-0 font-inherit"
             onClick={() => {
