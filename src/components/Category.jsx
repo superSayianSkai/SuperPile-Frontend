@@ -21,20 +21,29 @@ const Category = () => {
     if (!categoryRef.current) return;
     const el = categoryRef.current;
     const handleScroll = () => {
-      setShowArrow(el.scrollTop < 20); // adjust threshold as needed
+      // Show arrow when there's more content below (scrollable content)
+      const hasScrollableContent = el.scrollHeight > el.clientHeight;
+      const isNotAtBottom = el.scrollTop < (el.scrollHeight - el.clientHeight - 20);
+      setShowArrow(hasScrollableContent && isNotAtBottom);
     };
-    el.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => el.removeEventListener("scroll", handleScroll);
-  }, [categoryRef]);
+    el.addEventListener('scroll', handleScroll);
+    // Also check on resize or content change
+    const resizeObserver = new ResizeObserver(handleScroll);
+    resizeObserver.observe(el);
+    handleScroll(); // Initial check
+    return () => {
+      el.removeEventListener('scroll', handleScroll);
+      resizeObserver.disconnect();
+    };
+  }, [category]); // Add category as dependency to recheck when categories change
   console.log("formula 1");
   console.log(category.length);
   return (
     <div
       ref={categoryRef}
       className={`border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black ${
-        category.length > 3 && "w-[278px] max-w-[278px]"
-      } flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
+        category.length > 3 && "w-[200px] max-w-[200px] sm:w-[300px] sm:max-w-[300px]"
+      } flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-2xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
   `}
     >
       {category
@@ -57,7 +66,7 @@ const Category = () => {
             </div>
           );
         })}
-      {showArrow && category.length > 15 && (
+      {showArrow && (
         <div className="flex absolute right-2 bottom-2 justify-center">
           <i className="bi bi-chevron-double-down text-sm dark:text-white bouncing-arrow bi bi-arrow-down animate-bounce "></i>
         </div>
