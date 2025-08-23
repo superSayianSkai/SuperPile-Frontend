@@ -46,13 +46,13 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/api/") ||
     url.hostname === "supapile-backend.up.railway.app/"  // Fixed: removed https://
   ) {
-    // Skip caching for auth/login endpoints
-    // Remove line 51 entirely and fix the condition:
+    // Skip caching for auth/login endpoints AND categories endpoint
     if (
       url.pathname.startsWith("/auth") ||
       url.pathname.startsWith("/login") ||
       url.pathname.startsWith("/auth/user") ||
-      url.pathname.startsWith("/auth/me")
+      url.pathname.startsWith("/auth/me") ||
+      (url.pathname === "/api/v1/piles/categories" && request.method === "GET")
     ) {
       event.respondWith(fetch(request));
       return;
