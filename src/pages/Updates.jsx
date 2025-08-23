@@ -59,7 +59,7 @@ const Updates = () => {
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl dark:text-white font-bold text-gray-900 mb-4 leading-tight">
+          <h1 className="text-[1.8rem] sm:text-4xl lg:text-5xl dark:text-white font-bold text-gray-900 mb-4 leading-tight">
             Supapile, here we go!
           </h1>
         </header>
