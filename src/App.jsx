@@ -7,9 +7,10 @@ import HeroPublicPile from "./components/HeroPublicPile";
 import OnBoarding from "./pages/OnBoarding";
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
-import BadgeDownloader from "./components/BadgeDownloader";
+// import BadgeDownloader from "./components/BadgeDownloader";
 import Updates from "./pages/Updates";
-import ShareHandler from "./pages/ShareHandler"; // Add this import
+import ShareHandler from "./pages/ShareHandler";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -17,11 +18,32 @@ const App = () => {
       element: <Layout />,
       children: [
         { path: "*", element: <NotFound /> },
-        { path: "/", element: <HomePage /> },
+        {
+          path: "/",
+          element: (
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          ),
+        },
         { path: "/login", element: <Login /> },
         { path: "/onBoarding", element: <OnBoarding /> },
-        { path: "/archived", element: <ArchivedPage /> },
-        { path: "/share", element: <ShareHandler /> }, // Add this route
+        {
+          path: "/archived",
+          element: (
+            <ProtectedRoute>
+              <ArchivedPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/share",
+          element: (
+            <ProtectedRoute>
+              <ShareHandler />
+            </ProtectedRoute>
+          ),
+        },
         {
           path: "/api/share/:publicLinkToken",
           element: (
@@ -34,10 +56,10 @@ const App = () => {
       ],
     },
     { path: "/updates", element: <Updates /> },
-    {
-      path: "/badgeDownLoader",
-      element: <BadgeDownloader />,
-    },
+    // {
+    //   path: "/badgeDownLoader",
+    //   element: <BadgeDownloader />,
+    // },
   ]);
   return <RouterProvider router={router} />;
 };

@@ -39,7 +39,14 @@ const OnBoarding = () => {
     <div className="flex relative flex-col dark:bg-black justify-between min-h-[90svh] max-h-[100svh] w-full overflow-hidden dark:text-white md:px-8">
       <div className="flex justify-center flex-col md:mt-8 items-center h-[68vh]">
         <div className="w-60 sm:w-52 md:w-64 h-53">
-          <img  src={theme === "dark" ? piloDark : piloLight} />
+          <img 
+            src={theme === "dark" ? piloDark : piloLight} 
+            alt="SuperPile Logo"
+            width="240"
+            height="212"
+            loading="eager"
+            style={{ objectFit: 'contain' }}
+          />
         </div>
         <div className="relative group -mt-[92px] w-full  max-w-[560px] mx-auto">
           <div className="flex flex-col items-center text-black relative  gap-[1.5rem] px-4">
