@@ -31,7 +31,7 @@ const Category = () => {
   return (
     <div
       ref={categoryRef}
-      className="border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black w-[280px] max:w-[330px] flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-2xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
+      className="border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black max:w-[280px] flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-2xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
     >
       {category
         ?.slice()
