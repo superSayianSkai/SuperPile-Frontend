@@ -27,11 +27,15 @@ const Category = () => {
     handleScroll();
     return () => el.removeEventListener("scroll", handleScroll);
   }, [categoryRef]);
-
+  console.log("formula 1");
+  console.log(category.length);
   return (
     <div
       ref={categoryRef}
-      className="border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black max:w-[280px] flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-2xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
+      className={`border-[1px] dark:border-gray-700 bg-[#F4F4F4] dark:bg-[#191919] text-black ${
+        category.length > 3 && "w-[278px] max-w-[278px]"
+      } flex-wrap max-h-[155px] items-center overflow-y-scroll scroll-smooth scroll overflow-hidden -left-2 z-[2] rounded-xl flex  gap-2 absolute top-6 cursor-pointer p-3 shadow-2xl"
+  `}
     >
       {category
         ?.slice()
@@ -41,22 +45,21 @@ const Category = () => {
             <div
               onClick={() => pressSomething(c)}
               key={index}
-              className={`flex justify-between ${tick===c && "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white "}  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
+              className={`flex justify-between ${
+                tick === c &&
+                "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white "
+              }  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
             >
               <span>
-                <h1 className="text-[.8rem] lowercase w-[100%">
-                  {c}
-                </h1>
+                <h1 className="text-[.8rem] lowercase w-[100%">{c}</h1>
               </span>
-              {tick === c && (
-                <i className="bi bi-check2 text-[.8rem] "></i>
-              )}
+              {tick === c && <i className="bi bi-check2 text-[.8rem] "></i>}
             </div>
           );
         })}
       {showArrow && category.length > 15 && (
         <div className="flex absolute right-2 bottom-2 justify-center">
-           <i className="bi bi-chevron-double-down text-sm dark:text-white bouncing-arrow bi bi-arrow-down animate-bounce "></i>
+          <i className="bi bi-chevron-double-down text-sm dark:text-white bouncing-arrow bi bi-arrow-down animate-bounce "></i>
         </div>
       )}
     </div>

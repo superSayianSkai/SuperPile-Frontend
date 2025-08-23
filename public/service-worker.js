@@ -143,8 +143,11 @@ async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
     if (networkResponse && networkResponse.ok) {
-      const cache = await caches.open(API_CACHE);
-      cache.put(request, networkResponse.clone());
+      // Only cache GET requests, skip POST/PUT/DELETE
+      if (request.method === 'GET') {
+        const cache = await caches.open(API_CACHE);
+        cache.put(request, networkResponse.clone());
+      }
     }
     return networkResponse;
   } catch (err) {
