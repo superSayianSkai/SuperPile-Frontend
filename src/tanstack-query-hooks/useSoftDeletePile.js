@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../lib/axios";
 
 const softDeletePile = async ([{ _id }]) => {
-  return await apiClient.delete(`/api/v1/piles/${ _id }`);
+  return await apiClient.delete(`/api/v1/piles/${_id}`);
 };
 
 const useSoftDeletePile = () => {
@@ -63,7 +63,10 @@ const useSoftDeletePile = () => {
     onSuccess: (_, pileInfo) => {
       const removed = pileInfo[0];
       const archivedKey = ["archivedPile"];
-      const existing = queryClient.getQueryData(archivedKey) ?? { pages: [], pageParams: [] };
+      const existing = queryClient.getQueryData(archivedKey) ?? {
+        pages: [],
+        pageParams: [],
+      };
 
       const newFirstPage = {
         piles: [removed, ...(existing.pages?.[0]?.piles || [])],
@@ -77,6 +80,9 @@ const useSoftDeletePile = () => {
 
       queryClient.invalidateQueries({
         queryKey: ["pile", removed.category, removed.keyword ?? ""],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["category"],
       });
     },
   });
