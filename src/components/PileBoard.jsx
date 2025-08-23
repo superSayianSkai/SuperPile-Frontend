@@ -138,6 +138,7 @@ const PileBoard = () => {
         { url: pending, category: "all" },
         {
           onSuccess: (data) => {
+            
             // setFromLoginLoading(false); // removed as requested
             if (data?.message === "This link already exists in your pile.") {
               CustomToast("This link is already in your pile.");
@@ -187,7 +188,7 @@ const PileBoard = () => {
                       : "md:opacity-0 md:animate-fadeOut"
                   } text-white transition`}
                 >
-                  Pile
+                  Add
                 </div>
 
                 <div
@@ -214,10 +215,10 @@ const PileBoard = () => {
                 key={i}
                 className="border-[1px] border-slate-300 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
               >
-                {/* Thumbnail skeleton */}
+             
                 <div className="w-full aspect-[16/9] bg-gray-300" />
 
-                {/* Title and text */}
+         
                 <div className="px-4 py-3 space-y-2">
                   <div className="h-4 bg-gray-300 rounded w-3/4" />
                   <div className="h-3 bg-gray-200 rounded w-full" />
@@ -235,7 +236,7 @@ const PileBoard = () => {
         )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
           {(fromLoginLoading ||
-            (fromLogin &&
+            (fromLoginLoading &&
               !allPiles.some((pile) => pile.url === fromLogin.url))) && (
             <div className="">
               {Array.from({ length: 1 }).map((_, i) => (

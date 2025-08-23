@@ -1,17 +1,21 @@
 import pokiemon from "../assets/Images/pokiemon.gif";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-
+import { useState } from "react";
 const Updates = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
 
   const handleGoBack = () => {
     navigate(-1); // Go back to previous page
   };
-
+  const handleImageLoaded = () => {
+    setImageLoaded(true);
+  };
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
       {/* Back Navigation - positioned at page edge on desktop */}
+
       <div className="sm:absolute sm:left-4 sm:top-8 sm:z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-0 mb-4 sm:mb-0">
           <button
@@ -25,7 +29,48 @@ const Updates = () => {
       </div>
 
       <article className="max-w-4xl mx-auto overflow-hidden px-4 sm:px-6 lg:px-8">
-        {/* Product Launch Header */}
+        {!imageLoaded && (
+          <div className="animate-pulse mt-10 space-y-4">
+            <div className="flex flex-col  gap-6">
+              <div className="flex-1 space-y-3">
+                <div className="flex gap-10 items-center ">
+                  <div className="bg-gradient-to-r from-gray-300 to-gray-200 rounded w-20 h-8 "></div>
+                  <div className=" bg-gradient-to-r from-gray-300 to-gray-200 rounded w-48 h-4"></div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded w-4/6"></div>
+                  <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded w-5/6"></div>
+                  <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded"></div>
+                </div>
+
+                <div className="max-w-4xl h-64 sm:h-80 mt-just  md:h-96 lg:h-[500px] bg-gradient-to-br from-gray-300 to-gray-200 rounded-xl">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-60 animate-shimmer"></div>
+                </div>
+
+                <div className=" flex flex-col gap-10">
+                  <div className="space-y-2">
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded w-5/6"></div>
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded"></div>
+                    <div className="bg-gradient-to-r from-gray-300 to-gray-200 rounded h-[80px]"></div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="bg-gradient-to-r from-gray-300 to-gray-200 rounded  h-[50px]"></div>
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded w-5/6"></div>
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded"></div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="bg-gradient-to-r from-gray-300 to-gray-200 rounded h-[50px]"></div>
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded w-5/6"></div>
+                    <div className="h-3 bg-gradient-to-r from-gray-300 to-gray-200 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <header className="py-4 sm:py-6">
           <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
             <div className="bg-black hidden dark:block dark:bg-white rounded-lg px-3 sm:px-4 py-2 shadow-md">
@@ -57,18 +102,18 @@ const Updates = () => {
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl dark:text-white font-bold text-gray-900 mb-4 leading-tight">
-            SupaPile, here we go!
+            Supapile, here we go!
           </h1>
         </header>
-
         {/* Article Content */}
         <div className="py-1">
           {/* Featured Image - now responsive */}
           <figure className="mb-6 sm:mb-8">
-            <div className="w-full max-w-4xl h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden mx-auto rounded-lg shadow-md">
+            <div className="w-full max-w-4xl h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden mx-auto rounded-lg ">
               <img
                 src={pokiemon}
                 className="w-full h-full object-cover"
+                onLoad={handleImageLoaded}
                 alt="SupaPile Pokemon themed illustration"
               />
             </div>
@@ -172,18 +217,20 @@ const Updates = () => {
             </div>
           </div>
         </div>
-
         <p className="text-gray-700 max-w-4xl mx-auto dark:text-gray-300 mt-6 sm:mt-8 text-sm sm:text-base">
           I hope you'll enjoy using SupaPile!{" "}
-          <button 
+          <button
             className="underline cursor-pointer hover:opacity-50 text-inherit bg-transparent border-none p-0 font-inherit"
             onClick={() => {
-              window.open('https://mail.google.com/mail/?view=cm&fs=1&to=saiyanskai@gmail.com&su=SupaPile%20Feedback&body=Hi%20there!%0A%0AI%20have%20some%20feedback%20about%20SupaPile:%0A%0A', '_blank');
+              window.open(
+                "https://mail.google.com/mail/?view=cm&fs=1&to=saiyanskai@gmail.com&su=SupaPile%20Feedback&body=Hi%20there!%0A%0AI%20have%20some%20feedback%20about%20SupaPile:%0A%0A",
+                "_blank"
+              );
             }}
           >
             Feedback
-          </button> or ideas are
-          always welcome to help make future updates even better.
+          </button>{" "}
+          or ideas are always welcome to help make future updates even better.
         </p>
         {/* Article Footer */}
         <footer className="mt-8 sm:mt-10 py-4 sm:py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 rounded-lg">
