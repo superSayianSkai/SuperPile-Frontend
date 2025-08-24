@@ -138,7 +138,6 @@ const PileBoard = () => {
         { url: pending, category: "all" },
         {
           onSuccess: (data) => {
-            
             // setFromLoginLoading(false); // removed as requested
             if (data?.message === "This link already exists in your pile.") {
               CustomToast("This link is already in your pile.");
@@ -209,16 +208,14 @@ const PileBoard = () => {
 
         {/* Show user-friendly message if no piles */}
         {isLoading && (
-          <div className="w-full grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-8   px-2gi max-w-[90rem] mx-auto">
+          <div className="w-full grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] mt-8 max-w-[90rem] mx-auto">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
                 className="border-[1px] border-slate-300 rounded-xl overflow-clip animate-pulse flex flex-col gap-2"
               >
-             
                 <div className="w-full aspect-[16/9] bg-gray-300" />
 
-         
                 <div className="px-4 py-3 space-y-2">
                   <div className="h-4 bg-gray-300 rounded w-3/4" />
                   <div className="h-3 bg-gray-200 rounded w-full" />
@@ -226,12 +223,12 @@ const PileBoard = () => {
                   <div className="h-3 bg-gray-200 rounded w-2/3" />
                 </div>
               </div>
-            ))  }
+            ))}
           </div>
         )}
         {allPiles.length === 0 && !fromLoginLoading && (
           <div className="text-center text-gray-500 mt-10">
-            No piles found. Try adding some!
+           You have no Pile. Catch and Pile your favourite links across the web.
           </div>
         )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
@@ -275,7 +272,7 @@ const PileBoard = () => {
               >
                 <div
                   draggable="true"
-                  className="border-[1px] border-slate-300 dark:border-slate-500 rounded-xl overflow-clip flex flex-col justify-between cursor-pointer hover:opacity-90 "
+                  className="border-[1px] border-slate-300 dark:border-slate-500 rounded-xl overflow-clip flex flex-col justify-between  cursor-pointer hover:opacity-90 "
                 >
                   <a href={link?.url} target="_blank" className="">
                     <div className="w-full aspect-[16/9] bg-black">

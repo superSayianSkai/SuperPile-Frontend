@@ -17,7 +17,6 @@ const App = () => {
     {
       element: <Layout />,
       children: [
-        { path: "*", element: <NotFound /> },
         {
           path: "/",
           element: (
@@ -53,9 +52,18 @@ const App = () => {
             </div>
           ),
         },
+        {
+          path: "/magic-save/*",
+          element: (
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
     { path: "/updates", element: <Updates /> },
+    { path: "*", element: <NotFound /> },
     // {
     //   path: "/badgeDownLoader",
     //   element: <BadgeDownloader />,
