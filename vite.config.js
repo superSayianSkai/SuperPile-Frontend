@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       strategies: "injectManifest",
-      srcDir: "src/utils",
+      srcDir: "public",
       filename: "service-worker.js",
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,svg,webp,jpeg}"],
