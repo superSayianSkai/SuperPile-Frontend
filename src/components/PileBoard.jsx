@@ -30,7 +30,6 @@ const PileBoard = () => {
       category: supaPileState.category,
       keyword: supaPileState.keyword,
     });
-
   const allPiles = data?.pages.flatMap((page) => page.piles) || [];
   console.log("jessica loves me");
   console.log(allPiles);
@@ -48,7 +47,14 @@ const PileBoard = () => {
       setTheModal({ pile: modData, isOpen: true, modalType: "changeCategory" });
     },
   });
-  const { mutate: postMutate } = usePostPile({});
+  const { mutate: postMutate, error } = usePostPile({});
+  console.log(error);
+  if (
+    error?.message ===
+    "This link exists in your archived piles. Please restore it or use a different URL."
+  ) {
+    CustomToast("This pile exists in your archived piles.");
+  }
   const { mutate: changeVisibility } = useChangeVisibility();
 
   let { data: MetaData } = useMeta({ link: metaLink });
@@ -155,8 +161,13 @@ const PileBoard = () => {
 
             if (msg === "This link already exists in your pile.") {
               CustomToast("This pile exist.");
-            } else {
-              CustomToast("Something went wrong. Try again.");
+            } else if (
+              msg ===
+              "This link exists in your archived piles. Please restore it or use a different URL."
+            ) {
+              if (error?.type === "archived_duplicate" && error?.message) {
+                showCustomToast(error.message);
+              }
             }
           },
         }
@@ -227,8 +238,9 @@ const PileBoard = () => {
           </div>
         )}
         {allPiles.length === 0 && !fromLoginLoading && (
-          <div className="text-center text-gray-500 mt-10">
-           You have no Pile. Catch and Pile your favourite links across the web.
+          <div className="text-center text-gray-500 mt-20">
+            You have no Pile. Catch and Pile your favourite links across the
+            web.
           </div>
         )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">

@@ -1,189 +1,79 @@
-const CACHE_NAME = "supapile-shell-v3"; // Increment version
-const API_CACHE = "supapile-api-v3"; // Increment version
-const OFFLINE_PAGE = "/offline.html";
-const CORE_ASSETS = [
-  "/",
-  "/index.html",
-  "/offline.html",
-  "/static/js/main.js", // adapt to your build output paths
-  "/static/css/main.css",
-  "/icons/supapile-icon (1).png",
-];
+// src/service-worker.js
+import { precacheAndRoute } from "workbox-precaching";
+import { registerRoute, NavigationRoute } from "workbox-routing";
+import {
+  NetworkFirst,
+  CacheFirst,
+  StaleWhileRevalidate,
+} from "workbox-strategies";
+import { ExpirationPlugin } from "workbox-expiration";
 
-// Install: cache app shell
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(CORE_ASSETS))
-      .then(() => self.skipWaiting())
-  );
+// =======================
+// 1️⃣ Precache React build assets
+// =======================
+precacheAndRoute(self.__WB_MANIFEST, { url: "/offline.html", revision: 1 }); // Workbox injects all your build assets here
+
+
+// =======================
+// 2️⃣ NetworkFirst for API calls
+// =======================
+registerRoute(
+  ({ url }) =>
+    url.pathname.startsWith("/api/") &&
+    !url.pathname.startsWith("/auth") &&
+    !url.pathname.startsWith("/login"),
+  new NetworkFirst({
+    cacheName: "supapile-api-v1",
+    networkTimeoutSeconds: 3, // fallback to cache if network is slow
+  })
+);
+
+// =======================
+// 3️⃣ NetworkFirst for navigation (HTML pages)
+// =======================
+const navigationHandler = new NetworkFirst({
+  cacheName: "supapile-shell-v1",
+  networkTimeoutSeconds: 3,
 });
 
-// Activate: cleanup old caches
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME && key !== API_CACHE)
-            .map((k) => caches.delete(k))
-        )
-      )
-      .then(() => self.clients.claim())
-  );
+const navigationRoute = new NavigationRoute(navigationHandler, {
+  denylist: [
+    /\/auth/, // ignore login/auth routes
+    /\/login/,
+    /\?code=/, // OAuth redirects
+    /\?state=/,
+  ],
 });
 
-// Fetch: cache-first for assets, stale-while-revalidate for API, fallback to offline page
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
+registerRoute(navigationRoute);
 
-  // Example: treat your API calls separately (adjust domain/path as needed)
-  if (
-    url.pathname.startsWith("/api/") ||
-    url.hostname === "supapile-backend.up.railway.app/"  // Fixed: removed https://
-  ) {
-    // Skip caching for auth/login endpoints AND categories endpoint
-    if (
-      url.pathname.startsWith("/auth") ||
-      url.pathname.startsWith("/login") ||
-      url.pathname.startsWith("/auth/user") ||
-      url.pathname.startsWith("/auth/me") ||
-      (url.pathname === "/api/v1/piles/categories" && request.method === "GET")
-    ) {
-      event.respondWith(fetch(request));
-      return;
-    }
+// =======================
+// 4️⃣ CacheFirst for images
+// =======================
+registerRoute(
+  ({ request }) => request.destination === "image",
+  new CacheFirst({
+    cacheName: "supapile-images-v1",
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 50, // max 50 images cached
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+      }),
+    ],
+  })
+);
 
-    // For all other API calls, keep networkFirst
-    event.respondWith(networkFirst(request));
-    return;
-  }
+// =======================
+// 5️⃣ StaleWhileRevalidate for CSS/JS
+// =======================
+registerRoute(
+  ({ request }) =>
+    request.destination === "script" || request.destination === "style",
+  new StaleWhileRevalidate({
+    cacheName: "supapile-static-v1",
+  })
+);
 
-  // For navigation (HTML) requests, try NETWORK FIRST for auth-related pages
-  // For navigation (HTML) requests
-  if (request.mode === "navigate") {
-    const url = new URL(request.url);
-
-    // Skip caching for OAuth redirects and auth-related pages
-    if (
-      url.searchParams.has("code") || // OAuth callback with code parameter
-      url.searchParams.has("state") || // OAuth state parameter
-      url.pathname === "/login" ||
-      url.pathname === "/" || // Home page after login
-      url.pathname.startsWith("/auth")
-    ) {
-      // For OAuth flows, try multiple strategies
-      event.respondWith(
-        fetch(request, {
-          cache: "no-cache",
-          credentials: "same-origin",
-        }).catch(async (error) => {
-          console.log("OAuth redirect fetch failed, trying cache:", error);
-          // Try cache first, then offline page
-          const cachedResponse = await caches.match("/");
-          return cachedResponse || caches.match(OFFLINE_PAGE);
-        })
-      );
-      return;
-    }
-
-    // Cache-first for other navigation
-    event.respondWith(
-      caches
-        .match(request)
-        .then(
-          (res) => res || fetch(request).catch(() => caches.match(OFFLINE_PAGE))
-        )
-    );
-    return;
-  }
-
-  // For other requests (assets): cache-first with fallback to network
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) {
-        // start background update
-        event.waitUntil(
-          fetch(request)
-            .then((resp) => {
-              if (resp && resp.ok) {
-                caches
-                  .open(CACHE_NAME)
-                  .then((cache) => cache.put(request, resp.clone()))
-                  .catch(() => {}); // Handle potential clone errors
-              }
-            })
-            .catch(() => {})
-        );
-        return cached;
-      }
-      return fetch(request)
-        .then((resp) => {
-          // optional: cache fetched asset
-          if (resp && resp.ok && request.url.startsWith(self.location.origin)) {
-            // Clone the response before using it
-            const responseClone = resp.clone();
-            caches
-              .open(CACHE_NAME)
-              .then((cache) => cache.put(request, responseClone))
-              .catch(() => {}); // Handle potential cache errors
-          }
-          return resp;
-        })
-        .catch(() => caches.match(OFFLINE_PAGE));
-    })
-  );
-});
-
-async function networkFirst(request) {
-  try {
-    const networkResponse = await fetch(request);
-    if (networkResponse && networkResponse.ok) {
-      // Only cache GET requests, skip POST/PUT/DELETE
-      if (request.method === 'GET') {
-        const cache = await caches.open(API_CACHE);
-        cache.put(request, networkResponse.clone());
-      }
-    }
-    return networkResponse;
-  } catch (err) {
-    console.log(err);
-    const cached = await caches.match(request);
-    return cached || caches.match(OFFLINE_PAGE);
-  }
-}
-
-// Add message listener for force refresh
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-  if (event.data && event.data.type === "FORCE_REFRESH") {
-    // Clear all caches and force refresh
-    caches
-      .keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => caches.delete(cacheName))
-        );
-      })
-      .then(() => {
-        self.clients.matchAll().then((clients) => {
-          clients.forEach((client) => client.navigate(client.url));
-        });
-      });
-  }
-  // Add logout handler
-  if (event.data && event.data.type === "LOGOUT") {
-    // Clear all caches on logout
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => caches.delete(cacheName))
-      );
-    });
-  }
+self.addEventListener("install", () => {
+  self.skipWaiting();
 });

@@ -8,6 +8,7 @@
     "share_target": {
         "action": "/share",
         "method": "GET",
+        "enctype": "application/x-www-form-urlencoded",
         "params": {
             "title": "title",
             "text": "text",
@@ -29,14 +30,15 @@
     "screenshots": [
         {
             "src": "./screenshots/PC-supapile.png",
-            "sizes": "2877x1601",
+            "sizes": "1280x720",
             "type": "image/png",
             "form_factor": "wide"
         },
         {
             "src": "./screenshots/mobile-supapile.png",
-            "sizes": "632x1258",
-            "type": "image/png"
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow"
         }
     ]
 }
