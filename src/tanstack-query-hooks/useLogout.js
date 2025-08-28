@@ -36,15 +36,15 @@ const useLogout = () => {
         });
       }
       
-      // Redirect to onboarding page
-      window.location.href = '/onBoarding';
+      // Redirect to root path (which will show OnBoarding)
+      window.location.href = '/';
     },
     onError: (error) => {
       console.error('Logout error:', error);
       // Even if logout fails, clear local state and redirect
       logout();
       queryClient.clear();
-      window.location.href = '/onBoarding';
+      window.location.href = '/';
     }
   });
 };

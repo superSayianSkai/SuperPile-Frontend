@@ -26,7 +26,6 @@ const App = () => {
           ),
         },
         { path: "/login", element: <Login /> },
-        { path: "/onBoarding", element: <OnBoarding /> },
         {
           path: "/archived",
           element: (
