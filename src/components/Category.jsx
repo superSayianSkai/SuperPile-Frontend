@@ -205,15 +205,23 @@ const Category = () => {
                 onClick={() => pressSomething(c)}
                 onContextMenu={(e) => handleRightClick(e, c)}
                 key={index}
-                className={`flex justify-between ${
+                className={`flex justify-between select-none user-select-none ${
                   tick === c &&
                   "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white "
                 }  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
+                style={{
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none',
+                  userSelect: 'none',
+                  WebkitTouchCallout: 'none',
+                  WebkitTapHighlightColor: 'transparent'
+                }}
               >
-                <span>
-                  <h1 className="text-[.8rem] lowercase select-none w-[100%">{c}</h1>
+                <span className="select-none pointer-events-none">
+                  <h1 className="text-[.8rem] lowercase select-none w-[100%] pointer-events-none">{c}</h1>
                 </span>
-                {tick === c && <i className="bi bi-check2 text-[.8rem] "></i>}
+                {tick === c && <i className="bi bi-check2 text-[.8rem] select-none"></i>}
               </div>
             );
           })}
