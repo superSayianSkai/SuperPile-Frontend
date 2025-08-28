@@ -128,7 +128,7 @@ const PWAInstallNotification = () => {
 
   const handleInstallPWA = () => {
     alert(
-      'To install SupaPile as an app:\n\n📱 On Mobile:\n1. Tap browser menu (⋮)\n2. Select "Add to Home Screen"\n3. Tap "Add"\n\n💻 On Desktop:\n1. Look for install icon in address bar\n2. Or use browser menu → "Install SupaPile"'
+      'To install SupaPile as an app:\n\n📱 On Mobile:\n1. Tap browser menu (⋮)\n2. Select "Add to Home Screen"\n3. Tap "Add"\n\n💻 On Desktop:\n1. Look for install icon in address bar\n2. Or use browser menu → "Install Supapile"'
     );
   };
 
