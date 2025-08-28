@@ -152,7 +152,7 @@ const PWAInstallNotification = () => {
   const getContent = () => {
     if (isPWAInstalled && !hasExtension) {
       return {
-        title: "Complete Your SupaPile Setup! 🧩",
+        title: "Complete Your SupaPile Setup!",
         description:
           "You have the app installed! Get our Chrome extension to save links instantly while browsing.",
         showPWAButton: false,
