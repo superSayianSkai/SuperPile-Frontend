@@ -43,15 +43,6 @@ const App = () => {
           ),
         },
         {
-          path: "/api/share/:publicLinkToken",
-          element: (
-            <div>
-              <HeroPublicPile />
-              <PublicPile />
-            </div>
-          ),
-        },
-        {
           path: "/magic-save/*",
           element: (
             <ProtectedRoute>
@@ -64,9 +55,18 @@ const App = () => {
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
     // {
-    //   path: "/badgeDownLoader",
-    //   element: <BadgeDownloader />,
-    // },
+      //   path: "/badgeDownLoader",
+      //   element: <BadgeDownloader />,
+      // },
+      {
+        path: "/api/share/:publicLinkToken",
+        element: (
+          <div>
+            <HeroPublicPile />
+            <PublicPile />
+          </div>
+        ),
+      },
   ]);
   return <RouterProvider router={router} />;
 };
