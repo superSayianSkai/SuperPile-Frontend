@@ -30,14 +30,14 @@ const useAuth = () => {
       }
     },
     retry: (failureCount, error) => {
-      if (error?.response?.status === 401) {
-        // Force clear user state on 401
+      if (error?.response?.status === 401 || error?.response?.status === 500) {
+        // Force clear user state on 401/500
         setUser(null);
         setError(true, error);
         
         // Clear navigation cache to prevent stale auth pages
         if ('caches' in window) {
-          caches.open('supapile-shell-v3').then(cache => {
+          caches.open('supapile-shell-v1').then(cache => {
             cache.delete('/');
             cache.delete('/login');
           });
@@ -45,7 +45,6 @@ const useAuth = () => {
         
         return false;
       }
-      return failureCount < 2;
     },
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

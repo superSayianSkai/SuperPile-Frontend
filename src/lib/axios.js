@@ -1,11 +1,11 @@
 import axios from "axios";
+import { useAuthStore } from "../zustard/useAuthStore";
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
 });
 
-// Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -24,6 +24,12 @@ apiClient.interceptors.response.use(
   response => response,
   async (error) => {
     const originalRequest = error.config;
+    
+    // Check if user is logged out - if so, don't try to refresh
+    const authState = useAuthStore.getState();
+    if (authState.isLoggedOut) {
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -39,7 +45,7 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await apiClient.get("/auth/refresh-token"); 
+        await apiClient.get("/auth/sp-delta-vitals"); 
         processQueue(null);
         return apiClient(originalRequest); 
       } catch (err) {
@@ -54,4 +60,4 @@ apiClient.interceptors.response.use(
   }
 );
 
-export default apiClient
+export default apiClient;

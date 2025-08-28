@@ -1,46 +1,12 @@
 import { Link } from "react-router";
 import { menuIcons } from "../data/menuIcons";
-import { useAuthStore } from "../zustard/useAuthStore";
-import { useQueryClient } from "@tanstack/react-query";
+import useLogout from "../tanstack-query-hooks/useLogout";
 
 const Profile = () => {
-  const { setUser, setError } = useAuthStore();
-  const queryClient = useQueryClient();
+  const logoutMutation = useLogout();
 
-  const handleLogout = async () => {
-    try {
-      // Clear user state
-      setUser(null);
-      setError(false, null);
-      
-      // Clear all React Query cache
-      queryClient.clear();
-      
-      // Clear service worker caches
-      if ('serviceWorker' in navigator && 'caches' in window) {
-        const cacheNames = await caches.keys();
-        await Promise.all(
-          cacheNames.map(cacheName => caches.delete(cacheName))
-        );
-      }
-      
-      // Send message to service worker to force refresh
-      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-          type: 'FORCE_REFRESH'
-        });
-      }
-      
-      // Redirect to backend logout endpoint to clear server-side session
-      const baseURL = import.meta.env.VITE_BASE_URL;
-      console.log(baseURL)  
-      window.location.href = `${baseURL}/auth/v1/logout`;
-      
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Force reload as fallback
-      window.location.reload();
-    }
+  const handleLogout = () => {
+    logoutMutation.mutate();
   };
 
   const handleMenuClick = (icon) => {
@@ -50,14 +16,14 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-white dark:text-black shadow-xl absolute right-5 w-[200px] top-[5%] rounded-xl border-2 ">
+    <div className="bg-white dark:text-black shadow-xl absolute right-5 w-[200px] top-[5%] rounded-xl border-2 overflow-hidden">
       {menuIcons.map((icon, index) => {
         if (icon.action === 'logout') {
           return (
             <div
               key={index}
               onClick={() => handleMenuClick(icon)}
-              className="flex group transition-all items-center gap-5 hover:bg-gray-200 px-6 py-4 text-[.8rem] cursor-pointer"
+              className={`flex ${icon.label=="Log out" && "text-red-500"}  group transition-all items-center gap-5 hover:bg-gray-200 px-6 py-4 text-[.8rem] cursor-pointer`}
             >
               <style>{`
                 .group:hover button {
@@ -65,7 +31,7 @@ const Profile = () => {
                 }
               `}</style>
               <i className={`${icon.iconClass}`}></i>
-              <span>{icon.label}</span>
+              <span>{logoutMutation.isPending ? 'Logging out...' : icon.label}</span>
             </div>
           );
         }
