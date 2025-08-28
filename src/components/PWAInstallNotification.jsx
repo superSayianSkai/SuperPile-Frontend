@@ -160,7 +160,7 @@ const PWAInstallNotification = () => {
       };
     } else if (!isPWAInstalled && hasExtension) {
       return {
-        title: "Install SupaPile App! 📱",
+        title: "Install Supapile App! 📱",
         description:
           "You have our extension! Install the app for offline access and faster performance.",
         showPWAButton: true,
@@ -275,7 +275,7 @@ const PWAInstallNotification = () => {
           {content.showExtensionButton && (
             <button
               onClick={handleGetExtension}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+              className="w-full bg-black text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
               🧩 Get Chrome Extension
             </button>
@@ -284,7 +284,7 @@ const PWAInstallNotification = () => {
           {content.showPWAButton && (
             <button
               onClick={handleInstallPWA}
-              className="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+              className="w-full bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
               📱 Install as App
             </button>
