@@ -286,7 +286,7 @@ const PWAInstallNotification = () => {
               onClick={handleInstallPWA}
               className="w-full bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
-              📱 Install as App
+              📱 Install as an App
             </button>
           )}
 
