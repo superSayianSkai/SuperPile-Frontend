@@ -13,7 +13,7 @@ const Updates = () => {
     setImageLoading(true);
   };
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
+    <div className="min-h-screen max-h-screen overflow-y-auto bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
       {/* Back Navigation - positioned at page edge on desktop */}
       <div className="sm:absolute sm:left-4 sm:top-8 sm:z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-0 mb-4 sm:mb-0">
@@ -199,7 +199,7 @@ const Updates = () => {
           or ideas are always welcome to help make future updates even better.
         </p>
         {/* Article Footer */}
-        <footer className="mt-8 sm:mt-10 py-4 sm:py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 rounded-lg">
+        <footer className="mt-8 sm:mt-10 py-4 sm:py-6 mb-4 sm:mb-8 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               <span>Follow me on X</span>
