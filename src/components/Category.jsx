@@ -11,13 +11,13 @@ const Category = () => {
   const [showAddInput, setShowAddInput] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
-  
+
   // Context menu state
   const [contextMenu, setContextMenu] = useState({
     show: false,
     x: 0,
     y: 0,
-    categoryName: ""
+    categoryName: "",
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState("");
@@ -83,22 +83,21 @@ const Category = () => {
   const handleRightClick = (e, categoryName) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Don't show context menu for 'all' category
-    if (categoryName.toLowerCase() === 'all') {
+    if (categoryName.toLowerCase() === "all") {
       return;
     }
 
     // Calculate responsive positioning
-    const rect = e.currentTarget.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const menuWidth = 150; // Approximate context menu width
     const menuHeight = 50; // Approximate context menu height
-    
+
     let x = e.clientX;
     let y = e.clientY;
-    
+
     // Adjust position if menu would go off-screen
     if (x + menuWidth > viewportWidth) {
       x = viewportWidth - menuWidth - 10;
@@ -106,9 +105,10 @@ const Category = () => {
     if (y + menuHeight > viewportHeight) {
       y = viewportHeight - menuHeight - 10;
     }
-    
+
     // Ensure minimum distance from edges on mobile
-    if (viewportWidth < 640) { // sm breakpoint
+    if (viewportWidth < 640) {
+      // sm breakpoint
       x = Math.max(10, Math.min(x, viewportWidth - menuWidth - 10));
       y = Math.max(10, Math.min(y, viewportHeight - menuHeight - 10));
     }
@@ -117,7 +117,7 @@ const Category = () => {
       show: true,
       x,
       y,
-      categoryName
+      categoryName,
     });
   };
 
@@ -133,7 +133,7 @@ const Category = () => {
         onSuccess: () => {
           // If the deleted category was selected, switch to 'all'
           if (tick === categoryToDelete) {
-            pressSomething('all');
+            pressSomething("all");
           }
           setShowDeleteConfirm(false);
           setCategoryToDelete("");
@@ -141,7 +141,7 @@ const Category = () => {
         onError: (error) => {
           console.error("Failed to delete category:", error);
           // You can add toast notification here
-        }
+        },
       });
     }
   };
@@ -158,8 +158,8 @@ const Category = () => {
     };
 
     if (contextMenu.show) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
     }
   }, [contextMenu.show]);
 
@@ -211,7 +211,7 @@ const Category = () => {
                 }  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
               >
                 <span>
-                  <h1 className="text-[.8rem] lowercase w-[100%">{c}</h1>
+                  <h1 className="text-[.8rem] lowercase select-none w-[100%">{c}</h1>
                 </span>
                 {tick === c && <i className="bi bi-check2 text-[.8rem] "></i>}
               </div>
@@ -261,7 +261,9 @@ const Category = () => {
             className="flex justify-center items-center hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] dark:bg-[#2a2a2a] font-medium text-black dark:text-white rounded-md px-2 py-1 cursor-pointer transition-colors"
           >
             <span>
-              <h1 className="text-[1rem]"><i className="bi bi-plus"></i></h1>
+              <h1 className="text-[1rem]">
+                <i className="bi bi-plus"></i>
+              </h1>
             </span>
           </div>
         )}
@@ -288,7 +290,9 @@ const Category = () => {
             className="w-full px-3 py-2 sm:px-4 sm:py-2 text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 text-sm transition-colors duration-150"
           >
             <i className="bi bi-trash text-xs sm:text-sm"></i>
-            <span className="text-xs sm:text-sm font-medium">Delete Category</span>
+            <span className="text-xs sm:text-sm font-medium">
+              Delete Category
+            </span>
           </button>
         </div>
       )}
@@ -301,7 +305,9 @@ const Category = () => {
               Delete Category
             </h3>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-              Are you sure you want to delete the category "{categoryToDelete}"? All piles in this category will be moved to the "all" category.
+              Are you sure you want to delete the category &quot;
+              {categoryToDelete}&quot;? All piles in this category will be moved
+              to the &quot;all&quot; category.
             </p>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:justify-end">
               <button
