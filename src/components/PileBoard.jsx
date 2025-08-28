@@ -237,7 +237,7 @@ const PileBoard = () => {
         )}
         {allPiles.length === 0 && !fromLoginLoading && (
           <div className="text-center text-gray-500 mt-20">
-            You have no Pile. Catch and Pile your favourite links across the
+            You have no Pile. Catch and Pile your favorite links across the
             web.
           </div>
         )}

@@ -170,9 +170,28 @@ const PWAInstallNotification = () => {
       return {
         title: "Welcome to Supapile!",
         description:
-          "Catch, save and share your favourite links across the web.",
+          "Catch, save and share your favorite links across the web.",
         showPWAButton: true,
         showExtensionButton: true,
+      };
+    }
+  };
+
+  const getPopop = () => {
+    if (isPWAInstalled && !hasExtension) {
+      return {
+        description:
+          "If you change your mind, you can find the link to the Chrome Extension at the Update page :)",
+      };
+    } else if (!isPWAInstalled && hasExtension) {
+      return {
+        description:
+          "If you change your mind, you can find how to download supapile as an app at the Update page :)",
+      };
+    } else {
+      return {
+        description:
+          "If you change your mind, you can find how to download the PWA and link to the Chrome Extension at the Update page :)",
       };
     }
   };
@@ -187,7 +206,6 @@ const PWAInstallNotification = () => {
 
   const renderPage = () => {
     const content = getContent();
-    const totalPages = getTotalPages();
 
     if (currentPage === 0) {
       return (
@@ -283,6 +301,7 @@ const PWAInstallNotification = () => {
     );
   };
 
+  const popUpMessage = getPopop();
   if (!showInfoPopup || isDismissed || (isPWAInstalled && hasExtension)) {
     return (
       <>
@@ -300,8 +319,7 @@ const PWAInstallNotification = () => {
     animate-fade-slide
   "
           >
-            If you change your mind, you can find the how to download the PWA and
-          link to the Chrome Extension is at the Update page :)
+            {popUpMessage.description}
           </div>
         )}
       </>
