@@ -17,7 +17,6 @@ import { getMetaDataSync } from "../utils/getMetaDataSync";
 import CustomToast from "./ShowCustomToast";
 import usePostPile from "../tanstack-query-hooks/usePostPile";
 import { useQueryClient } from "@tanstack/react-query";
-import ExtensionNotification from "./ExtensionNotification";
 import PWAInstallNotification from "./PWAInstallNotification";
 import pileBall from "../assets/supapile-icon2.svg";
 const PileBoard = () => {
@@ -180,7 +179,6 @@ const PileBoard = () => {
     <div className="w-[100%] max-w-[90rem] mx-auto mt-[2rem]">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
         {clicked.isOpen && <ChangeCategoryContainer />}
-        <ExtensionNotification />
         <PWAInstallNotification />
         <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
           <CategoryController id={"pickCategory"} />

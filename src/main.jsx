@@ -7,7 +7,6 @@ import AuthProvider from "./context/AuthProvider.jsx";
 import StateProvider from "./context/StateProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient({});
-// Remove this line: import { register } from "./utils/serviceWorkerRegistration.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
