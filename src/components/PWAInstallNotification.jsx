@@ -392,7 +392,7 @@ const PWAInstallNotification = () => {
                   onClick={() => goToPage(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-200 ${
                     index === currentPage
-                      ? "bg-blue-500 w-8"
+                      ? "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] w-8"
                       : "bg-gray-300 hover:bg-gray-400"
                   }`}
                   aria-label={`Go to page ${index + 1}`}
