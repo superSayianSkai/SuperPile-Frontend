@@ -24,6 +24,7 @@ const PilePanel = () => {
   const [hasError, setHasError] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const panelRef = useRef();
+  const closeRef = useRef();
   const triggerToast = (message) => {
     setToastMessage(message);
     setShowToast(true);
@@ -125,7 +126,7 @@ const PilePanel = () => {
   };
 
   const handleClose = (e) => {
-    if (panelRef.current && !panelRef.current.contains(e.target)) {
+    if (panelRef.current && !panelRef.current.contains(e.target) || closeRef.current.contains(e.target))  {
       setIsVisible(false);
       setTimeout(() => {
         setLinkBoardPanelToggle();
@@ -166,7 +167,8 @@ const PilePanel = () => {
               Add Pile
             </h2>
             <button
-              onClick={handleClose}
+              ref={closeRef}
+              
               className="text-gray-600 hover:text-gray-800 hover:opacity-50 transition-all duration-150 hover:scale-110 p-1 rounded-full hover:bg-gray-100"
             >
               <svg
