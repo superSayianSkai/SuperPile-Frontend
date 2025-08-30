@@ -16,14 +16,14 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-white dark:text-black shadow-xl absolute right-0 w-[200px] top-[5%] rounded-xl border-2 overflow-hidden">
+    <div className="dark:bg-black dark:text-white bg-white text-black shadow-xl absolute right-0 w-[180px] top-[4%] rounded-xl border-2 dark:border-[1px] dark:border-gray-700 overflow-hidden">
       {menuIcons.map((icon, index) => {
         if (icon.action === 'logout') {
           return (
             <div
               key={index}
               onClick={() => handleMenuClick(icon)}
-              className={`flex ${icon.label=="Log out" && "text-red-500"}  group transition-all items-center gap-5 hover:bg-gray-200 px-6 py-4 text-[.8rem] cursor-pointer`}
+              className={`flex ${icon.label=="Log out" && "text-red-500 border-t-[1px] dark:border-gray-800"}  group transition-all items-center gap-5 hover:bg-gray-200 dark:hover:bg-gray-900  px-6 py-4 text-[.8rem] cursor-pointer`}
             >
               <style>{`
                 .group:hover button {
@@ -40,7 +40,7 @@ const Profile = () => {
           <Link
             to={icon.link}
             key={index}
-            className="flex group transition-all items-center gap-5 hover:bg-gray-200 px-6 py-4 text-[.8rem] cursor-pointer"
+            className="flex group transition-all items-center gap-5 hover:bg-gray-200 dark:hover:bg-gray-900 px-6 py-4 text-[.8rem] cursor-pointer"
           >
             <style>{`
               .group:hover button {
