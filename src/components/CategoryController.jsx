@@ -14,9 +14,9 @@ const CategoryController = ({ id }) => {
     <div
       ref={toogleRef}
       onClick={() => toggleCategory(id)}
-      className="user-select-none flex gap-2 items-center justify-center cursor-pointer relative"
+      className="user-select-none flex gap-1 items-center justify-center cursor-pointer relative"
     >
-      <h2 className="font-bold user-select-none text-[.8rem] md:text-[.8rem] capitalize">
+      <h2 className="font-bold user-select-none text-[1rem] md:text-[.8rem] capitalize">
         {tick}
       </h2>
       <i
