@@ -65,12 +65,24 @@ const PilePanel = () => {
     setIsVisible(true);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
+  // useEffect(() => {
+  //   document.body.style.overflow = "hidden";
+  //   return () => {
+  //     document.body.style.overflow = "";
+  //   };
+  // }, []);
+    useEffect(() => {
+    // Prevent body scroll when modal is open
+    document.documentElement.style.overflow = 'hidden';
+    document.body.scroll = "no";
+    
+    // Cleanup function to restore scroll when component unmounts
     return () => {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = 'auto';
+      document.body.scroll = "yes";
     };
   }, []);
+  
 
   const theCategoryInput = (e) => {
     const value = e.target.value;
