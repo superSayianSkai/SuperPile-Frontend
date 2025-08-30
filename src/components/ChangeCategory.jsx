@@ -1,10 +1,11 @@
 import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory.js";
 import useCategoryChanger from "../zustard/useCategoryChanger.js";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import useClickedModal from "../zustard/useClickedModal.js";
 import useChangeCategory from "../tanstack-query-hooks/useChangeCategory.js";
 import CustomToast from "./ShowCustomToast.jsx";
 const ChangeCategory = () => {
+  const categoryRef = useRef();
   const { data } = useFetchCategory();
   const { setTheCategoryChangerStore } = useCategoryChanger();
   const { clicked } = useClickedModal();
@@ -18,11 +19,17 @@ const ChangeCategory = () => {
     }, 3000);
   };
 
+  const handleClose = (e) => {
+    if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+      setTheModal({});
+    }
+  };
+
   const category = data?.data.categories;
 
   const { mutate } = useChangeCategory();
   let clickedPileCategory = clicked.pile;
-  console.log(clickedPileCategory)
+  console.log(clickedPileCategory);
   console.log("hahahahah");
   const handleChange = async (e) => {
     console.log(e);
@@ -51,8 +58,11 @@ const ChangeCategory = () => {
       onClick={() => setTheModal()}
       className="relative z-10  w-[100%] rounded-xl h-[100svh] overflow-y-scroll inset-0 cursor-pointer flex justify-center items-center"
     >
-      <div onClick={(e) => e.stopPropagation()} className="w-[90%]  md:w-[400px] h-[400px] rounded-xl overflow-scroll">
-        <div className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]">
+      <div
+        onClick={(e) => [e.stopPropagation(), handleClose(e)]}
+        className="w-[90%]  md:w-[400px] h-[400px] rounded-xl overflow-scroll"
+      >
+        <div ref={categoryRef} className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]">
           <h1 className="text-sm font-semibold text-gray-700 mb-3 text-center">
             Change Category
           </h1>

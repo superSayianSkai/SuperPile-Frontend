@@ -23,7 +23,7 @@ const PilePanel = () => {
   const [showToast, setShowToast] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-
+  const panelRef = useRef();
   const triggerToast = (message) => {
     setToastMessage(message);
     setShowToast(true);
@@ -124,11 +124,13 @@ const PilePanel = () => {
     }, [3000]);
   };
 
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      setLinkBoardPanelToggle();
-    }, 100);
+  const handleClose = (e) => {
+    if (panelRef.current && !panelRef.current.contains(e.target)) {
+      setIsVisible(false);
+      setTimeout(() => {
+        setLinkBoardPanelToggle();
+      }, 100);
+    }
   };
 
   return (
@@ -139,6 +141,7 @@ const PilePanel = () => {
       ></div>
 
       <div
+        onClick={handleClose}
         className={` z-[100] md:max-w-2xl max-w-full rounded-3xl  scroll md:w-[100%] absolute  md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 ${
           meta
             ? " w-[100%]  md:min-h-[70svh]  max-md:inset-0 max-md:top-[80px] "
@@ -146,6 +149,7 @@ const PilePanel = () => {
         } `}
       >
         <div
+          ref={panelRef}
           className={`bg-white border scroll border-gray-200 overflow-y-auto  ${
             meta
               ? "w-[100%]  max-md:pb-20 max-md:min-h-[100svh] max-md:max-h-[100svh] rounded-3xl md:w-[100%]"
