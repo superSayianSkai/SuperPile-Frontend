@@ -20,7 +20,7 @@ const CategoryController = ({ id }) => {
         {tick}
       </h2>
       <i
-        className={`text-[1rem] transition-transform duration-300 ease-in-out ${
+        className={`text-[1rem] transition-transform text-gray-500 duration-300 ease-in-out ${
           modals.pickCategory ? "bi bi-x rotate-180" : "bi bi-plus rotate-0"
         }`}
       ></i>

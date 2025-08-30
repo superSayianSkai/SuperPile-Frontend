@@ -146,7 +146,7 @@ const PilePanel = () => {
         }`}
       >
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100">
+        <div className="px-6 py-4 border-b  border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100">
           <h2 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
             Add Pile
           </h2>

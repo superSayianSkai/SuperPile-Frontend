@@ -187,7 +187,7 @@ const PileBoard = () => {
               <button
                 id="my-button"
                 onClick={setLinkBoardPanelToggle}
-                className="group text-[1rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-8 py-4 md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors"
+                className="group text-[.8rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-7 py-[.5rem] md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors"
               >
                 <div
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
