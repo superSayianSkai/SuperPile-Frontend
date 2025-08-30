@@ -180,14 +180,14 @@ const PileBoard = () => {
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
         {clicked.isOpen && <ChangeCategoryContainer />}
         <PWAInstallNotification />
-        <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
+        <div className="flex justify-between mb-5 items-center md:px-2  dark:border-slate-500 md:border-0">
           <CategoryController id={"pickCategory"} />
           <div className="flex justify-center items-center gap-5">
             <div ref={pileButtonRef}>
               <button
                 id="my-button"
                 onClick={setLinkBoardPanelToggle}
-                className="group text-[.6rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-6 py-1 mb-2 relative h-6 overflow-hidden transition-colors"
+                className="group text-[.6rem] dark:bg-white dark:text-black md:text-[.8rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-6 py-1 mb-2 relative h-6 overflow-hidden transition-colors"
               >
                 <div
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
@@ -237,8 +237,7 @@ const PileBoard = () => {
         )}
         {allPiles.length === 0 && !fromLoginLoading && (
           <div className="text-center text-gray-500 mt-20">
-            You have no Pile. Catch and Pile your favorite links across the
-            web.
+            You have no Pile. Catch and Pile your favorite links across the web.
           </div>
         )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">

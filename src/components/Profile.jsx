@@ -16,7 +16,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-white dark:text-black shadow-xl absolute right-5 w-[200px] top-[5%] rounded-xl border-2 overflow-hidden">
+    <div className="bg-white dark:text-black shadow-xl absolute right-0 w-[200px] top-[5%] rounded-xl border-2 overflow-hidden">
       {menuIcons.map((icon, index) => {
         if (icon.action === 'logout') {
           return (

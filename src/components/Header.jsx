@@ -20,8 +20,8 @@ const Header = () => {
 
   return (
     <header className="sticky max-w-[95rem] mx-auto top-0 z-[1000] bg-white/80 dark:bg-black/60 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700 shadow-sm">
-      <div className="max-w-7xl mx-auto px-3 ">
-        <div className="flex justify-between items-center min-h-16 h-16 md:h-16 ">
+      <div className="px-3 md:px-6 ">
+        <div className="flex justify-between items-center  h-14 md:h-16 ">
           {/* Logo Section */}
           <Link
             to="/"
@@ -101,7 +101,7 @@ const Header = () => {
                     onClick={() =>
                       setTheModal({ isOpen: true, modalType: "generateLink" })
                     }
-                    className="group h-9 dark:bg-black dark:border-slate-500 dark:text-white relative flex items-center gap-2 px-3 overflow-hidden text-[.8rem] md:text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full hover:border-transparent hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="group h-9 dark:bg-black dark:border-slate-500 dark:text-white relative flex items-center gap-2 px-3 overflow-hidden text-[.6rem] md:text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full hover:border-transparent hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
                     style={{
                       "--hover-bg":
                         "linear-gradient(to right, #ff66b2, #ff8c00)",
@@ -138,7 +138,7 @@ const Header = () => {
                       }
                     `}</style>
                     <i className="bi bi-chevron-double-up text-sm bouncing-arrow"></i>
-                    <span>Share</span>
+                    <span >Share</span>
                   </button>
 
                   {/* Profile Section */}
@@ -158,11 +158,11 @@ const Header = () => {
                         ></div>
 
                         {/* Profile picture container */}
-                        <div className="relative md:w-9 h-9 rounded-full overflow-hidden bg-white">
+                        <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white">
                           <img
                             src={userData?.data?.profilePicture}
                             alt="Profile"
-                            className="w-full h-full object-cover transition-all duration-300 shadow-sm group-hover:shadow-md"
+                            className="w-full h-full object-contain transition-all duration-300 shadow-sm group-hover:shadow-md"
                           />
                         </div>
                       </div>
