@@ -141,7 +141,7 @@ const PilePanel = () => {
       <div
         className={` z-[100] md:max-w-2xl max-w-full rounded-3xl  scroll md:w-[100%] absolute  md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 ${
           meta
-            ? " w-[100%] min-h-[10svh] md:min-h-[70svh]  max-md:inset-0 max-md:top-[80px] "
+            ? " w-[100%]  md:min-h-[70svh]  max-md:inset-0 max-md:top-[80px] "
             : "w-[95%] min-h-[50svh] md:min-h-[70svh] "
         } `}
       >
@@ -373,7 +373,7 @@ const PilePanel = () => {
               {/* Category Suggestions */}
               <div className="pl-6 mt-4 sm:mt-3 ">
                 <p className="text-xs text-gray-500 mb-2">categories:</p>
-                <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin pr-2 scroll border-black">
+                <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin p-2 scroll border-black">
                   {categoryList.map((cat) => (
                     <button
                       key={cat}
