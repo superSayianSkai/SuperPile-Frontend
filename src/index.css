@@ -12,7 +12,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "IBM Plex Mono", monospace;
-  transition: all 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52);
+  /* transition: all 0.3s cubic-bezier(0.16, 0.8, 0.62, 1.52); */
   scroll-behavior: smooth;
   scrollbar-width: thin;
 }

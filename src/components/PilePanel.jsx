@@ -141,14 +141,14 @@ const PilePanel = () => {
       <div
         className={` z-[100] md:max-w-2xl max-w-full rounded-3xl  scroll md:w-[100%] absolute  md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 ${
           meta
-            ? " w-[100%] min-h-[10svh] md:min-h-[70svh]  max-md:inset-0 max-md:top-[80px] max-md:overflow-auto"
+            ? " w-[100%] min-h-[10svh] md:min-h-[70svh]  max-md:inset-0 max-md:top-[80px] "
             : "w-[95%] min-h-[50svh] md:min-h-[70svh] "
         } `}
       >
         <div
-          className={`bg-white border scroll border-gray-200 overflow-y-auto  ${
+          className={`bg-white max-md:pb-20 border scroll border-gray-200 overflow-y-auto  ${
             meta
-              ? "w-[100%] max-sm:min-h-[100svh] max-sm:max-h-[100svh] rounded-3xl md:w-[100%]"
+              ? "w-[100%] max-md:min-h-[100svh] max-md:max-h-[100svh] rounded-3xl md:w-[100%]"
               : "rounded-3xl w-[100%]"
           } shadow-2xl   max-w-full absolute  z-20 flex flex-col transform transition-all duration-250 ease-out ${
             isVisible
@@ -157,7 +157,7 @@ const PilePanel = () => {
           }`}
         >
           {/* Modal Header */}
-          <div className="px-6 py-4 border-b  border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100">
+          <div className="px-6 sticky inset-0 top-0 h-[65px] z-[100] py-4 border-b  border-gray-200 flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100">
             <h2 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-orange-600 bg-clip-text text-transparent">
               Add Pile
             </h2>
