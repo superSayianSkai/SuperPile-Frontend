@@ -135,7 +135,7 @@ const PilePanel = () => {
     <div className="fixed inset-0 z-[1000]  flex justify-center items-center transition-all duration-150 ease-in-out">
       <div
         onClick={handleClose}
-        className="absolute inset-0 backdrop-blur-sm z-10"
+        className="absolute bg-black bg-opacity-50  inset-0 backdrop-blur-sm z-10"
       ></div>
 
       <div
