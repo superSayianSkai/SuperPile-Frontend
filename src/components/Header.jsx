@@ -101,7 +101,7 @@ const Header = () => {
                     onClick={() =>
                       setTheModal({ isOpen: true, modalType: "generateLink" })
                     }
-                    className="group h-9 dark:bg-black dark:border-slate-500 dark:text-white relative flex items-center gap-2 px-3 overflow-hidden text-[.6rem] md:text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full hover:border-transparent hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="group h-9 dark:bg-black dark:border-slate-500 dark:text-white relative flex items-center gap-2 px-3 overflow-hidden text-[.6rem] md:text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full  hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
                     style={{
                       "--hover-bg":
                         "linear-gradient(to right, #ff66b2, #ff8c00)",
