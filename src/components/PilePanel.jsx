@@ -146,9 +146,9 @@ const PilePanel = () => {
         } `}
       >
         <div
-          className={`bg-white max-md:pb-20 border scroll border-gray-200 overflow-y-auto  ${
+          className={`bg-white border scroll border-gray-200 overflow-y-auto  ${
             meta
-              ? "w-[100%] max-md:min-h-[100svh] max-md:max-h-[100svh] rounded-3xl md:w-[100%]"
+              ? "w-[100%]  max-md:pb-20 max-md:min-h-[100svh] max-md:max-h-[100svh] rounded-3xl md:w-[100%]"
               : "rounded-3xl w-[100%]"
           } shadow-2xl   max-w-full absolute  z-20 flex flex-col transform transition-all duration-250 ease-out ${
             isVisible
