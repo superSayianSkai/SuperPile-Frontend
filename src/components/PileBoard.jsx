@@ -48,14 +48,9 @@ const PileBoard = () => {
       setTheModal({ pile: modData, isOpen: true, modalType: "changeCategory" });
     },
   });
-  const { mutate: postMutate, error } = usePostPile();
+  const { mutate: postMutate } = usePostPile();
   const error2 = useError((state) => state.error);
-  
-  // Remove the conditional toast call as it's now handled in usePostPile
-  // Remove this block:
-  // if (error?.message === "This link exists in your archived piles. Please restore it or use a different URL.") {
-  //   CustomToast("This pile exists in your archived piles.");
-  // }
+
   const { mutate: changeVisibility } = useChangeVisibility();
 
   let { data: MetaData } = useMeta({ link: metaLink });

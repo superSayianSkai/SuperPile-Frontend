@@ -45,7 +45,7 @@ const PilePanel = () => {
   const [meta, showMeta] = useState(false);
   const [categoryInput, setCategoryInput] = useState("all");
   const { data, isLoading } = useMeta({ link: metaLink });
-  const { mutate} = usePostPile();
+  const { mutate } = usePostPile();
 
   const allPiles = pileData?.pages.flatMap((page) => page.piles) || [];
   const pileUrls = allPiles.map((pile) => pile.url);
@@ -112,7 +112,9 @@ const PilePanel = () => {
       keyword: supaPileState.keyword ?? "",
     });
     setLinkBoardPanelToggle();
-    refetch();
+    setTimeout(() => {
+      refetch();
+    }, 1000);
   };
 
   const handleClose = (e) => {

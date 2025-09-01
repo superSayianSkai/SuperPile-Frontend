@@ -131,6 +131,6 @@ self.addEventListener('activate', event => {
   );
 });
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
