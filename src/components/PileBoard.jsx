@@ -19,6 +19,7 @@ import usePostPile from "../tanstack-query-hooks/usePostPile";
 import { useQueryClient } from "@tanstack/react-query";
 import PWAInstallNotification from "./PWAInstallNotification";
 import pileBall from "../assets/supapile-icon2.svg";
+import useAuth from "../tanstack-query-hooks/useAuthPile";
 const PileBoard = () => {
   const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence } =
     useContext(StateContext);
@@ -81,7 +82,10 @@ const PileBoard = () => {
       setToast({ show: false, message: "" });
     }, 3000);
   };
-
+ 
+  const { data: userData } = useAuth();
+  console.log("your life will go down by half");
+  console.log(userData.newTimer);
   const copy = (e) => {
     navigator.clipboard.writeText(e);
     showCustomToast("Copied to clipboard");
@@ -179,7 +183,7 @@ const PileBoard = () => {
     <div className="w-[100%] max-w-[90rem] mx-auto mt-[2rem]">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
         {clicked.isOpen && <ChangeCategoryContainer />}
-        <PWAInstallNotification />
+        {!userData.data?.newTimer && <PWAInstallNotification />}
         <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
           <CategoryController id={"pickCategory"} />
           <div className="flex justify-center items-center gap-5">
@@ -235,7 +239,7 @@ const PileBoard = () => {
             ))}
           </div>
         )}
-        {allPiles.length === 0 && !fromLoginLoading && (
+        {allPiles.length === 0 && !fromLoginLoading || isLoading && (
           <div className="text-center text-gray-500 mt-20">
             You have no Pile. Catch and Pile your favorite links across the web.
           </div>

@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import supapile from "../assets/Images/supapile-icon2.svg";
-
+import { useTimer } from "../tanstack-query-hooks/useTimer";
 const PWAInstallNotification = () => {
-  const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
   const [hasExtension, setHasExtension] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [showDismissMessage, setShowDismissMessage] = useState(false);
+  const [showDismissMessage, setShowDismissedMessage] = useState(false);
 
+  const { mutate: timer } = useTimer();
   // Features data for carousel
   const features = [
     {
@@ -42,16 +41,14 @@ const PWAInstallNotification = () => {
   ];
 
   useEffect(() => {
-    if (showInfoPopup && !isDismissed) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.scroll = "no";
-    }
+    document.documentElement.style.overflow = "hidden";
+    document.body.scroll = "no";
 
     return () => {
       document.documentElement.style.overflow = "auto";
       document.body.scroll = "yes";
     };
-  }, [showInfoPopup, isDismissed]);
+  }, []);
 
   useEffect(() => {
     console.log("App Info Popup: Component mounted");
@@ -82,44 +79,11 @@ const PWAInstallNotification = () => {
       console.log("App Info Popup: Both installed, not showing");
       return;
     }
-
-    const dismissed = localStorage.getItem("app-info-dismissed");
-    const dismissedTime = localStorage.getItem("app-info-dismissed-time");
-
-    if (dismissed) {
-      const now = new Date().getTime();
-      const dismissTime = parseInt(dismissedTime);
-      if (now - dismissTime < 7 * 24 * 60 * 60 * 1000) {
-        console.log("App Info Popup: Previously dismissed, not showing");
-        setIsDismissed(true);
-        return;
-      } else {
-        localStorage.removeItem("app-info-dismissed");
-      }
-    }
-
-    const currentVisitCount = parseInt(
-      localStorage.getItem("app-visit-count") || "0"
-    );
-    const newVisitCount = currentVisitCount + 1;
-    localStorage.setItem("app-visit-count", newVisitCount.toString());
-
-    if (newVisitCount >= 3) {
-      setShowInfoPopup(true);
-    }
-  }, []);
+  });
 
   const handleDismiss = () => {
-    console.log("App Info Popup: User dismissed popup");
-    const now = new Date().getTime();
-    localStorage.setItem("app-info-dismissed", "true");
-    localStorage.setItem("app-info-dismissed-time", now.toString());
-    setShowInfoPopup(false);
-    setIsDismissed(true);
-
-    // Show toast message for 5s
-    setShowDismissMessage(true);
-    setTimeout(() => setShowDismissMessage(false), 5000);
+   setShowDismissedMessage(true)
+   timer()
   };
 
   const handleGetExtension = () => {
@@ -302,7 +266,7 @@ const PWAInstallNotification = () => {
   };
 
   const popUpMessage = getPopop();
-  if (!showInfoPopup || isDismissed || (isPWAInstalled && hasExtension)) {
+  if (isPWAInstalled && hasExtension) {
     return (
       <>
         {showDismissMessage && (
