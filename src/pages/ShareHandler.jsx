@@ -140,6 +140,15 @@ const ShareHandler = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
             <p className="text-gray-600 mb-4">{statusMessage}</p>
           </>
+        ) : statusMessage.includes("successfully") ? (
+          <>
+            <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">✓</span>
+              </div>
+            </div>
+            <p className="text-gray-600 mb-4">{statusMessage}</p>
+          </>
         ) : (
           <>
             <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">

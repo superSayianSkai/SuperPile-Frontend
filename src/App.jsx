@@ -42,14 +42,14 @@ const App = () => {
             </ProtectedRoute>
           ),
         },
-        {
-          path: "/magic-save/*",
-          element: (
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          ),
-        },
+        // {
+        //   path: "/magic-save/*",
+        //   element: (
+        //     <ProtectedRoute>
+        //       <HomePage />
+        //     </ProtectedRoute>
+        //   ),
+        // },
       ],
     },
     { path: "/updates", element: <Updates /> },
