@@ -42,17 +42,11 @@ const Hero = () => {
   }, [timer]);
 
   return (
-    <div className="flex flex-col items-center  text-black  relative my-[6rem] gap-[.8rem]">
-      <h2 className="font-bold text-[1.8rem] md:text-[3rem] color">
-        {newName ? `${newName}'s PileBoard` : "PileBoard"}
+    <div className="flex flex-col items-center  text-black  relative my-[5rem]  gap-[.1rem]">
+      <h2 className="font-bold text-[1rem] text-center md:text-[2rem] color p-4">
+      This is a list of pile, {newName} wants you to see.
       </h2>
-      <div
-        className={`rounded-2xl text-sm text-black dark:text-white  px-4 py-1 flex items-center "border-[1px] border-[#ff8c00]"
-        }`}
-      >
-        This is a list of pile, {newName} wants you to see.
-      </div>
-      <div className="text-xs   text-red-600 mt-1"></div>
+      <div className="text-xs  text-red-600 mt-0"></div>
       Expires in: {timeLeft}
     </div>
   );

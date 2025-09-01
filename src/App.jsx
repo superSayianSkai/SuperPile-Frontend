@@ -45,11 +45,21 @@ const App = () => {
         // {
         //   path: "/magic-save/*",
         //   element: (
-        //     <ProtectedRoute>
-        //       <HomePage />
-        //     </ProtectedRoute>
-        //   ),
-        // },
+          //     <ProtectedRoute>
+          //       <HomePage />
+          //     </ProtectedRoute>
+          //   ),
+          // },
+          // },
+          {
+            path: "/api/share/:publicLinkToken",
+            element: (
+              <div>
+                <HeroPublicPile />
+                <PublicPile />
+              </div>
+            ),
+          },
       ],
     },
     { path: "/updates", element: <Updates /> },
@@ -57,16 +67,6 @@ const App = () => {
     // {
       //   path: "/badgeDownLoader",
       //   element: <BadgeDownloader />,
-      // },
-      {
-        path: "/api/share/:publicLinkToken",
-        element: (
-          <div>
-            <HeroPublicPile />
-            <PublicPile />
-          </div>
-        ),
-      },
   ]);
   return <RouterProvider router={router} />;
 };
