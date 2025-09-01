@@ -14,23 +14,62 @@ precacheAndRoute([
   { url: '/src/assets/Images/supapileCat2.png', revision: null },
   { url: '/src/assets/Images/supapile.webp', revision: null },
   { url: '/src/assets/Images/pokiemon.gif', revision: null },
-  // Remove the explicit offline.html entry since it's handled by the build manifest
   ...self.__WB_MANIFEST
 ]);
 
-// NetworkFirst for API calls
+// Separate cache for auth-related requests
 registerRoute(
-  ({ url }) =>
-    url.pathname.startsWith("/api/") &&
-    !url.pathname.startsWith("/auth") &&
-    !url.pathname.startsWith("/login"),
+  ({ url }) => url.pathname.includes('/api/v1/auth/'),
   new NetworkFirst({
-    cacheName: "supapile-api-v1",
-    networkTimeoutSeconds: 3,
+    cacheName: "supapile-auth-v1",
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 10,
+        maxAgeSeconds: 24 * 60 * 60, // 24 hours
+      }),
+    ],
   })
 );
 
-// Navigation handling
+// NetworkFirst for API calls with session persistence
+registerRoute(
+  ({ url }) =>
+    url.pathname.startsWith("/api/") &&
+    !url.pathname.includes('/auth/') &&
+    !url.pathname.includes('/login'),
+  new NetworkFirst({
+    cacheName: "supapile-api-v1",
+    networkTimeoutSeconds: 3,
+    plugins: [
+      {
+        // Handle failed network requests
+        handlerDidError: async ({ request }) => {
+          const cache = await caches.open("supapile-api-v1");
+          const cachedResponse = await cache.match(request);
+          
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // Return a structured error response
+          return new Response(
+            JSON.stringify({
+              error: "offline",
+              message: "You are currently offline. Using cached data.",
+              data: null
+            }),
+            {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        }
+      }
+    ]
+  })
+);
+
+// Navigation handling with auth persistence
 const navigationHandler = new NetworkFirst({
   cacheName: "supapile-shell-v1",
   networkTimeoutSeconds: 3,
@@ -48,33 +87,17 @@ const navigationRoute = new NavigationRoute(navigationHandler, {
 
 registerRoute(navigationRoute);
 
-// Enhanced image caching strategy
+// Cache static assets
 registerRoute(
-  ({ request, url }) => {
-    // Check if it's an image request
-    if (request.destination === "image") {
-      // Priority cache for specific images
-      const priorityImages = [
-        '/src/assets/Images/supapileCat2.png',
-        '/src/assets/Images/supapile.webp',
-        '/src/assets/Images/pokiemon.gif'
-      ];
-      return priorityImages.some(img => url.pathname.includes(img));
-    }
-    return false;
-  },
-  new CacheFirst({
-    cacheName: "supapile-priority-images-v1",
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 10,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-      }),
-    ],
+  ({ request }) =>
+    request.destination === "script" || 
+    request.destination === "style",
+  new StaleWhileRevalidate({
+    cacheName: "supapile-static-v1",
   })
 );
 
-// General image caching
+// Image caching
 registerRoute(
   ({ request }) => request.destination === "image",
   new CacheFirst({
@@ -88,56 +111,26 @@ registerRoute(
   })
 );
 
-// Cache static assets
-registerRoute(
-  ({ request }) =>
-    request.destination === "script" || request.destination === "style",
-  new StaleWhileRevalidate({
-    cacheName: "supapile-static-v1",
-  })
-);
-
-// Enhanced API caching with offline support
-registerRoute(
-  ({ url }) =>
-    url.pathname.startsWith("/api/") &&
-    !url.pathname.startsWith("/auth") &&
-    !url.pathname.startsWith("/login"),
-  new StaleWhileRevalidate({
-    cacheName: "supapile-api-v1",
-    plugins: [
-      {
-        // Handle offline scenarios
-        handlerDidError: async ({ request }) => {
-          const cache = await caches.open("supapile-api-v1");
-          const cachedResponse = await cache.match(request);
-          
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          
-          // If no cached data, return a structured error response
-          return new Response(
-            JSON.stringify({
-              error: "offline",
-              message: "You are currently offline. Showing cached data.",
-              data: {
-                piles: [],
-                hasMore: false,
-                lastId: null
-              }
-            }),
-            {
-              status: 200,
-              headers: { 'Content-Type': 'application/json' }
+// Handle service worker updates without forcing logout
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    Promise.all([
+      // Claim clients immediately
+      self.clients.claim(),
+      // Only delete old caches that aren't auth-related
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== 'supapile-auth-v1' && cacheName.startsWith('supapile-')) {
+              return caches.delete(cacheName);
             }
-          );
-        }
-      }
-    ]
-  })
-);
+          })
+        );
+      })
+    ])
+  );
+});
 
-self.addEventListener("install", () => {
+self.addEventListener('install', (event) => {
   self.skipWaiting();
 });

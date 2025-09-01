@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -13,6 +12,8 @@ export default defineConfig({
       filename: "service-worker.js",
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,svg,webp,jpeg}"],
+        // Don't precache auth-related APIs
+        navigateFallbackDenylist: [/\/api\/v1\/auth\//, /\/login/],
       },
       manifest: {
         name: "SupaPile",
