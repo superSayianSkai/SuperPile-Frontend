@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import supapile from "../assets/Images/supapile-icon2.svg";
 import { useTimer } from "../tanstack-query-hooks/useTimer";
+
 const PWAInstallNotification = () => {
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
   const [hasExtension, setHasExtension] = useState(false);
@@ -40,6 +41,7 @@ const PWAInstallNotification = () => {
     },
   ];
 
+  // Handle scroll lock
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
     document.body.scroll = "no";
@@ -50,13 +52,12 @@ const PWAInstallNotification = () => {
     };
   }, []);
 
+  // Check installation status
   useEffect(() => {
     console.log("App Info Popup: Component mounted");
 
     const checkPWAInstalled = () => {
-      const isStandalone = window.matchMedia(
-        "(display-mode: standalone)"
-      ).matches;
+      const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
       const isInWebAppiOS = window.navigator.standalone === true;
       return isStandalone || isInWebAppiOS;
     };
@@ -69,17 +70,25 @@ const PWAInstallNotification = () => {
       );
     };
 
+    // Add media query listener for PWA status
+    const mediaQuery = window.matchMedia("(display-mode: standalone)");
+    const handleMediaChange = (e) => {
+      setIsPWAInstalled(e.matches || window.navigator.standalone === true);
+    };
+    mediaQuery.addListener(handleMediaChange);
+
+    // Initial check
     const pwaInstalled = checkPWAInstalled();
     const extensionInstalled = checkExtensionInstalled();
 
     setIsPWAInstalled(pwaInstalled);
     setHasExtension(extensionInstalled);
 
-    if (pwaInstalled && extensionInstalled) {
-      console.log("App Info Popup: Both installed, not showing");
-      return;
-    }
-  });
+    // Cleanup
+    return () => {
+      mediaQuery.removeListener(handleMediaChange);
+    };
+  }, []); // Empty dependency array since we only want this to run once
 
   const handleDismiss = () => {
     setShowDismissedMessage(true);
@@ -114,18 +123,15 @@ const PWAInstallNotification = () => {
   };
 
   const getContent = () => {
-    if (!isPWAInstalled && !hasExtension) {
-      return {
-        title: "Welcome to Supapile!",
-        description:
-          "Catch, save and share your favorite links across the web.",
-        showPWAButton: true,
-        showExtensionButton: true,
-      };
-    }
+    return {
+      title: "Welcome to Supapile!",
+      description: "Catch, save and share your favorite links across the web.",
+      showPWAButton: !isPWAInstalled,
+      showExtensionButton: !hasExtension,
+    };
   };
 
-  const getPopop = () => {
+  const getPopup = () => {
     if (isPWAInstalled && !hasExtension) {
       return {
         description:
@@ -145,7 +151,7 @@ const PWAInstallNotification = () => {
   };
 
   const getTotalPages = () => {
-    if (!isPWAInstalled && !hasExtension) {
+    if (isPWAInstalled || hasExtension) {
       return features.length + 2;
     } else {
       return 2;
@@ -173,9 +179,11 @@ const PWAInstallNotification = () => {
       );
     }
 
-    if (!isPWAInstalled && !hasExtension && currentPage <= features.length) {
+    if (currentPage <= features.length) {
       const featureIndex = currentPage - 1;
       const feature = features[featureIndex];
+
+      if (!feature) return null; // Guard against undefined feature
 
       return (
         <div className="text-center">
@@ -197,7 +205,7 @@ const PWAInstallNotification = () => {
         </h3>
 
         <div className="flex flex-col gap-3">
-          {content.showExtensionButton && (
+          {!hasExtension && (
             <button
               onClick={handleGetExtension}
               className="w-full bg-black text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
@@ -206,7 +214,7 @@ const PWAInstallNotification = () => {
             </button>
           )}
 
-          {content.showPWAButton && (
+          {!isPWAInstalled && (
             <button
               onClick={handleInstallPWA}
               className="w-full bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
@@ -219,32 +227,32 @@ const PWAInstallNotification = () => {
             onClick={handleDismiss}
             className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:-translate-y-0.5"
           >
-            {"Maybe Later"}
+            Maybe Later
           </button>
         </div>
       </div>
     );
   };
 
-  const popUpMessage = getPopop();
+  const popupMessage = getPopup();
   if (isPWAInstalled && hasExtension) {
     return (
       <>
         {showDismissMessage && (
           <div
             className="
-    fixed 
-    bottom-6 left-1/2 transform -translate-x-1/2
-    bg-black dark:bg-white text-white dark:text-black
-    px-4 py-2 rounded-lg shadow-lg z-[1100]
-    text-center
-    w-[90%] sm:w-[80%] md:w-[65%] lg:w-[50%] xl:w-[40%]
-    text-xs sm:text-sm md:text-base
-    transition-all duration-300 ease-in-out opacity-100
-    animate-fade-slide
-  "
+              fixed 
+              bottom-6 left-1/2 transform -translate-x-1/2
+              bg-black dark:bg-white text-white dark:text-black
+              px-4 py-2 rounded-lg shadow-lg z-[1100]
+              text-center
+              w-[90%] sm:w-[80%] md:w-[65%] lg:w-[50%] xl:w-[40%]
+              text-xs sm:text-sm md:text-base
+              transition-all duration-300 ease-in-out opacity-100
+              animate-fade-slide
+            "
           >
-            {popUpMessage.description}
+            {popupMessage.description}
           </div>
         )}
       </>

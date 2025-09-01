@@ -4,7 +4,6 @@ import { usePostStore } from "../zustard/usePostStore";
 import usePostPile from "../tanstack-query-hooks/usePostPile";
 import CustomToast from "../components/ShowCustomToast";
 import { useQueryClient } from "@tanstack/react-query";
-// omo
 const ShareHandler = () => {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
