@@ -5,7 +5,7 @@ import { useError } from "../zustard/useError";
 const CustomToast = ({ message = "", show = false, duration = 1000 }) => {
   const [visible, setVisible] = useState(show);
   const clearError = useError((state) => state.setError);
-
+ console.log("hehehehehehey inioluwa")
   useEffect(() => {
     if (show && message) {
       setVisible(true);
@@ -20,7 +20,7 @@ const CustomToast = ({ message = "", show = false, duration = 1000 }) => {
       };
     }
   }, [show, duration, message, clearError]);
-
+ 
   // Don't render if there's no message or not meant to be shown
   if (!visible || !message) return null;
 
