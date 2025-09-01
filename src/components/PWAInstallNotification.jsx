@@ -27,7 +27,7 @@ const PWAInstallNotification = () => {
     {
       icon: "🧩",
       color: "text-purple-500",
-      title: "Chrome Extension",
+      title: "Extension",
       description:
         "Save links instantly while browsing without visiting the main site",
     },
@@ -65,7 +65,7 @@ const PWAInstallNotification = () => {
       return (
         !!window.supapilechromeextension ||
         !!document.querySelector("[data-supapile-extension]") ||
-        !!window.chrome?.runtime?.getManifest?.()?.name?.includes("SupaPile")
+        !!window.chrome?.runtime?.getManifest?.()?.name?.includes("Supapile")
       );
     };
 
@@ -82,8 +82,8 @@ const PWAInstallNotification = () => {
   });
 
   const handleDismiss = () => {
-   setShowDismissedMessage(true)
-   timer()
+    setShowDismissedMessage(true);
+    timer();
   };
 
   const handleGetExtension = () => {
@@ -114,23 +114,7 @@ const PWAInstallNotification = () => {
   };
 
   const getContent = () => {
-    if (isPWAInstalled && !hasExtension) {
-      return {
-        title: "Complete Your SupaPile Setup!",
-        description:
-          "You have the app installed! Get our Chrome extension to save links instantly while browsing.",
-        showPWAButton: false,
-        showExtensionButton: true,
-      };
-    } else if (!isPWAInstalled && hasExtension) {
-      return {
-        title: "Install Supapile App! 📱",
-        description:
-          "You have our extension! Install the app for offline access and faster performance.",
-        showPWAButton: true,
-        showExtensionButton: false,
-      };
-    } else {
+    if (!isPWAInstalled && !hasExtension) {
       return {
         title: "Welcome to Supapile!",
         description:
@@ -212,36 +196,13 @@ const PWAInstallNotification = () => {
           Ready to Get Started?
         </h3>
 
-        <div className="flex justify-center gap-3 mb-6">
-          <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
-              isPWAInstalled
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            <span>{isPWAInstalled ? "✅" : "⭕"}</span>
-            PWA {isPWAInstalled ? "Installed" : "Not Installed"}
-          </div>
-          <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
-              hasExtension
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            <span>{hasExtension ? "✅" : "⭕"}</span>
-            Extension {hasExtension ? "Installed" : "Not Installed"}
-          </div>
-        </div>
-
         <div className="flex flex-col gap-3">
           {content.showExtensionButton && (
             <button
               onClick={handleGetExtension}
               className="w-full bg-black text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
-              🧩 Get Chrome Extension
+              🧩 Get extension for desktop
             </button>
           )}
 
@@ -258,7 +219,7 @@ const PWAInstallNotification = () => {
             onClick={handleDismiss}
             className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:-translate-y-0.5"
           >
-            {isPWAInstalled || hasExtension ? "Got it!" : "Maybe Later"}
+            {"Maybe Later"}
           </button>
         </div>
       </div>

@@ -45,7 +45,8 @@ const PilePanel = () => {
   const [meta, showMeta] = useState(false);
   const [categoryInput, setCategoryInput] = useState("all");
   const { data, isLoading } = useMeta({ link: metaLink });
-  const { mutate, error } = usePostPile();
+  const { mutate} = usePostPile();
+
   const allPiles = pileData?.pages.flatMap((page) => page.piles) || [];
   const pileUrls = allPiles.map((pile) => pile.url);
   const isDuplicate = pileUrls.includes(metaLink);
@@ -65,13 +66,6 @@ const PilePanel = () => {
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  // useEffect(() => {
-  //   document.body.style.overflow = "hidden";
-  //   return () => {
-  //     document.body.style.overflow = "";
-  //   };
-  // }, []);
   useEffect(() => {
     // Prevent body scroll when modal is open
     document.documentElement.style.overflow = "hidden";
@@ -118,15 +112,14 @@ const PilePanel = () => {
       keyword: supaPileState.keyword ?? "",
     });
     setLinkBoardPanelToggle();
-    setTimeout(() => {
-      refetch();
-      console.log("kyle");
-      console.log(error);
-    }, [3000]);
+    refetch();
   };
 
   const handleClose = (e) => {
-    if (panelRef.current && !panelRef.current.contains(e.target) || closeRef.current.contains(e.target))  {
+    if (
+      (panelRef.current && !panelRef.current.contains(e.target)) ||
+      closeRef.current.contains(e.target)
+    ) {
       setIsVisible(false);
       setTimeout(() => {
         setLinkBoardPanelToggle();
@@ -168,7 +161,6 @@ const PilePanel = () => {
             </h2>
             <button
               ref={closeRef}
-              
               className="text-gray-600 hover:text-gray-800 hover:opacity-50 transition-all duration-150 hover:scale-110 p-1 rounded-full hover:bg-gray-100"
             >
               <svg

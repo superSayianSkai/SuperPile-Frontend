@@ -37,17 +37,23 @@ const useFetchPile = ({ category, keyword }) => {
       return lastPage?.hasMore ? lastPage.lastId : undefined;
     },
 
+    // Keep previous data while fetching new data
+    keepPreviousData: true,
+    
+    // Custom error handling for offline scenarios
     retry: (failureCount, error) => {
       if (error?.response?.status === 404) return false;
-      return failureCount < 10;
+      // Don't retry on network errors (offline)
+      if (!navigator.onLine) return false;
+      return failureCount < 3;
     },
 
-    enabled: Boolean(category),
-    keepPreviousData: false, // Show loading state instead of stale data
-    staleTime: 0,
-    cacheTime: 0, // Don't cache query results
+    // Only refetch when online
     refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus:true,
+    
+    // Enable background refetch when connection is restored
+    refetchOnReconnect: true,
   });
 };
 

@@ -99,6 +99,47 @@ registerRoute(
   })
 );
 
+// Enhanced API caching with offline support
+registerRoute(
+  ({ url }) =>
+    url.pathname.startsWith("/api/") &&
+    !url.pathname.startsWith("/auth") &&
+    !url.pathname.startsWith("/login"),
+  new StaleWhileRevalidate({
+    cacheName: "supapile-api-v1",
+    plugins: [
+      {
+        // Handle offline scenarios
+        handlerDidError: async ({ request }) => {
+          const cache = await caches.open("supapile-api-v1");
+          const cachedResponse = await cache.match(request);
+          
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // If no cached data, return a structured error response
+          return new Response(
+            JSON.stringify({
+              error: "offline",
+              message: "You are currently offline. Showing cached data.",
+              data: {
+                piles: [],
+                hasMore: false,
+                lastId: null
+              }
+            }),
+            {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        }
+      }
+    ]
+  })
+);
+
 self.addEventListener("install", () => {
   self.skipWaiting();
 });

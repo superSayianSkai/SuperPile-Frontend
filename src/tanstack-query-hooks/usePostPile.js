@@ -2,7 +2,10 @@ import apiClient from "../lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostStore } from "../zustard/usePostStore";
+import { useError } from "../zustard/useError";
+
 const { setPostSuccess } = usePostStore.getState();
+
 const postURL = async ({ url, category }) => {
   console.log(category);
   try {
@@ -11,15 +14,16 @@ const postURL = async ({ url, category }) => {
     console.log(response);
     return response.data;
   } catch (error) {
-    console.log(error)
-    throw  error;
-
+    console.log(error);
+    throw error;
   }
 };
 
 const usePostPile = () => {
   const setPostData = usePostStore((state) => state.setPostData);
+  const setError = useError((state) => state.setError);
   const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: postURL,
 
@@ -132,7 +136,11 @@ const usePostPile = () => {
 
     onError: (err, _variables, context) => {
       console.log(err);
+      // Set error message for toast
+      const errorMessage = err.response?.data?.message || err.message || "Failed to save pile";
+      setError(errorMessage);
 
+      // Restore previous posts if available
       if (context?.previousPosts) {
         queryClient.setQueryData(["pile", "all", ""], (oldData) => ({
           ...oldData,
@@ -149,4 +157,5 @@ const usePostPile = () => {
     },
   });
 };
+
 export default usePostPile;

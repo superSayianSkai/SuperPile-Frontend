@@ -15,6 +15,7 @@ import { usePostStore } from "../zustard/usePostStore";
 import useChangeVisibility from "../tanstack-query-hooks/useChangeVisibility";
 import { getMetaDataSync } from "../utils/getMetaDataSync";
 import CustomToast from "./ShowCustomToast";
+import { useError } from "../zustard/useError";
 import usePostPile from "../tanstack-query-hooks/usePostPile";
 import { useQueryClient } from "@tanstack/react-query";
 import PWAInstallNotification from "./PWAInstallNotification";
@@ -48,7 +49,9 @@ const PileBoard = () => {
     },
   });
   const { mutate: postMutate, error } = usePostPile({});
+  console.log("shshshssh");
   console.log(error);
+
   if (
     error?.message ===
     "This link exists in your archived piles. Please restore it or use a different URL."
@@ -82,7 +85,7 @@ const PileBoard = () => {
       setToast({ show: false, message: "" });
     }, 3000);
   };
- 
+
   const { data: userData } = useAuth();
   console.log("your life will go down by half");
   console.log(userData.newTimer);
@@ -179,11 +182,20 @@ const PileBoard = () => {
     savePendingLinkWithMeta();
   }, []);
 
+  const error2 = useError((state) => state.error);
+  const errorTimestamp = useError((state) => state.timestamp);
+
   return (
     <div className="w-[100%] max-w-[90rem] mx-auto mt-[2rem]">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
         {clicked.isOpen && <ChangeCategoryContainer />}
         {!userData.data?.newTimer && <PWAInstallNotification />}
+        {/* Your other components */}
+        <CustomToast 
+          message={error2} 
+          show={Boolean(error2 && errorTimestamp)} 
+          duration={3000} 
+        />
         <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
           <CategoryController id={"pickCategory"} />
           <div className="flex justify-center items-center gap-5">
@@ -239,11 +251,13 @@ const PileBoard = () => {
             ))}
           </div>
         )}
-        {allPiles.length === 0 && !fromLoginLoading || isLoading && (
-          <div className="text-center text-gray-500 mt-20">
-            You have no Pile. Catch and Pile your favorite links across the web.
-          </div>
-        )}
+        {(allPiles.length === 0 && !fromLoginLoading) ||
+          (isLoading && (
+            <div className="text-center text-gray-500 mt-20">
+              You have no Pile. Catch and Pile your favorite links across the
+              web.
+            </div>
+          ))}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
           {(fromLoginLoading ||
             (fromLoginLoading &&
