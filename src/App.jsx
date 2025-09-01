@@ -4,7 +4,8 @@ import ArchivedPage from "./pages/ArchivedPage";
 import PublicPile from "./pages/PublicPile";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HeroPublicPile from "./components/HeroPublicPile";
-import OnBoarding from "./pages/OnBoarding";
+// import OnBoarding from "./pages/OnBoarding";
+import Header from "./components/Header";
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
 // import BadgeDownloader from "./components/BadgeDownloader";
@@ -45,28 +46,29 @@ const App = () => {
         // {
         //   path: "/magic-save/*",
         //   element: (
-          //     <ProtectedRoute>
-          //       <HomePage />
-          //     </ProtectedRoute>
-          //   ),
-          // },
-          // },
-          {
-            path: "/api/share/:publicLinkToken",
-            element: (
-              <div>
-                <HeroPublicPile />
-                <PublicPile />
-              </div>
-            ),
-          },
+        //     <ProtectedRoute>
+        //       <HomePage />
+        //     </ProtectedRoute>
+        //   ),
+        // },
+        // },
       ],
+    },
+    {
+      path: "/api/share/:publicLinkToken",
+      element: (
+        <div>
+          <Header />
+          <HeroPublicPile />
+          <PublicPile />
+        </div>
+      ),
     },
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
     // {
-      //   path: "/badgeDownLoader",
-      //   element: <BadgeDownloader />,
+    //   path: "/badgeDownLoader",
+    //   element: <BadgeDownloader />,
   ]);
   return <RouterProvider router={router} />;
 };
