@@ -135,9 +135,14 @@ const usePostPile = () => {
     },
 
     onError: (err, _variables, context) => {
-      console.log(err);
-      // Set error message for toast
-      const errorMessage = err.response?.data?.message || err.message || "Failed to save pile";
+      console.log('Post Pile Error:', err);
+      
+      // Enhanced error message extraction
+      const errorMessage = err.response?.data?.message || 
+                         err.message || 
+                         "Failed to save pile";
+      
+      // Force error state update with new timestamp
       setError(errorMessage);
 
       // Restore previous posts if available

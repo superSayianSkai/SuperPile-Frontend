@@ -48,16 +48,14 @@ const PileBoard = () => {
       setTheModal({ pile: modData, isOpen: true, modalType: "changeCategory" });
     },
   });
-  const { mutate: postMutate, error } = usePostPile({});
-  console.log("shshshssh");
-  console.log(error);
-
-  if (
-    error?.message ===
-    "This link exists in your archived piles. Please restore it or use a different URL."
-  ) {
-    CustomToast("This pile exists in your archived piles.");
-  }
+  const { mutate: postMutate, error } = usePostPile();
+  const error2 = useError((state) => state.error);
+  
+  // Remove the conditional toast call as it's now handled in usePostPile
+  // Remove this block:
+  // if (error?.message === "This link exists in your archived piles. Please restore it or use a different URL.") {
+  //   CustomToast("This pile exists in your archived piles.");
+  // }
   const { mutate: changeVisibility } = useChangeVisibility();
 
   let { data: MetaData } = useMeta({ link: metaLink });
@@ -182,7 +180,6 @@ const PileBoard = () => {
     savePendingLinkWithMeta();
   }, []);
 
-  const error2 = useError((state) => state.error);
   const errorTimestamp = useError((state) => state.timestamp);
 
   return (
@@ -194,7 +191,7 @@ const PileBoard = () => {
         <CustomToast 
           message={error2} 
           show={Boolean(error2 && errorTimestamp)} 
-          duration={3000} 
+          duration={3000}
         />
         <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
           <CategoryController id={"pickCategory"} />
