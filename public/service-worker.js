@@ -14,9 +14,7 @@ precacheAndRoute([
   { url: '/src/assets/Images/supapileCat2.png', revision: null },
   { url: '/src/assets/Images/supapile.webp', revision: null },
   { url: '/src/assets/Images/pokiemon.gif', revision: null },
-  // Precache offline page
-  { url: '/offline.html', revision: '1' },
-  // Precache build assets
+  // Remove the explicit offline.html entry since it's handled by the build manifest
   ...self.__WB_MANIFEST
 ]);
 
