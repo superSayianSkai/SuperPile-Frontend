@@ -6,32 +6,42 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
       strategies: "injectManifest",
       srcDir: "public",
       filename: "service-worker.js",
+      injectRegister: 'auto',
       workbox: {
-        globPatterns: ["**/*.{js,css,html,png,svg,webp,jpeg}"],
-        // Don't precache auth-related APIs
+        globPatterns: [
+          "**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg,json,woff2}"
+        ],
+        cleanupOutdatedCaches: true,
+        sourcemap: true,
         navigateFallbackDenylist: [/\/api\/v1\/auth\//, /\/login/],
       },
       manifest: {
         name: "SupaPile",
         short_name: "SupaPile",
+        description: "SupaPile - Your Personal Link Manager",
         start_url: "/?source=pwa",
         display: "standalone",
         background_color: "#ffffff",
-        theme_color: "#000",
+        theme_color: "#000000",
         icons: [
           {
-            src: "./icons/supapile-icon-192x192webp.webp",
-            sizes: "192x192",
-            type: "image/webp"
+            src: "/icons/supapile-128.png",
+            sizes: "128x128",
+            type: "image/png"
           },
           {
-            src: "./icons/supapile-icon-512512webp.webp",
+            src: "/icons/supapile-192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: "/icons/supapile-512.png",
             sizes: "512x512",
-            type: "image/webp"
+            type: "image/png"
           }
         ]
       }

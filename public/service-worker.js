@@ -1,19 +1,17 @@
-// src/service-worker.js
-import { precacheAndRoute } from "workbox-precaching";
-import { registerRoute, NavigationRoute } from "workbox-routing";
-import {
-  NetworkFirst,
-  CacheFirst,
-  StaleWhileRevalidate,
-} from "workbox-strategies";
-import { ExpirationPlugin } from "workbox-expiration";
+// Use workbox from CDN
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 
-// Precache specific assets and build manifest
+const { precacheAndRoute, createHandlerBoundToURL } = workbox.precaching;
+const { registerRoute, NavigationRoute } = workbox.routing;
+const { NetworkFirst, CacheFirst, StaleWhileRevalidate } = workbox.strategies;
+const { ExpirationPlugin } = workbox.expiration;
+
+// Precache specific assets
 precacheAndRoute([
-  // Precache specific images
-  { url: '/src/assets/Images/supapileCat2.png', revision: null },
-  { url: '/src/assets/Images/supapile.webp', revision: null },
-  { url: '/src/assets/Images/pokiemon.gif', revision: null },
+  { url: '/icons/supapile-128.png', revision: null },
+  { url: '/icons/supapile-192.png', revision: null },
+  { url: '/icons/supapile-512.png', revision: null },
+  { url: '/offline.html', revision: null },
   ...self.__WB_MANIFEST
 ]);
 
@@ -51,7 +49,6 @@ registerRoute(
             return cachedResponse;
           }
           
-          // Return a structured error response
           return new Response(
             JSON.stringify({
               error: "offline",
@@ -69,7 +66,7 @@ registerRoute(
   })
 );
 
-// Navigation handling with auth persistence
+// Navigation handling
 const navigationHandler = new NetworkFirst({
   cacheName: "supapile-shell-v1",
   networkTimeoutSeconds: 3,
@@ -111,13 +108,11 @@ registerRoute(
   })
 );
 
-// Handle service worker updates without forcing logout
+// Handle service worker updates
 self.addEventListener('activate', event => {
   event.waitUntil(
     Promise.all([
-      // Claim clients immediately
       self.clients.claim(),
-      // Only delete old caches that aren't auth-related
       caches.keys().then(cacheNames => {
         return Promise.all(
           cacheNames.map(cacheName => {

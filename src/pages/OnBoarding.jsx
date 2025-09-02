@@ -41,7 +41,7 @@ const OnBoarding = () => {
         <div className="w-60 sm:w-52 md:w-64 h-53">
           <img 
             src={theme === "dark" ? piloDark : piloLight} 
-            alt="SuperPile Logo"
+            alt="Supapile Logo"
             width="240"
             height="212"
             loading="eager"
