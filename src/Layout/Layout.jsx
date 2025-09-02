@@ -10,6 +10,7 @@ const Layout = () => {
   console.log(isError);
   const { clicked } = useClickedModal();
   const location = useLocation();
+  console.log(location.pathname);
 
   // Show loading while checking authentication
   if (isLoading) {
@@ -27,7 +28,12 @@ const Layout = () => {
   }
 
   // Redirect to root if not authenticated and not already on auth pages
-  if (!user && !isLoading && !["/login"].includes(location.pathname)) {
+  if (
+    !user &&
+    !isLoading &&
+    !["/login"].includes(location.pathname) &&
+    !location.pathname.startsWith("/api/share/")
+  ) {
     return <Navigate to="/" replace />;
   }
 

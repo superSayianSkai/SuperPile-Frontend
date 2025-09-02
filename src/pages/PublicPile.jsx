@@ -39,7 +39,7 @@ const PublicPile = () => {
   console.log(data);
   console.log("hjshs");
   return (
-    <div className="py-[20px] lg:mx-[30px] mx-[1rem] md:px-0 ">
+    <div className="lg:mx-[30px] mx-[1rem] md:px-0 ">
       {clicked.isOpen && <ChangeCategoryContainer />}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem]  relative pb-[45px]">
         {pile?.map((link) => {

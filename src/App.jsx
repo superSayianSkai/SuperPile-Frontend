@@ -52,17 +52,17 @@ const App = () => {
         //   ),
         // },
         // },
+        {
+          path: "/api/share/:publicLinkToken",
+          element: (
+            <div>
+
+              <HeroPublicPile />
+              <PublicPile />
+            </div>
+          ),
+        },
       ],
-    },
-    {
-      path: "/api/share/:publicLinkToken",
-      element: (
-        <div>
-          <Header />
-          <HeroPublicPile />
-          <PublicPile />
-        </div>
-      ),
     },
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
