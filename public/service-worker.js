@@ -79,7 +79,7 @@ registerRoute(
     !url.pathname.includes('/auth/') &&
     !url.pathname.includes('/login'),
   new NetworkFirst({
-    cacheName: "supapile-api-v1",
+    cacheName: "supapile-api-v2",
     networkTimeoutSeconds: 3,
     plugins: [
       {

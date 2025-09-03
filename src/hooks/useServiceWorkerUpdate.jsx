@@ -1,41 +1,38 @@
 // src/hooks/useServiceWorkerUpdater.ts
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-const useServiceWorkerUpdater=()=> {
+const useServiceWorkerUpdater = () => {
   const [updated, setUpdated] = useState(false);
 
   const {
     needRefresh: [needRefresh],
-    updateServiceWorker
+    updateServiceWorker,
   } = useRegisterSW({
+    onRegisteredSW(swUrl, registration) {
+      console.log("SW registered:", swUrl, registration);
+    },
     onNeedRefresh() {
-      // Called when a new SW is waiting
+      console.log("⚡ A new version is available!");
       setUpdated(true);
     },
-    onRegisteredSW(_, registration) {
-      if (registration) {
-        registration.addEventListener("updatefound", () => {
-          const newWorker = registration.installing;
-          if (newWorker) {
-            newWorker.addEventListener("statechange", () => {
-              if (newWorker.state === "activated") {
-                // SW activated successfully
-                setUpdated(true);
-                // Force reload after short delay
-                setTimeout(() => {
-                  updateServiceWorker(true);
-                  window.location.reload();
-                }, 2000);
-              }
-            });
-          }
-        });
-      }
-    }
+    onRegisterError(error) {
+      console.error("SW registration failed", error);
+    },
   });
 
-  return updated;
-}
+  // Auto-refresh after 2s when update is detected
+  useEffect(() => {
+    if (updated) {
+      const timer = setTimeout(() => {
+        updateServiceWorker(true); // skip waiting
+        window.location.reload();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [updated, updateServiceWorker]);
 
-export default useServiceWorkerUpdater
+  return updated;
+};
+
+export default useServiceWorkerUpdater;
