@@ -50,7 +50,6 @@ precacheAndRoute([
   { url: '/icons/supapile-128.png', revision: null },
   { url: '/icons/supapile-192.png', revision: null },
   { url: '/icons/supapile-512.png', revision: null },
-  { url: '/offline.html', revision: null },
   ...self.__WB_MANIFEST
 ]);
 
