@@ -5,8 +5,11 @@ const { precacheAndRoute, createHandlerBoundToURL } = workbox.precaching;
 const { registerRoute, NavigationRoute } = workbox.routing;
 const { NetworkFirst, CacheFirst, StaleWhileRevalidate } = workbox.strategies;
 const { ExpirationPlugin } = workbox.expiration;
+const { offlineFallback } = workbox.recipes;
 
+// ------------------------------------------------------------
 // Precache specific assets
+// ------------------------------------------------------------
 precacheAndRoute([
   { url: '/icons/supapile-128.png', revision: null },
   { url: '/icons/supapile-192.png', revision: null },
@@ -15,7 +18,9 @@ precacheAndRoute([
   ...self.__WB_MANIFEST
 ]);
 
-// Separate cache for auth-related requests
+// ------------------------------------------------------------
+// Auth-related API calls (short cache)
+// ------------------------------------------------------------
 registerRoute(
   ({ url }) => url.pathname.includes('/api/v1/auth/'),
   new NetworkFirst({
@@ -29,7 +34,9 @@ registerRoute(
   })
 );
 
-// NetworkFirst for API calls with session persistence
+// ------------------------------------------------------------
+// API calls (persistent cache for offline browsing)
+// ------------------------------------------------------------
 registerRoute(
   ({ url }) =>
     url.pathname.startsWith("/api/") &&
@@ -40,15 +47,14 @@ registerRoute(
     networkTimeoutSeconds: 3,
     plugins: [
       {
-        // Handle failed network requests
         handlerDidError: async ({ request }) => {
           const cache = await caches.open("supapile-api-v1");
           const cachedResponse = await cache.match(request);
-          
+
           if (cachedResponse) {
             return cachedResponse;
           }
-          
+
           return new Response(
             JSON.stringify({
               error: "offline",
@@ -66,7 +72,9 @@ registerRoute(
   })
 );
 
-// Navigation handling
+// ------------------------------------------------------------
+// Navigation handling → App shell (cached when offline)
+// ------------------------------------------------------------
 const navigationHandler = new NetworkFirst({
   cacheName: "supapile-shell-v1",
   networkTimeoutSeconds: 3,
@@ -84,17 +92,21 @@ const navigationRoute = new NavigationRoute(navigationHandler, {
 
 registerRoute(navigationRoute);
 
-// Cache static assets
+// ------------------------------------------------------------
+// Static assets (JS, CSS)
+// ------------------------------------------------------------
 registerRoute(
   ({ request }) =>
-    request.destination === "script" || 
+    request.destination === "script" ||
     request.destination === "style",
   new StaleWhileRevalidate({
     cacheName: "supapile-static-v1",
   })
 );
 
-// Image caching
+// ------------------------------------------------------------
+// Images
+// ------------------------------------------------------------
 registerRoute(
   ({ request }) => request.destination === "image",
   new CacheFirst({
@@ -108,7 +120,9 @@ registerRoute(
   })
 );
 
-// Handle service worker updates
+// ------------------------------------------------------------
+// Service worker updates + cache cleanup
+// ------------------------------------------------------------
 self.addEventListener('activate', event => {
   event.waitUntil(
     Promise.all([
@@ -126,6 +140,9 @@ self.addEventListener('activate', event => {
   );
 });
 
-self.addEventListener('install', () => {
-  self.skipWaiting();
+// ------------------------------------------------------------
+// Offline fallback (only if no shell cached)
+// ------------------------------------------------------------
+offlineFallback({
+  pageFallback: '/offline.html',
 });
