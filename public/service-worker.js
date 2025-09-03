@@ -1,4 +1,6 @@
-// Use workbox from CDN
+// ------------------------------------------------------------
+// Import Workbox from CDN
+// ------------------------------------------------------------
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
 
 const { precacheAndRoute, createHandlerBoundToURL } = workbox.precaching;
@@ -8,7 +10,41 @@ const { ExpirationPlugin } = workbox.expiration;
 const { offlineFallback } = workbox.recipes;
 
 // ------------------------------------------------------------
-// Precache specific assets
+// 
+// ------------------------------------------------------------
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      // Take control of all clients immediately
+      await self.clients.claim();
+
+      // Delete old caches (bump version when you deploy)
+      const expectedCaches = [
+        "supapile-shell-v2",   // 🔥 bump this on new deploys
+        "supapile-auth-v1",
+        "supapile-api-v1",
+        "supapile-static-v1",
+        "supapile-images-v1",
+      ];
+
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.map((cacheName) => {
+          if (!expectedCaches.includes(cacheName)) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })()
+  );
+});
+
+// ------------------------------------------------------------
+// Precache app shell + offline page
 // ------------------------------------------------------------
 precacheAndRoute([
   { url: '/icons/supapile-128.png', revision: null },
@@ -76,7 +112,7 @@ registerRoute(
 // Navigation handling → App shell (cached when offline)
 // ------------------------------------------------------------
 const navigationHandler = new NetworkFirst({
-  cacheName: "supapile-shell-v1",
+  cacheName: "supapile-shell-v2", // bump this when you redeploy
   networkTimeoutSeconds: 3,
 });
 
@@ -119,26 +155,6 @@ registerRoute(
     ],
   })
 );
-
-// ------------------------------------------------------------
-// Service worker updates + cache cleanup
-// ------------------------------------------------------------
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    Promise.all([
-      self.clients.claim(),
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheName !== 'supapile-auth-v1' && cacheName.startsWith('supapile-')) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-    ])
-  );
-});
 
 // ------------------------------------------------------------
 // Offline fallback (only if no shell cached)

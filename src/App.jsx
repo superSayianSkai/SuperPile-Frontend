@@ -5,7 +5,7 @@ import PublicPile from "./pages/PublicPile";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HeroPublicPile from "./components/HeroPublicPile";
 // import OnBoarding from "./pages/OnBoarding";
-
+import ServiceWorkerToast from "./components/ServiceWorker";
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
 // import BadgeDownloader from "./components/BadgeDownloader";
@@ -61,6 +61,7 @@ const App = () => {
   return (
     <>
        <OfflineSnackbar />
+       <ServiceWorkerToast/>
       <RouterProvider router={router} />
     </>
   );
