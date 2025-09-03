@@ -8,11 +8,13 @@ import HeroPublicPile from "./components/HeroPublicPile";
 import ServiceWorkerToast from "./components/ServiceWorker";
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 // import BadgeDownloader from "./components/BadgeDownloader";
 import Updates from "./pages/Updates";
 import ShareHandler from "./pages/ShareHandler";
 import ProtectedRoute from "./pages/ProtectedRoute";
-import OfflineSnackbar  from "./components/useOfflineSnackBar";
+import OfflineSnackbar from "./components/useOfflineSnackBar";
+// import PrivacyPolicy from "./components/PrivacyPolicy";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -54,14 +56,15 @@ const App = () => {
         },
       ],
     },
+    { path: "/extension-privacy", element: <PrivacyPolicy /> },
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
   ]);
 
   return (
     <>
-       <OfflineSnackbar />
-       <ServiceWorkerToast/>
+      <OfflineSnackbar />
+      <ServiceWorkerToast />
       <RouterProvider router={router} />
     </>
   );
