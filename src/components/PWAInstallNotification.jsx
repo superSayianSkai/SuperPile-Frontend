@@ -153,7 +153,7 @@ const PWAInstallNotification = () => {
   };
 
   const getTotalPages = () => {
-    return features.length + 3;
+    return features.length + 2;
   };
 
   const renderPage = () => {
