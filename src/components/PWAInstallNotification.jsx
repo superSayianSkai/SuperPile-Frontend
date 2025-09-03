@@ -57,7 +57,9 @@ const PWAInstallNotification = () => {
     console.log("App Info Popup: Component mounted");
 
     const checkPWAInstalled = () => {
-      const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
+      const isStandalone = window.matchMedia(
+        "(display-mode: standalone)"
+      ).matches;
       const isInWebAppiOS = window.navigator.standalone === true;
       return isStandalone || isInWebAppiOS;
     };
@@ -151,11 +153,7 @@ const PWAInstallNotification = () => {
   };
 
   const getTotalPages = () => {
-    if (isPWAInstalled || hasExtension) {
-      return features.length + 2;
-    } else {
-      return 2;
-    }
+    return features.length + 3;
   };
 
   const renderPage = () => {
