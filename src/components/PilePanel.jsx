@@ -259,9 +259,9 @@ const PilePanel = () => {
                 ) : (
                   <>
                     <div className="flex flex-col md:flex-row gap-5">
-                      {data.image?.length > 1 ? (
+                      {data?.image?.length > 1 ? (
                         <img
-                          src={data.image}
+                          src={data?.image}
                           alt="Preview"
                           className="w-full md:w-48 h-40 object-cover rounded-xl border border-gray-300 shadow-lg"
                         />
@@ -294,15 +294,15 @@ const PilePanel = () => {
                           className="font-bold text-xl text-gray-800 mb-2 line-clamp-2"
                           maxLength={titleMaxLength}
                         >
-                          {data.title}
+                          {data?.title}
                         </h2>
                         <p
                           ref={secondTextAreaRef}
                           maxLength={descMaxLength}
                           className="text-gray-600 text-sm line-clamp-4"
                         >
-                          {data.description
-                            ? data.description
+                          {data?.description
+                            ? data?.description
                             : hostNameSentence}
                         </p>
                         <div className="mt-3 flex items-center text-sm text-gray-500">

@@ -21,7 +21,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import PWAInstallNotification from "./PWAInstallNotification";
 import pileBall from "../assets/supapile-icon2.svg";
 import useAuth from "../tanstack-query-hooks/useAuthPile";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const PileBoard = () => {
+  const isOnline = useOnlineStatus();
   const { setLinkBoardPanelToggle, metaLink, hostName, hostNameSentence } =
     useContext(StateContext);
   const { supaPileState } = useStateStore();
@@ -183,9 +185,9 @@ const PileBoard = () => {
         {clicked.isOpen && <ChangeCategoryContainer />}
         {!userData.data?.newTimer && <PWAInstallNotification />}
         {/* Your other components */}
-        <CustomToast 
-          message={error2} 
-          show={Boolean(error2 && errorTimestamp)} 
+        <CustomToast
+          message={error2}
+          show={Boolean(error2 && errorTimestamp)}
           duration={3000}
         />
         <div className="flex justify-between mb-5 items-center md:px-2 border-b-[1px] border-slate-300 dark:border-slate-500 md:border-0">
@@ -193,9 +195,10 @@ const PileBoard = () => {
           <div className="flex justify-center items-center gap-5">
             <div ref={pileButtonRef}>
               <button
+                disabled={!isOnline}
                 id="my-button"
                 onClick={setLinkBoardPanelToggle}
-                className="group text-[.8rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-7 py-[.5rem] md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors"
+                className={`${!isOnline && "cursor-not-allowed opacity-50 pointer-events-none"} group text-[.8rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-7 py-[.5rem] md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors`}
               >
                 <div
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${

@@ -5,14 +5,14 @@ import PublicPile from "./pages/PublicPile";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HeroPublicPile from "./components/HeroPublicPile";
 // import OnBoarding from "./pages/OnBoarding";
-import Header from "./components/Header";
+
 import Login from "./components/Login";
 import Layout from "./Layout/Layout";
 // import BadgeDownloader from "./components/BadgeDownloader";
 import Updates from "./pages/Updates";
 import ShareHandler from "./pages/ShareHandler";
 import ProtectedRoute from "./pages/ProtectedRoute";
-
+import OfflineSnackbar  from "./components/useOfflineSnackBar";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -43,20 +43,10 @@ const App = () => {
             </ProtectedRoute>
           ),
         },
-        // {
-        //   path: "/magic-save/*",
-        //   element: (
-        //     <ProtectedRoute>
-        //       <HomePage />
-        //     </ProtectedRoute>
-        //   ),
-        // },
-        // },
         {
           path: "/api/share/:publicLinkToken",
           element: (
             <div>
-
               <HeroPublicPile />
               <PublicPile />
             </div>
@@ -66,11 +56,14 @@ const App = () => {
     },
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
-    // {
-    //   path: "/badgeDownLoader",
-    //   element: <BadgeDownloader />,
   ]);
-  return <RouterProvider router={router} />;
+
+  return (
+    <>
+       <OfflineSnackbar />
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default App;
