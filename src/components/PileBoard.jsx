@@ -178,7 +178,6 @@ const PileBoard = () => {
   }, []);
 
   const errorTimestamp = useError((state) => state.timestamp);
-
   return (
     <div className="w-[100%] max-w-[90rem] mx-auto mt-[2rem]">
       <div className="flex-1 lg:mx-[30px] mx-[1rem] md:px-0 dark:bg-black min-h-[50vh] ">
@@ -198,7 +197,10 @@ const PileBoard = () => {
                 disabled={!isOnline}
                 id="my-button"
                 onClick={setLinkBoardPanelToggle}
-                className={`${!isOnline && "cursor-not-allowed opacity-50 pointer-events-none"} group text-[.8rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-7 py-[.5rem] md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors`}
+                className={`${
+                  !isOnline &&
+                  "cursor-not-allowed opacity-50 pointer-events-none"
+                } group text-[.8rem] dark:bg-white dark:text-black md:text-[.7rem] flex justify-center items-center rounded-md text-white bg-black font-bold cursor-pointer hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] px-7 py-[.5rem] md:px-6 md:py-1 mb-2 relative h-6 overflow-hidden transition-colors`}
               >
                 <div
                   className={`absolute dark:text-black transition-opacity duration-500 ease-in-out ${
@@ -246,13 +248,13 @@ const PileBoard = () => {
             ))}
           </div>
         )}
-        {(allPiles.length === 0 && !fromLoginLoading) ||
-          (isLoading && (
+        {(allPiles.length === 0 && isLoading) &&
+           (
             <div className="text-center text-gray-500 mt-20">
               You have no Pile. Catch and Pile your favorite links across the
               web.
             </div>
-          ))}
+          )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
           {(fromLoginLoading ||
             (fromLoginLoading &&
@@ -284,7 +286,6 @@ const PileBoard = () => {
               link?.image ||
               (link?.url === MetaData?.url && MetaData?.image) ||
               fromLogin?.image;
-
             return (
               <div
                 key={link?._id || MetaData?._id}
