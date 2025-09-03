@@ -10,7 +10,7 @@ const { ExpirationPlugin } = workbox.expiration;
 const { offlineFallback } = workbox.recipes;
 
 // ------------------------------------------------------------
-// 
+// Install & Activate
 // ------------------------------------------------------------
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -22,15 +22,16 @@ self.addEventListener("activate", (event) => {
       // Take control of all clients immediately
       await self.clients.claim();
 
-      // Delete old caches (bump version when you deploy)
+      // ✅ All expected caches (reset back to v1)
       const expectedCaches = [
-        "supapile-shell-v2",   // 🔥 bump this on new deploys
+        "supapile-shell-v1",
         "supapile-auth-v1",
         "supapile-api-v1",
         "supapile-static-v1",
         "supapile-images-v1",
       ];
 
+      // Delete old/unexpected caches
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames.map((cacheName) => {
@@ -47,9 +48,6 @@ self.addEventListener("activate", (event) => {
 // Precache app shell + offline page
 // ------------------------------------------------------------
 precacheAndRoute([
-  { url: '/icons/supapile-128.png', revision: null },
-  { url: '/icons/supapile-192.png', revision: null },
-  { url: '/icons/supapile-512.png', revision: null },
   ...self.__WB_MANIFEST
 ]);
 
@@ -78,7 +76,7 @@ registerRoute(
     !url.pathname.includes('/auth/') &&
     !url.pathname.includes('/login'),
   new NetworkFirst({
-    cacheName: "supapile-api-v2",
+    cacheName: "supapile-api-v1",
     networkTimeoutSeconds: 3,
     plugins: [
       {
@@ -111,7 +109,7 @@ registerRoute(
 // Navigation handling → App shell (cached when offline)
 // ------------------------------------------------------------
 const navigationHandler = new NetworkFirst({
-  cacheName: "supapile-shell-v2", // bump this when you redeploy
+  cacheName: "supapile-shell-v1",
   networkTimeoutSeconds: 3,
 });
 
