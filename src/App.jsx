@@ -14,7 +14,7 @@ import Updates from "./pages/Updates";
 import ShareHandler from "./pages/ShareHandler";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import OfflineSnackbar from "./components/useOfflineSnackBar";
-// import PrivacyPolicy from "./components/PrivacyPolicy";
+import {HelmetProvider } from 'react-helmet-async';
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -62,11 +62,11 @@ const App = () => {
   ]);
 
   return (
-    <>
+    <HelmetProvider>
       <OfflineSnackbar />
       <ServiceWorkerToast />
       <RouterProvider router={router} />
-    </>
+    </HelmetProvider>
   );
 };
 
