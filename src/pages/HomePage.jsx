@@ -114,7 +114,7 @@ const HomePage = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.supapile.com" />
-        <meta property="og:image" content="https://www.supapile.com/og-image.png" />
+        <meta property="og:image" content="https://supapile.com/og-image.png" />
 
         {/* Twitter card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -128,7 +128,7 @@ const HomePage = () => {
         />
         <meta
           name="twitter:image"
-          content="https://www.supapile.com/og-image.png"
+          content="https://supapile.com/og-image.png"
         />
       </Helmet>
 
