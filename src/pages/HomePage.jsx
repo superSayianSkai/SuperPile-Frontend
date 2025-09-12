@@ -16,6 +16,7 @@ const HomePage = () => {
   const { mutate: postMutate } = usePostPile(); // Remove the empty object
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // trying something out
   // Get existing piles data to check for duplicates
   const { data: pileData } = useFetchPile({ category: "all", keyword: "" });
 
