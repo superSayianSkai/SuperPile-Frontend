@@ -26,14 +26,8 @@ export default defineConfig({
         start_url: "/?source=pwa",
         display: "standalone",
         background_color: "#ffffff",
-        theme_color: "#ffffff", // Changed from #000000 to white
+        theme_color: "#000000",
         icons: [
-          {
-            src: "/icons/supapile-icon2.svg",
-            sizes: "any",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-          },
           {
             src: "/icons/supapile-128.png",
             sizes: "128x128",
@@ -42,20 +36,12 @@ export default defineConfig({
           {
             src: "/icons/supapile-192.png",
             sizes: "192x192",
-            type: "image/png",
-            purpose: "any"
-          },
-          {
-            src: "/icons/supapile-192.png",
-            sizes: "192x192", 
-            type: "image/png",
-            purpose: "maskable"
+            type: "image/png"
           },
           {
             src: "/icons/supapile-512.png",
             sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable"
+            type: "image/png"
           }
         ]
       }
