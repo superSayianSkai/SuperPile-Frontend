@@ -28,7 +28,7 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    if (input.Ref.current) {
+    if (inputRef.current) {
       inputRef.current.focus();
     }
   }, [inputRef]);
