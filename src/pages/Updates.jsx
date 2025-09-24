@@ -53,7 +53,7 @@ const Updates = () => {
                   className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white"
                   dateTime="2024-01-15"
                 >
-                  January 15, 2025
+                  September 24, 2025
                 </time>
               </div>
             </div>
