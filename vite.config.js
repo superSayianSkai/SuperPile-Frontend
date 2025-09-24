@@ -29,20 +29,33 @@ export default defineConfig({
         theme_color: "#ffffff", // Changed from #000000 to white
         icons: [
           {
+            src: "/icons/supapile-icon2.svg",
+            sizes: "any",
+            type: "image/svg+xml",
+            purpose: "any maskable"
+          },
+          {
             src: "/icons/supapile-128.png",
             sizes: "128x128",
-            type: "image/png",
-            purpose: "any maskable"
+            type: "image/png"
           },
           {
             src: "/icons/supapile-192.png",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/png",
+            purpose: "any"
+          },
+          {
+            src: "/icons/supapile-192.png",
+            sizes: "192x192", 
+            type: "image/png",
+            purpose: "maskable"
           },
           {
             src: "/icons/supapile-512.png",
             sizes: "512x512",
-            type: "image/png"
+            type: "image/png",
+            purpose: "any maskable"
           }
         ]
       }
