@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
 Allow: /updates
-Allow: /share
+Allow: /api/share/
 Disallow: /login
-Disallow: /api/
+Disallow: /api/auth/
+Disallow: /api/user/
+Disallow: /api/pile/
 Disallow: /archived
 
 Sitemap: https://www.supapile.com/sitemap.xml
