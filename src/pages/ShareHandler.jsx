@@ -162,7 +162,7 @@ const ShareHandler = () => {
         <meta property="og:site_name" content="Supapile" />
 
         {/* Twitter card */}
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
           content="Processing Shared Link - Supapile.com"
@@ -170,6 +170,10 @@ const ShareHandler = () => {
         <meta
           name="twitter:description"
           content="Processing a shared link to add to your Supapile collection."
+        />
+        <meta
+          name="twitter:image"
+          content="https://supapile.com/og-image.png"
         />
 
         {/* Additional SEO tags */}
