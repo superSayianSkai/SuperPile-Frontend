@@ -26,12 +26,13 @@ export default defineConfig({
         start_url: "/?source=pwa",
         display: "standalone",
         background_color: "#ffffff",
-        theme_color: "#000000",
+        theme_color: "#ffffff", // Changed from #000000 to white
         icons: [
           {
             src: "/icons/supapile-128.png",
             sizes: "128x128",
-            type: "image/png"
+            type: "image/png",
+            purpose: "any maskable"
           },
           {
             src: "/icons/supapile-192.png",
