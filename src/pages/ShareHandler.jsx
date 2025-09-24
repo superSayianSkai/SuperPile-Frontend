@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { usePostStore } from "../zustard/usePostStore";
-import usePostPile from "../tanstack-query-hooks/usePostPile";
-import CustomToast from "../components/ShowCustomToast";
 import { useQueryClient } from "@tanstack/react-query";
+import usePostPile from "../tanstack-query-hooks/usePostPile";
+import { usePostStore } from "../zustard/usePostStore";
+import CustomToast from "../components/ShowCustomToast";
+import { Helmet } from "react-helmet-async";
+
 const ShareHandler = () => {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
@@ -132,34 +134,78 @@ const ShareHandler = () => {
   }, [searchParams, navigate, mutate, queryClient, setPostData]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
-      <div className="text-center max-w-md mx-auto">
-        {(isPending || isProcessing) ? (
-          <>
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
-            <p className="text-gray-600 mb-4">{statusMessage}</p>
-          </>
-        ) : statusMessage.includes("successfully") ? (
-          <>
-            <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">✓</span>
+    <>
+      <Helmet>
+        <title>Processing Shared Link - Supapile.com</title>
+        
+        {/* Description for Google and social previews */}
+        <meta
+          name="description"
+          content="Processing a shared link to add to your Supapile collection. Save and organize URLs from anywhere on the web with Supapile.com."
+        />
+
+        {/* Keywords for better SEO */}
+        <meta name="keywords" content="share to supapile, save link, add bookmark, supapile.com, link sharing" />
+
+        {/* Open Graph tags */}
+        <meta
+          property="og:title"
+          content="Processing Shared Link - Supapile.com"
+        />
+        <meta
+          property="og:description"
+          content="Processing a shared link to add to your Supapile collection. Save and organize URLs from anywhere."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.supapile.com/share" />
+        <meta property="og:image" content="https://supapile.com/og-image.png" />
+        <meta property="og:site_name" content="Supapile" />
+
+        {/* Twitter card */}
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content="Processing Shared Link - Supapile.com"
+        />
+        <meta
+          name="twitter:description"
+          content="Processing a shared link to add to your Supapile collection."
+        />
+
+        {/* Additional SEO tags */}
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="author" content="Supapile" />
+      </Helmet>
+
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="text-center max-w-md mx-auto">
+          {(isPending || isProcessing) ? (
+            <>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
+              <p className="text-gray-600 mb-4">{statusMessage}</p>
+            </>
+          ) : statusMessage.includes("successfully") ? (
+            <>
+              <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">✓</span>
+                </div>
               </div>
-            </div>
-            <p className="text-gray-600 mb-4">{statusMessage}</p>
-          </>
-        ) : (
-          <>
-            <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">
-              <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">!</span>
+              <p className="text-gray-600 mb-4">{statusMessage}</p>
+            </>
+          ) : (
+            <>
+              <div className="h-12 w-12 mx-auto mb-4 flex items-center justify-center">
+                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">!</span>
+                </div>
               </div>
-            </div>
-            <p className="text-gray-600 mb-4">{statusMessage}</p>
-          </>
-        )}
+              <p className="text-gray-600 mb-4">{statusMessage}</p>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

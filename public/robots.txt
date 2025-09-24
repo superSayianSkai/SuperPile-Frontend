@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /updates
+Disallow: /login
+Disallow: /share
+Disallow: /api/
+Disallow: /archived
+
+Sitemap: https://www.supapile.com/sitemap.xml

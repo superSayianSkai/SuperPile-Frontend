@@ -2,6 +2,8 @@ import pokiemon from "../assets/Images/pokiemon.gif";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+
 const Updates = () => {
   const [imageLoaded, setImageLoading] = useState(false);
   const navigate = useNavigate();
@@ -14,6 +16,53 @@ const Updates = () => {
   };
   return (
     <div className="min-h-screen max-h-screen overflow-y-auto bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
+      <Helmet>
+        {/* Title for tab + search engines */}
+        <title>Updates - Supapile v1.0 Launch</title>
+
+        {/* Description for Google and social previews */}
+        <meta
+          name="description"
+          content="Supapile v1.0 is here! Learn about the new features and improvements in our latest update. Save, organize and share your favorite URLs with ease."
+        />
+
+        {/* Open Graph tags for better previews on Twitter, LinkedIn, etc. */}
+        <meta
+          property="og:title"
+          content="Supapile v1.0 Launch - Updates & New Features"
+        />
+        <meta
+          property="og:description"
+          content="Discover what's new in Supapile v1.0. Enhanced link saving, better organization, and improved sharing features."
+        />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://www.supapile.com/updates" />
+        <meta property="og:image" content="https://supapile.com/og-image.png" />
+
+        {/* Twitter card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Supapile v1.0 Launch - Updates & New Features"
+        />
+        <meta
+          name="twitter:description"
+          content="Discover what's new in Supapile v1.0. Enhanced link saving, better organization, and improved sharing features."
+        />
+        <meta
+          name="twitter:image"
+          content="https://supapile.com/og-image.png"
+        />
+
+        {/* Article specific meta tags */}
+        <meta property="article:published_time" content="2024-09-24T00:00:00Z" />
+        <meta property="article:author" content="skai" />
+        <meta property="article:section" content="Product Updates" />
+        <meta property="article:tag" content="product launch" />
+        <meta property="article:tag" content="updates" />
+        <meta property="article:tag" content="features" />
+      </Helmet>
+
       {/* Back Navigation - positioned at page edge on desktop */}
       <div className="sm:absolute sm:left-4 sm:top-8 sm:z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-0 mb-4 sm:mb-0">

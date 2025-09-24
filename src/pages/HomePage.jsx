@@ -96,41 +96,68 @@ const HomePage = () => {
     <div className="bg-white dark:bg-black dark:text-white ">
       <Helmet>
         {/* Title for tab + search engines */}
-        <title>Supapile</title>
+        <title>Supapile - Save, Organize & Share Your Favorite URLs</title>
 
         {/* Description for Google and social previews */}
         <meta
           name="description"
-          content="Supapile lets you catch, save, organize and share your favorite URLS into piles. Keep everything tidy and build your own digital library."
+          content="Save, organize and share your favorite URLs in one place. Create digital piles of links, manage your bookmarks, and share collections with others. Keep all your URLs organized and accessible."
         />
+
+        {/* Keywords for better SEO */}
+        <meta name="keywords" content="bookmark manager, URL organizer, link saver, digital bookmarks, share links, organize URLs, link collection, bookmark tool, save links, manage bookmarks" />
 
         {/* Open Graph tags for better previews on Twitter, LinkedIn, etc. */}
         <meta
           property="og:title"
-          content="Supapile – Catch, Save, Organize & Share your favourite URLs"
+          content="Supapile - Save, Organize & Share Your Favorite URLs"
         />
         <meta
           property="og:description"
-          content="Catch, save, organize, and share your favorite URLS into piles. Share your collections with others and discover new ones."
+          content="Save, organize and share your favorite URLs in one place. Create digital piles of links and keep everything organized."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.supapile.com" />
         <meta property="og:image" content="https://supapile.com/og-image.png" />
+        <meta property="og:site_name" content="Supapile" />
 
         {/* Twitter card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Supapile – Catch, Save, Organize & Share your favourite URLs"
+          content="Supapile - Save, Organize & Share Your Favorite URLs"
         />
         <meta
           name="twitter:description"
-          content="Catch, save, organize, and share your favorite URLS into piles with supapile."
+          content="Save, organize and share your favorite URLs in one place. Create digital piles of links and keep everything organized."
         />
         <meta
           name="twitter:image"
           content="https://supapile.com/og-image.png"
         />
+
+        {/* Additional SEO tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Supapile" />
+        <link rel="canonical" href="https://www.supapile.com" />
+        
+        {/* Structured data for better search understanding */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Supapile",
+            "description": "Save, organize and share your favorite URLs in one place. Create digital piles of links and keep everything organized.",
+            "url": "https://www.supapile.com",
+            "applicationCategory": "ProductivityApplication",
+            "operatingSystem": "Web Browser",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          })}
+        </script>
       </Helmet>
 
       <div
