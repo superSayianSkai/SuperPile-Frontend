@@ -2,12 +2,13 @@ import piloDark from "../assets/Images/supapileCat2.png";
 import piloLight from "../assets/Images/supapile.webp";
 import useStateStore from "../zustard/useStateStore";
 import { SupaPileAUTHContext } from "../context/SupaPileContext";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { InfoIcon } from "lucide-react";
 import { useContext } from "react";
 import { useTheme } from "../hooks/useTheme";
 import { Link } from "react-router-dom"; // Add this import for navigation
 const OnBoarding = () => {
+  const inputRef = useRef();
   const { setKeyword } = useStateStore();
   const { theme } = useTheme();
   console.log(theme);
@@ -15,6 +16,12 @@ const OnBoarding = () => {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setIsLoading] = useState(false);
   const { handleSignIn } = useContext(SupaPileAUTHContext);
+  
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
 
   const regex = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/;
   const handleSearch = (e) => {
@@ -39,13 +46,13 @@ const OnBoarding = () => {
     <div className="flex relative flex-col dark:bg-black justify-between min-h-[90svh] max-h-[100svh] w-full overflow-hidden dark:text-white md:px-8">
       <div className="flex justify-center flex-col md:mt-8 items-center h-[68vh]">
         <div className="w-60 sm:w-52 md:w-64 h-53">
-          <img 
-            src={theme === "dark" ? piloDark : piloLight} 
+          <img
+            src={theme === "dark" ? piloDark : piloLight}
             alt="Supapile Logo"
             width="240"
             height="212"
             loading="eager"
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
           />
         </div>
         <div className="relative group -mt-[92px] w-full  max-w-[560px] mx-auto">
@@ -62,6 +69,7 @@ const OnBoarding = () => {
               >
                 <div className="bg-white rounded-2xl overflow-hidden flex items-center gap-3">
                   <input
+                    ref={inputRef}
                     value={searchValue}
                     onFocus={() => setActive(true)}
                     onBlur={() => setActive(false)}
@@ -104,8 +112,8 @@ const OnBoarding = () => {
       <footer className="p-6 w-full  max-sm:absolute max-sm:inset-x-0 max-sm:bottom-2 dark:bg-black bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex max-sm:flex-col max-sm:justify-center justify-between items-center text-center">
-            <Link 
-              to="/updates" 
+            <Link
+              to="/updates"
               className="flex items-center justify-center gap-1 mb-2 hover:underline cursor-pointer hover:opacity-80 transition-opacity duration-200"
             >
               <InfoIcon className="h-4 w-4 sm:mt-1" />

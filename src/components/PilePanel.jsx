@@ -7,9 +7,14 @@ import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
 import useStateStore from "../zustard/useStateStore";
 import useFetchPile from "../tanstack-query-hooks/useFetchPile";
 const PilePanel = () => {
+  const inputRef = useRef();
+
   useEffect(() => {
-    console.log("hey there  ");
-  });
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
+
   const { supaPileState } = useStateStore();
   const { data: pileData, refetch } = useFetchPile({
     category: supaPileState.category,
@@ -204,6 +209,7 @@ const PilePanel = () => {
                   </svg>
                 </div>
                 <input
+                  ref={inputRef}
                   onChange={workOnSetTheMetaLink}
                   placeholder="Paste your link here..."
                   className="w-full pl-10 pr-4 py-3 bg-white text-gray-800 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500/50 focus:border-transparent transition-all duration-150 placeholder-gray-500"

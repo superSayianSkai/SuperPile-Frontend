@@ -30,7 +30,7 @@ const ChangeCategory = () => {
   const { mutate } = useChangeCategory();
   let clickedPileCategory = clicked.pile;
   console.log(clickedPileCategory);
-  console.log("hahahahah");
+
   const handleChange = async (e) => {
     console.log(e);
     const ticked = e.target.value;
@@ -51,6 +51,7 @@ const ChangeCategory = () => {
         },
       }
     );
+    setTheModal({ isOpen: false });
   };
 
   return (
@@ -62,7 +63,10 @@ const ChangeCategory = () => {
         onClick={(e) => [e.stopPropagation(), handleClose(e)]}
         className="w-[90%]  md:w-[400px] h-[400px] rounded-xl overflow-scroll"
       >
-        <div ref={categoryRef} className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]">
+        <div
+          ref={categoryRef}
+          className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]"
+        >
           <h1 className="text-sm font-semibold text-gray-700 mb-3 text-center">
             Change Category
           </h1>

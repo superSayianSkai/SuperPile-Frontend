@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect, } from "react";
+import { useMemo, useState, useRef } from "react";
 import { useAuthStore } from "../zustard/useAuthStore";
 import useStateStore from "../zustard/useStateStore";
 import debounce from "../utilities/debounce";
@@ -12,7 +12,7 @@ const Hero = () => {
   const [active, setActive] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const searchContainerRef = useRef(null);
-  const inputRef = useRef();
+
   // Use the existing hook to handle click outside
   useOnClickOutside(() => setActive(false), searchContainerRef, active);
 
@@ -26,12 +26,6 @@ const Hero = () => {
     setSearchValue("");
     setKeyword("");
   };
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [inputRef]);
 
   return (
     <>
@@ -113,7 +107,6 @@ const Hero = () => {
             ></i>
 
             <input
-              ref={inputRef}
               value={searchValue}
               onFocus={() => setActive(true)}
               placeholder="Search your pileboard..."
