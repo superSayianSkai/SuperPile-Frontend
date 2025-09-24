@@ -47,6 +47,15 @@ export default defineConfig({
       }
     }),
   ],
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
   server: {
     port: 2000,
     host: "0.0.0.0",
