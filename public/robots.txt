@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 Allow: /updates
+Allow: /share
 Disallow: /login
-Disallow: /share
 Disallow: /api/
 Disallow: /archived
 
