@@ -15,19 +15,26 @@ const PublicPile = () => {
   const { setTheModal, clicked } = useClickedModal();
   const { publicLinkToken } = useParams();
   console.log(publicLinkToken);
-  const { data } = useFetchUserPublicPile(publicLinkToken);
+  const { data, isLoading } = useFetchUserPublicPile(publicLinkToken);
   const { user: userData } = useAuthStore();
 
   const pile = data?.data;
-  console.log(pile)
-  console.log("hey there how are youuu")
-  const ownerName = data?.data[0]?.name || "Supapile User";
- 
+  console.log("Full API response:", data);
+  console.log("Pile data:", pile);
   
-  // Get the first image from the pile for the meta tag, or use default
-  const firstImage = pile?.[0]?.image || "https://supapile.com/og-image.png";
+  // Keep your existing data structure
+  const ownerName = data?.data?.[0]?.name || "Supapile User";
+  
+  // Get the first valid image from the pile, or use default
+  const firstValidImage = pile?.find(link => link.image && link.image.trim() !== "" && link.image !== "undefined")?.image;
+  const firstImage = firstValidImage || "https://supapile.com/og-image.png";
+  
   const pileTitle = `${ownerName}'s Collection - Supapile`;
   const pileDescription = `Discover ${ownerName}'s curated collection of ${pile?.length || 0} links on Supapile. Save, organize and share your favorite URLs in one place.`;
+
+  console.log("Owner name:", ownerName);
+  console.log("First image:", firstImage);
+  console.log("Pile length:", pile?.length);
 
   const [toast, setToast] = useState({ show: false, message: "" });
 
@@ -42,13 +49,27 @@ const PublicPile = () => {
     navigator.clipboard.writeText(e);
     showCustomToast("Copied to clipboard");
   };
+  
   const handleLinkSubmit = async (link) => {
     localStorage.setItem("pending_link", link);
     handleSignIn();
   };
 
-  console.log(data);
-  console.log("hjshs");
+  // Don't render meta tags until we have data
+  if (isLoading || !data || !pile) {
+    return (
+      <>
+        <Helmet>
+          <title>Loading Collection - Supapile</title>
+          <meta name="description" content="Loading shared collection from Supapile" />
+        </Helmet>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Helmet>
@@ -64,19 +85,25 @@ const PublicPile = () => {
         <meta property="og:title" content={pileTitle} />
         <meta property="og:description" content={pileDescription} />
         <meta property="og:image" content={firstImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={`Preview of ${ownerName}'s collection on Supapile`} />
         <meta property="og:site_name" content="Supapile" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={`https://supapile.com/api/share/${publicLinkToken}`} />
-        <meta property="twitter:title" content={pileTitle} />
-        <meta property="twitter:description" content={pileDescription} />
-        <meta property="twitter:image" content={firstImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@supapile" />
+        <meta name="twitter:creator" content="@supapile" />
+        <meta name="twitter:url" content={`https://supapile.com/api/share/${publicLinkToken}`} />
+        <meta name="twitter:title" content={pileTitle} />
+        <meta name="twitter:description" content={pileDescription} />
+        <meta name="twitter:image" content={firstImage} />
+        <meta name="twitter:image:alt" content={`Preview of ${ownerName}'s collection on Supapile`} />
 
         {/* Additional SEO tags */}
         <meta name="robots" content="index, follow" />
         <meta name="author" content={`${ownerName} via Supapile`} />
-        <meta name="canonical" content={`https://supapile.com/api/share/${publicLinkToken}`} />
+        <link rel="canonical" href={`https://supapile.com/api/share/${publicLinkToken}`} />
 
         {/* Structured Data */}
         <script type="application/ld+json">
@@ -94,7 +121,11 @@ const PublicPile = () => {
             "publisher": {
               "@type": "Organization",
               "name": "Supapile",
-              "url": "https://supapile.com"
+              "url": "https://supapile.com",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://supapile.com/og-image.png"
+              }
             },
             "mainEntity": {
               "@type": "ItemList",
@@ -104,10 +135,10 @@ const PublicPile = () => {
                 "position": index + 1,
                 "item": {
                   "@type": "WebPage",
-                  "name": link.title,
-                  "description": link.description,
+                  "name": link.title || "Untitled",
+                  "description": link.description || "",
                   "url": link.url,
-                  "image": link.image
+                  "image": link.image || firstImage
                 }
               })) || []
             }
