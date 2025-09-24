@@ -98,7 +98,7 @@ const PWAInstallNotification = () => {
   };
 
   const handleGetExtension = () => {
-    window.open("https://chrome.google.com/webstore/search/supapile", "_blank");
+    window.open("https://chromewebstore.google.com/detail/supapile/dijfgnlpkjppccgkiapcppdkeiekemah", "_blank");
   };
 
   const handleInstallPWA = () => {
