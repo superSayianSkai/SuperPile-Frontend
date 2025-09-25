@@ -198,8 +198,8 @@ const OnBoarding = () => {
 
           {/* Local Piles Section */}
           {(showLocalSection || pilesCount > 0) && (
-            <div className="w-full  mx-auto mt-8 px-4">
-              <div className=" rounded-2xl  border-gray-200 dark:border-gray-700 p-6">
+            <div className="w-full  mx-auto mt-8 px-2">
+              <div className=" rounded-2xl  border-gray-200 dark:border-gray-700 p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -225,7 +225,7 @@ const OnBoarding = () => {
                 />
                 
                 {/* Upgrade Message */}
-                <div className="mt-10 p-4 rounded-lg border-gray-100 dark:border-gray-100/50 border-[1px] ">
+                <div className="mt-10 p-4 rounded-lg border-gray-200 dark:border-gray-100/50 border-[1px] ">
                   <div className="flex items-center gap-2 mb-2">
                    
                     <h4 className="font-semibold text-gray-800 dark:text-white">
