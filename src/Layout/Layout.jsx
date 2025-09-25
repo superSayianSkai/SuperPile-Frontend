@@ -4,6 +4,8 @@ import useAuth from "../tanstack-query-hooks/useAuthPile";
 import useClickedModal from "../zustard/useClickedModal";
 import ChangeCategoryContainer from "../components/ChangeCategoryContainer";
 import OnBoarding from "../pages/OnBoarding";
+import { useAutoMigration } from "../hooks/useAutoMigration";
+import AutoMigrationNotification from "../components/AutoMigrationNotification";
 
 const Layout = () => {
   const { data: user, isLoading, isError } = useAuth();
@@ -11,6 +13,9 @@ const Layout = () => {
   const { clicked } = useClickedModal();
   const location = useLocation();
   console.log(location.pathname);
+
+  // Auto-migration hook
+  const { isMigrating, migrationProgress, migrationStatus, hasAttemptedMigration } = useAutoMigration(user);
 
   // Show loading while checking authentication
   if (isLoading) {
@@ -41,6 +46,11 @@ const Layout = () => {
     <div className="overflow-x-hidden">
       <Header />
       {clicked.isOpen && <ChangeCategoryContainer />}
+      <AutoMigrationNotification 
+        migrationStatus={migrationStatus}
+        isMigrating={isMigrating}
+        migrationProgress={migrationProgress}
+      />
       <Outlet />
     </div>
   );

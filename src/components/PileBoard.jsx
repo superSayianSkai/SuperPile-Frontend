@@ -349,7 +349,7 @@ const PileBoard = () => {
                         onClick={() => copy(link.url)}
                         className="p-1 rounded-md transition"
                       >
-                        <i className="bi bi-clipboard hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
+                        <i className="bi bi-clipboard md:hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition"></i>
                       </button>
                       <button
                         onClick={() =>
@@ -361,7 +361,7 @@ const PileBoard = () => {
                         }
                         className="p-1 rounded-md transition"
                       >
-                        <i className="bi bi-share hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
+                        <i className="bi bi-share md:hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition"></i>
                       </button>
                       <button className="p-1 rounded-md transition">
                         <i
@@ -375,14 +375,14 @@ const PileBoard = () => {
                             ]);
                             setFromLogin(undefined);
                           }}
-                          className="bi bi-trash3 text-red-600 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer"
+                          className="bi bi-trash3 text-red-600 md:hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition cursor-pointer"
                         ></i>
                       </button>
                       <button
                         onClick={() => handleClick(link?._id)}
                         className="p-1 rounded-md transition relative"
                       >
-                        <i className="bi bi-bookmark-check hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"></i>
+                        <i className="bi bi-bookmark-check md:hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition"></i>
                       </button>
                       <button className="p-1 rounded-md transition text-[15px]">
                         {console.log(link.visibility)}
@@ -409,7 +409,7 @@ const PileBoard = () => {
                                 }
                               )
                             }
-                            className="bi bi-eye hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"
+                            className="bi bi-eye hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition"
                           ></i>
                         ) : (
                           <i
@@ -434,7 +434,7 @@ const PileBoard = () => {
                                 }
                               )
                             }
-                            className="bi bi-eye-slash hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition"
+                            className="bi bi-eye-slash md:hover:text-transparent md:hover:bg-clip-text md:hover:bg-gradient-to-r md:hover:from-[#ff66b2] md:hover:to-[#ff8c00] transition"
                           ></i>
                         )}
                       </button>
