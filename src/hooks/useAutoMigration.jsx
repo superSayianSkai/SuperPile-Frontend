@@ -38,6 +38,9 @@ export const useAutoMigration = (user) => {
               message: `Migration failed: ${error.message}`
             });
           }
+        } else {
+          // No piles to migrate, mark as attempted to prevent future checks
+          setHasAttemptedMigration(true);
         }
       }
     };

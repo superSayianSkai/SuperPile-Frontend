@@ -198,7 +198,7 @@ const OnBoarding = () => {
 
           {/* Local Piles Section */}
           {(showLocalSection || pilesCount > 0) && (
-            <div className="w-full  mx-auto mt-8 px-2">
+            <div className="w-full max-w-[95rem]  mx-auto mt-8 px-2">
               <div className=" rounded-2xl  border-gray-200 dark:border-gray-700 p-4">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">

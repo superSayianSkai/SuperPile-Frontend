@@ -15,7 +15,12 @@ const Layout = () => {
   console.log(location.pathname);
 
   // Auto-migration hook
-  const { isMigrating, migrationProgress, migrationStatus, hasAttemptedMigration } = useAutoMigration(user);
+  const {
+    isMigrating,
+    migrationProgress,
+    migrationStatus,
+    hasAttemptedMigration,
+  } = useAutoMigration(user);
 
   // Show loading while checking authentication
   if (isLoading) {
@@ -43,14 +48,16 @@ const Layout = () => {
   }
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden max-w-[95rem] mx-auto relative">
       <Header />
       {clicked.isOpen && <ChangeCategoryContainer />}
-      <AutoMigrationNotification 
-        migrationStatus={migrationStatus}
-        isMigrating={isMigrating}
-        migrationProgress={migrationProgress}
-      />
+    
+        <AutoMigrationNotification
+          migrationStatus={migrationStatus}
+          isMigrating={isMigrating}
+          migrationProgress={migrationProgress}
+        />
+    
       <Outlet />
     </div>
   );
