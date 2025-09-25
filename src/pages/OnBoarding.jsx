@@ -227,12 +227,12 @@ const OnBoarding = () => {
                 {/* Upgrade Message */}
                 <div className="mt-10 p-4 rounded-lg border-gray-200 dark:border-gray-100/50 border-[1px] ">
                   <div className="flex items-center gap-2 mb-2">
-                   
+                     <Crown className="h-4 w-4 text-black dark:text-white" />
                     <h4 className="font-semibold text-gray-800 dark:text-white">
                       Get More Features
                     </h4>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                  <p className="text-sm text-gray-600 opacity-70 dark:text-gray-300 mb-3">
                     Sign up to save unlimited links aesthetically, sync across devices, organize with categories, and share your piles with others!
                   </p>
                   <button
