@@ -22,7 +22,7 @@ const AutoMigrationNotification = ({ migrationStatus, isMigrating, migrationProg
   if (!showNotification) return null;
 
   return (
-    <div className="fixed top-18 right-4 z-50 max-w-sm">
+    <div className="fixed top-18 right-0 md:right-4 z-50 w-[90%] mx-auto md:max-w-sm">
       <div className={`rounded-lg p-4 shadow-lg border ${
         isMigrating 
           ? 'bg-blue-50 border-blue-200' 
@@ -66,7 +66,7 @@ const AutoMigrationNotification = ({ migrationStatus, isMigrating, migrationProg
                   <p>Moving your locally saved piles to your account...</p>
                   {migrationProgress > 0 && (
                     <div className="mt-2">
-                      <div className="bg-white rounded-full h-2">
+                      <div className="bg-orange-200 rounded-full h-2">
                         <div 
                           className="bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] h-2 rounded-full transition-all duration-300"
                           style={{ width: `${migrationProgress}%` }}

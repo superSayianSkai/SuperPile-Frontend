@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import usePostPile from '../tanstack-query-hooks/usePostPile';
 import { localStoragePiles } from '../utilities/localStoragePiles';
 
@@ -7,6 +8,7 @@ export const usePileMigration = () => {
   const [migrationProgress, setMigrationProgress] = useState(0);
   const [migrationError, setMigrationError] = useState(null);
   const postPile = usePostPile();
+  const queryClient = useQueryClient();
 
   const migratePilesToAccount = async () => {
     const localPiles = localStoragePiles.getLocalPiles();
@@ -47,6 +49,9 @@ export const usePileMigration = () => {
       // Clear local storage after successful migration
       if (migratedCount > 0) {
         localStoragePiles.clearLocalPiles();
+        
+        // Invalidate pile queries to refresh the UI
+        queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
       }
 
       return { success: true, migratedCount };
