@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Trash2, Copy, ExternalLink } from 'lucide-react';
+import { Trash2, Copy, ExternalLink, Check } from 'lucide-react';
 import { localStoragePiles } from '../utilities/localStoragePiles';
 
 const LocalPilesList = ({ piles, onRemove, onRefresh }) => {
   const [imageErrors, setImageErrors] = useState(new Set());
+  const [copiedPiles, setCopiedPiles] = useState(new Set());
 
   const handleRemove = (id) => {
     try {
@@ -23,9 +24,24 @@ const LocalPilesList = ({ piles, onRemove, onRefresh }) => {
     });
   };
 
-  const copy = (text) => {
+  const copy = (text, pileId) => {
     navigator.clipboard.writeText(text);
-    // You can add toast notification here if needed
+    
+    // Add pile to copied set
+    setCopiedPiles((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(pileId);
+      return newSet;
+    });
+
+    // Remove from copied set after 2 seconds
+    setTimeout(() => {
+      setCopiedPiles((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(pileId);
+        return newSet;
+      });
+    }, 2000);
   };
 
   const getHostName = (url) => {
@@ -112,11 +128,15 @@ const LocalPilesList = ({ piles, onRemove, onRefresh }) => {
               <div className="flex items-center w-[100%] pr-[1rem]">
                 <div className="flex gap-4 mt-[10px] items-center w-[100%]">
                   <button
-                    onClick={() => copy(pile.url)}
+                    onClick={() => copy(pile.url, pile.id)}
                     className="p-1 rounded-md transition"
                     title="Copy link"
                   >
-                    <Copy className="h-4 w-4 hover:opacity-50 md:hover:opacity-50 active:opacity-50 hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition" />
+                    {copiedPiles.has(pile.id) ? (
+                      <Check className="h-4 w-4 text-green-500 transition" />
+                    ) : (
+                      <Copy className="h-4 w-4 hover:opacity-50 md:hover:opacity-50 active:opacity-50 hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition" />
+                    )}
                   </button>
                   <button
                     onClick={() => window.open(pile.url, '_blank')}
