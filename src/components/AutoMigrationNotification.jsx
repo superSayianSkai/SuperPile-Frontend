@@ -22,7 +22,7 @@ const AutoMigrationNotification = ({ migrationStatus, isMigrating, migrationProg
   if (!showNotification) return null;
 
   return (
-    <div className="fixed top-18 right-0 md:right-4 z-50 w-[90%] mx-auto md:max-w-sm">
+    <div className="fixed top-18 right-0 md:right-4 z-50  mx-auto max-w-sm">
       <div className={`rounded-lg p-4 shadow-lg border ${
         isMigrating 
           ? 'bg-blue-50 border-blue-200' 
