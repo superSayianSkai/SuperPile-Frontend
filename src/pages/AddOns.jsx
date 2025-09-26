@@ -152,11 +152,11 @@ const AddOns = () => {
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
-              Get Supapile
+              Get Supacharged
             </span>
           </h1>
 
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Choose your preferred way to access Supapile. Install the extension
             for quick link saving or get the PWA for the full experience.
           </p>
@@ -171,13 +171,13 @@ const AddOns = () => {
             <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl">
-                  <Chrome className="w-8 h-8 text-white" />
+                  <Chrome className="w-4 h-4 md:w-8 md:h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="md:text-2xl font-bold text-gray-900 dark:text-white">
                     Extension
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="max-sm:text-sm text-gray-600 dark:text-gray-400">
                     For quick link saving
                   </p>
                 </div>
@@ -207,7 +207,7 @@ const AddOns = () => {
               </div>
 
               <div className="gap-8 mb-10">
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
                   Installation Instructions
                 </h2>
                 <div className="flex flex-col">
@@ -272,10 +272,10 @@ const AddOns = () => {
             <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 bg-black  rounded-xl">
-                  <Smartphone className="w-8 h-8 text-white" />
+                  <Smartphone className="w-4 h-4 md:w-8 md:h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="md:text-2xl font-bold text-gray-900 dark:text-white">
                     Progressive Web App
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
@@ -319,7 +319,7 @@ const AddOns = () => {
                     <h4 className="font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                       📱 On Mobile
                     </h4>
-                    <ol className="space-y-3 text-gray-700 dark:text-gray-300">
+                    <ol className="space-y-3 text-sm sm:text-base text-gray-700 dark:text-gray-300">
                       <li className="flex gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                           1

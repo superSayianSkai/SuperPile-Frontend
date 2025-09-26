@@ -137,17 +137,17 @@ const PWAInstallNotification = () => {
     if (isPWAInstalled && !hasExtension) {
       return {
         description:
-          "If you change your mind, you can find the link to the Chrome Extension at the Update page :)",
+          "If you change your mind, you can find the link to the Chrome Extension at the addons page :)",
       };
     } else if (!isPWAInstalled && hasExtension) {
       return {
         description:
-          "If you change your mind, you can find how to download supapile as an app at the Update page :)",
+          "If you change your mind, you can find how to download supapile as an app at the addons page :)",
       };
     } else {
       return {
         description:
-          "If you change your mind, you can find how to download the PWA and link to the Chrome Extension at the Update page :)",
+          "If you change your mind, you can find how to download the PWA and link to the Chrome Extension at the addons page :)",
       };
     }
   };
