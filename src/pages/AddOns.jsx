@@ -10,7 +10,7 @@ import {
   Shield,
   RefreshCw,
   InfoIcon,
-  Crown,
+  Check,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import supapile from "../assets/supapile-icon2.svg";
@@ -85,29 +85,7 @@ const AddOns = () => {
     }
   };
 
-  const features = [
-    {
-      icon: <Zap className="w-6 h-6" />,
-      title: "Lightning Fast",
-      description: "Save links instantly with one click",
-    },
-    {
-      icon: <Shield className="w-6 h-6" />,
-      title: "Secure & Private",
-      description: "Your data is encrypted and protected",
-    },
-    {
-      icon: <RefreshCw className="w-6 h-6" />,
-      title: "Cross-Device Sync",
-      description: "Access your links from anywhere",
-    },
-    {
-      icon: <Globe className="w-6 h-6" />,
-      title: "Works Everywhere",
-      description: "Compatible with all major browsers",
-    },
-  ];
-
+ 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-black dark:via-gray-900 dark:to-black">
       <Helmet>
@@ -179,25 +157,10 @@ const AddOns = () => {
           </h1>
 
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Choose your preferred way to access Supapile. Install the extension for quick link saving or get the PWA for the full
-            experience.
+            Choose your preferred way to access Supapile. Install the extension
+            for quick link saving or get the PWA for the full experience.
           </p>
 
-          {/* Status Indicators */}
-          <div className="flex justify-center gap-4 mb-8">
-            {hasExtension && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Extension Installed
-              </div>
-            )}
-            {isPWAInstalled && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                App Installed
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Download Options */}
@@ -289,7 +252,7 @@ const AddOns = () => {
                 {hasExtension ? (
                   <span className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <Check className="w-3 h-3 text-green" />
                     </div>
                     Already Installed
                   </span>
@@ -415,10 +378,12 @@ const AddOns = () => {
               >
                 {isPWAInstalled ? (
                   <span className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    Already Installed
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                        <Check className="w-3 h-3 text-green" />
+                      </div>
+                      Already Installed
+                    </span>
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
