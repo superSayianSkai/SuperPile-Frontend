@@ -311,7 +311,7 @@ const AddOns = () => {
                 </div>
               </div>
               <div className="gap-8 mb-10">
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
+                <h2 className="text-lg sm:text-xl font-bold mb-6 text-gray-900 dark:text-white text-center">
                   Installation Instructions
                 </h2>
                 <div className="space-y-6">
