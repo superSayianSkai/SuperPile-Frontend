@@ -89,7 +89,7 @@ const AddOns = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-black dark:via-gray-900 dark:to-black">
       <Helmet>
-        <title>Downloads - Get Supapile Extension & App</title>
+        <title>Addons - Get Supapile Extension & App</title>
         <meta
           name="description"
           content="Download the Supapile Chrome extension and install the PWA app. Save, organize and share your favorite URLs with ease across all your devices."
@@ -101,7 +101,7 @@ const AddOns = () => {
 
         <meta
           property="og:title"
-          content="Downloads - Get Supapile Extension & App"
+          content="Addons - Get Supapile Extension & App"
         />
         <meta
           property="og:description"
@@ -114,7 +114,7 @@ const AddOns = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Downloads - Get Supapile Extension & App"
+          content="Addons - Get Supapile Extension & App"
         />
         <meta
           name="twitter:description"
