@@ -152,7 +152,7 @@ const AddOns = () => {
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
-              Get Supacharged
+              Get Supacharged!
             </span>
           </h1>
 
