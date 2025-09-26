@@ -4,7 +4,7 @@ import useStateStore from "../zustard/useStateStore";
 import debounce from "../utilities/debounce";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 
-const Hero = () => {
+const Hero = (allPiles = []) => {
   const { setKeyword } = useStateStore();
   const debounceIT = useMemo(() => debounce(setKeyword, 200), []);
   const name = useAuthStore().user?.data?.name;
@@ -26,6 +26,8 @@ const Hero = () => {
     setSearchValue("");
     setKeyword("");
   };
+
+
 
   return (
     <>
@@ -91,6 +93,7 @@ const Hero = () => {
         </div>
 
         {/* Enhanced Search Container */}
+        
         <div className="relative group">
           <div
             ref={searchContainerRef}
@@ -105,13 +108,13 @@ const Hero = () => {
                 active ? "active" : "text-gray-500"
               }`}
             ></i>
-
+            
             <input
               value={searchValue}
               onFocus={() => setActive(true)}
               placeholder="Search your pileboard..."
               onChange={handleSearch}
-              className="flex-1 bg-transparent border-none outline-none text-[.7rem] sm:text-[.75rem] md:text-[.85rem] text-gray-800 placeholder-gray-500 font-medium"
+                            className="flex-1 bg-transparent border-none outline-none text-[.7rem] sm:text-[.75rem] md:text-[.85rem] text-gray-800 placeholder-gray-500 font-medium"
             />
 
             {/* Clear Button */}

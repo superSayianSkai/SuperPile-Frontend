@@ -132,7 +132,7 @@ const OnBoarding = () => {
                       value={searchValue}
                       onFocus={() => setActive(true)}
                       onBlur={() => setActive(false)}
-                      placeholder="Paste a link here..."
+                      placeholder="Paste an https link here..."
                       onChange={handleSearch}
                       disabled={isSavingLocally}
                       className="flex-1 border-2 bg-transparent px-5 py-3 border-none outline-none text-gray-800 placeholder-gray-500 text-xs md:text-sm font-medium disabled:opacity-50"

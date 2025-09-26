@@ -19,12 +19,12 @@ const HomePage = () => {
   // trying something out
   // Get existing piles data to check for duplicates
   const { data: pileData } = useFetchPile({ category: "all", keyword: "" });
-
   // Extract URL from pathname
   const magic = location.pathname.startsWith("/magic-save/")
     ? location.pathname.replace("/magic-save/", "")
     : null;
 
+  const allPiles = pileData?.pages?.flatMap((page) => page.piles) || [];
   useEffect(() => {
     if (magic && userData && !isProcessing) {
       // Add userData check back
@@ -38,7 +38,6 @@ const HomePage = () => {
       }
 
       // Check if URL already exists in piles
-      const allPiles = pileData?.pages?.flatMap((page) => page.piles) || [];
       const existingPile = allPiles.find((pile) => pile.url === url);
 
       if (existingPile) {
@@ -105,7 +104,10 @@ const HomePage = () => {
         />
 
         {/* Keywords for better SEO */}
-        <meta name="keywords" content="bookmark manager, URL organizer, link saver, digital bookmarks, share links, organize URLs, link collection, bookmark tool, save links, manage bookmarks" />
+        <meta
+          name="keywords"
+          content="bookmark manager, URL organizer, link saver, digital bookmarks, share links, organize URLs, link collection, bookmark tool, save links, manage bookmarks"
+        />
 
         {/* Open Graph tags for better previews on Twitter, LinkedIn, etc. */}
         <meta
@@ -140,22 +142,23 @@ const HomePage = () => {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Supapile" />
         <link rel="canonical" href="https://www.supapile.com" />
-        
+
         {/* Structured data for better search understanding */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            "name": "Supapile",
-            "description": "Save, organize and share your favorite URLs in one place. Create digital piles of links and keep everything organized.",
-            "url": "https://www.supapile.com",
-            "applicationCategory": "ProductivityApplication",
-            "operatingSystem": "Web Browser",
-            "offers": {
+            name: "Supapile",
+            description:
+              "Save, organize and share your favorite URLs in one place. Create digital piles of links and keep everything organized.",
+            url: "https://www.supapile.com",
+            applicationCategory: "ProductivityApplication",
+            operatingSystem: "Web Browser",
+            offers: {
               "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD"
-            }
+              price: "0",
+              priceCurrency: "USD",
+            },
           })}
         </script>
       </Helmet>
@@ -166,8 +169,8 @@ const HomePage = () => {
         } `}
       >
         <>
-          <Hero />
-          <PileBoard />
+          <Hero  />
+          <PileBoard allPiles={allPiles} />
           {LinkBoardPanel && <PilePanel />}
         </>
       </div>

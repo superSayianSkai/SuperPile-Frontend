@@ -15,6 +15,7 @@ import ShareHandler from "./pages/ShareHandler";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import OfflineSnackbar from "./components/useOfflineSnackBar";
 import {HelmetProvider } from 'react-helmet-async';
+import AddOns from "./pages/AddOns";
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -59,6 +60,7 @@ const App = () => {
     { path: "/extension-privacy", element: <PrivacyPolicy /> },
     { path: "/updates", element: <Updates /> },
     { path: "*", element: <NotFound /> },
+    {path:"/addons", element:<AddOns/>}
   ]);
 
   return (

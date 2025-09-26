@@ -248,13 +248,11 @@ const PileBoard = () => {
             ))}
           </div>
         )}
-        {(allPiles.length === 0 && isLoading) &&
-           (
-            <div className="text-center text-gray-500 mt-20">
-              You have no Pile. Catch and Pile your favorite links across the
-              web.
-            </div>
-          )}
+        {allPiles.length === 0 && (
+          <div className="text-center text-gray-500 mt-20">
+            You have no pile here. Catch and save your favorite links across the web.
+          </div>
+        )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
           {(fromLoginLoading ||
             (fromLoginLoading &&
