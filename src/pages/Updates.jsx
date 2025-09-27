@@ -80,7 +80,7 @@ const Updates = () => {
         {/* Product Launch Header */}
         <header className="py-4 sm:py-6">
           <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
-            <div className="bg-black hidden dark:block dark:bg-white rounded-lg px-3 sm:px-4 py-1 h-[35px] shadow-md">
+            <div className="bg-black hidden dark:block dark:bg-white rounded-lg px-3 sm:px-4 py-2 h-[35px] shadow-md">
               <div className="text-center">
                 <div className="text-sm sm:text-[.8rem] font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">
                   1.0
@@ -248,7 +248,7 @@ const Updates = () => {
           or ideas are always welcome to help make future updates even better.
         </p>
         {/* Article Footer */}
-        <footer className="mt-8 sm:mt-10 py-4 sm:py-6 mb-4 sm:mb-8 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 rounded-lg">
+        <footer className="mt-8 sm:mt-10 py-4 sm:py-6 mb-4 sm:mb-8 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700  p-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               <span>Follow me on X</span>

@@ -13,7 +13,7 @@ import {
   Check,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import supapile from "../assets/supapile-icon2.svg";
+import supapile from "../assets/Images/supapile-128.png";
 import { Link } from "react-router-dom";
 const AddOns = () => {
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
@@ -85,7 +85,6 @@ const AddOns = () => {
     }
   };
 
- 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-black dark:via-gray-900 dark:to-black">
       <Helmet>
@@ -140,15 +139,7 @@ const AddOns = () => {
       <div className="container mx-auto px-4 py-16 max-w-6xl">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <img
-                src={supapile}
-                alt="Supapile"
-                className="relative w-20 h-20 mx-auto"
-              />
-            </div>
-          </div>
+          <img src={supapile} alt="Supapile" className=" mx-auto mb-6" />
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
@@ -160,7 +151,6 @@ const AddOns = () => {
             Choose your preferred way to access Supapile. Install the extension
             for quick link saving or get the PWA for the full experience.
           </p>
-
         </div>
 
         {/* Download Options */}
@@ -168,7 +158,7 @@ const AddOns = () => {
           {/* Chrome Extension Card */}
           <div className="group relative">
             <div className="absolute inset-0 rounded-2xl blur-xl  transition-opacity duration-500"></div>
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 sm:p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 bg-gradient-to-r from-pink-500 to-orange-500 rounded-xl">
                   <Chrome className="w-4 h-4 md:w-8 md:h-8 text-white" />
@@ -186,7 +176,7 @@ const AddOns = () => {
               <div className="flex flex-col gap-y-4 mb-8">
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300 max-sm:text-sm">
                     Save and organize your favorite links without opening the
                     site
                   </p>
@@ -211,7 +201,7 @@ const AddOns = () => {
                   Installation Instructions
                 </h2>
                 <div className="flex flex-col">
-                  <ol className="space-y-3 text-gray-700 dark:text-gray-300">
+                  <ol className="space-y-3 max-sm:text-sm text-gray-700 dark:text-gray-300">
                     <li className="flex gap-3">
                       <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                         1
@@ -269,7 +259,7 @@ const AddOns = () => {
           {/* PWA App Card */}
           <div className="group relative">
             <div className="absolute inset-0 rounded-2xl blur-xl duration-500"></div>
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 sm:p-8 transition-all duration-300 border border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 bg-black  rounded-xl">
                   <Smartphone className="w-4 h-4 md:w-8 md:h-8 text-white" />
@@ -285,8 +275,8 @@ const AddOns = () => {
               </div>
 
               <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-black dark:bg-white rounded-full mt-2"></div>
+                <div className="flex items-start max-sm:text-sm gap-3">
+                  <div className="w-2 h-2  bg-black dark:bg-white rounded-full mt-2"></div>
                   <p className="text-gray-700 dark:text-gray-300">
                     Works offline with cached data
                   </p>
@@ -314,7 +304,7 @@ const AddOns = () => {
                 <h2 className="text-lg sm:text-xl font-bold mb-6 text-gray-900 dark:text-white text-center">
                   Installation Instructions
                 </h2>
-                <div className="space-y-6">
+                <div className="space-y-6 max-sm:text-sm">
                   <div>
                     <h4 className="font-medium text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                       📱 On Mobile
