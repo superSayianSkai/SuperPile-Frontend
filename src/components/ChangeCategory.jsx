@@ -53,7 +53,6 @@ const ChangeCategory = () => {
         },
       }
     );
-    setTheModal({ isOpen: false });
   };
 
   return (
@@ -63,7 +62,7 @@ const ChangeCategory = () => {
     >
       <div
         onClick={(e) => [e.stopPropagation(), handleClose(e)]}
-        className="w-[95%] absolute max-md:top-8 md:w-[400px] h-[400px] rounded-xl overflow-scroll"
+        className="w-[95%] md:w-[400px] h-[400px] rounded-xl overflow-scroll"
       >
         <div
           ref={categoryRef}
@@ -110,7 +109,7 @@ const ChangeCategory = () => {
           )}
           <div
             onClick={() => setTheModal({ isOpen: false })}
-            className="sticky bottom-0 border-[1px] border-gray-300 bg-white p-3  w-[100%] text-center md:hover:bg-gray-50 "
+            className="sticky bottom-0 border-[1px] border-gray-300 bg-white p-3 text-black  w-[100%] text-center md:hover:bg-gray-50 "
           >
             Done
           </div>

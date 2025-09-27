@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useEffect } from "react";
+import { useContext, useRef, useMemo, useState, useEffect } from "react";
 import { StateContext } from "../context/SupaPileContext";
 import { useFetchCategory } from "../tanstack-query-hooks/useFetchCategory";
 import useStateStore from "../zustard/useStateStore";
@@ -30,7 +30,7 @@ const Category = () => {
   const { data } = useFetchCategory();
   const { mutate: createCategory } = useCreateCategory();
   const { mutate: deleteCategory, isLoading: isDeleting } = useDeleteCategory();
-  let category = data?.data.categories || [];
+  const category = useMemo(() => data?.data.categories || [], [data?.data.categories]);
 
   const [showArrow, setShowArrow] = useState(false);
   const categoryRef = useRef();
