@@ -29,7 +29,9 @@ const ChangeCategory = () => {
 
   const { mutate } = useChangeCategory();
   let clickedPileCategory = clicked.pile;
-  console.log(clickedPileCategory);
+  
+ 
+  const isLoadingPileData = clickedPileCategory && !clickedPileCategory.category;
 
   const handleChange = async (e) => {
     console.log(e);
@@ -71,33 +73,41 @@ const ChangeCategory = () => {
             Change Category
           </h1>
 
-          <div className="overflow-y-auto custom-scroll flex-1 space-y-1 pr-1 cursor-pointer">
-            {category
-              ?.slice()
-              .reverse()
-              .map((c, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer transition"
-                >
-                  <label className="flex items-center gap-2 text-sm text-gray-800 cursor-pointer w-[100%]">
-                    <input
-                      type="radio"
-                      name="category"
-                      className="accent-indigo-600 cursor-pointer h-4 w-4 rounded-md border-gray-300"
-                      value={c}
-                      checked={
-                        clickedState === undefined
-                          ? clickedPileCategory.category === c
-                          : clickedState === c
-                      }
-                      onChange={(e) => handleChange(e)}
-                    />
-                    <span className="capitalize">{c}</span>
-                  </label>
-                </div>
-              ))}
-          </div>
+          {isLoadingPileData ? (
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-transparent bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] p-0.5">
+                <div className="rounded-full h-full w-full bg-white"></div>
+              </div>
+            </div>
+          ) : (
+            <div className="overflow-y-auto custom-scroll flex-1 space-y-1 pr-1 cursor-pointer">
+              {category
+                ?.slice()
+                .reverse()
+                .map((c, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer transition"
+                  >
+                    <label className="flex items-center gap-2 text-sm text-gray-800 cursor-pointer w-[100%]">
+                      <input
+                        type="radio"
+                        name="category"
+                        className="accent-indigo-600 cursor-pointer h-4 w-4 rounded-md border-gray-300"
+                        value={c}
+                        checked={
+                          clickedState === undefined
+                            ? clickedPileCategory.category === c
+                            : clickedState === c
+                        }
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <span className="capitalize">{c}</span>
+                    </label>
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
       </div>
       <CustomToast message={toast.message} show={toast.show} />

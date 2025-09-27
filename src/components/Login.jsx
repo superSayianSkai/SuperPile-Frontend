@@ -37,7 +37,7 @@ const Login = () => {
 
             {/* Animated Heading */}
             <div
-              className={`text-center mb-10 transform transition-all duration-700 delay-500 ${
+              className={`text-center mb-5 transform transition-all duration-700 delay-500 ${
                 isLoaded
                   ? "translate-y-0 opacity-100"
                   : "translate-y-4 opacity-0"

@@ -90,6 +90,11 @@ const PileBoard = () => {
   };
 
   const handleClick = (pile) => {
+    setTheModal({
+      pile: { _id: pile },
+      isOpen: true,
+      modalType: "changeCategory",
+    });
     fetchMutate({ _id: pile });
   };
 
@@ -250,7 +255,8 @@ const PileBoard = () => {
         )}
         {allPiles.length === 0 && (
           <div className="text-center text-gray-500 mt-20">
-            You have no pile here. Catch and save your favorite links across the web.
+            You have no pile here. Catch and save your favorite links across the
+            web.
           </div>
         )}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[2rem] gap-y-[4rem] relative pb-[45px]">
