@@ -204,24 +204,59 @@ const Category = () => {
               <div
                 onClick={() => pressSomething(c)}
                 onContextMenu={(e) => handleRightClick(e, c)}
+                onMouseEnter={(e) => {
+                  if (c !== "all") {
+                    const deleteBtn = e.currentTarget.querySelector('.delete-btn');
+                    if (deleteBtn) deleteBtn.style.opacity = '1';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (c !== "all") {
+                    const deleteBtn = e.currentTarget.querySelector('.delete-btn');
+                    if (deleteBtn) deleteBtn.style.opacity = '0';
+                  }
+                }}
                 key={index}
-                className={`flex justify-between select-none user-select-none ${
-                  tick === c &&
-                  "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white "
-                }  hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white bg-[#E3E3E3] font-medium text-black rounded-md capitalize  px-2 py-1 `}
+                className={`flex relative justify-between items-center select-none user-select-none ${
+                  tick === c
+                    ? "bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] text-white"
+                    : "bg-[#E3E3E3] text-black"
+                } hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] hover:text-white font-medium rounded-md capitalize px-2 py-1`}
                 style={{
-                  WebkitUserSelect: 'none',
-                  MozUserSelect: 'none',
-                  msUserSelect: 'none',
-                  userSelect: 'none',
-                  WebkitTouchCallout: 'none',
-                  WebkitTapHighlightColor: 'transparent'
+                  WebkitUserSelect: "none",
+                  MozUserSelect: "none",
+                  msUserSelect: "none",
+                  userSelect: "none",
+                  WebkitTouchCallout: "none",
+                  WebkitTapHighlightColor: "transparent",
                 }}
               >
                 <span className="select-none pointer-events-none">
-                  <h1 className="text-[.8rem] lowercase select-none w-[100%] pointer-events-none">{c}</h1>
+                  <h1 className="text-[.8rem] lowercase select-none w-[100%] pointer-events-none">
+                    {c}
+                  </h1>
                 </span>
-                {tick === c && <i className="bi bi-check2 text-[.8rem] select-none"></i>}
+                {/* Delete button - visible beside category on mobile, hover on desktop */}
+                {c !== "all" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCategoryToDelete(c);
+                      setShowDeleteConfirm(true);
+                    }}
+                    className="delete-btn flex justify-center items-center transition-all duration-200 z-10
+                               max-md:relative max-md:opacity-100 max-md:ml-2 max-md:w-4 max-md:h-4 max-md:bg-transparent max-md:hover:bg-red-100 max-md:rounded
+                               md:absolute md:-top-1 md:-right-1 md:w-5 md:h-5 md:bg-red-500 md:hover:bg-red-600 md:rounded-full md:shadow-md md:hover:shadow-lg md:text-white"
+                    style={{ opacity: window.innerWidth >= 768 ? 0 : 1 }}
+                    title="Delete category"
+                  >
+                    <i className="bi bi-x md:text-xs hidden md:block"></i>
+                    <i className="bi bi-trash text-red-600 text-[10px] md:hidden"></i>
+                  </button>
+                )}
+                {tick === c && (
+                  <i className="bi bi-check2 text-[.8rem] select-none"></i>
+                )}
               </div>
             );
           })}
