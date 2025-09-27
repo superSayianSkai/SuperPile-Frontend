@@ -29,9 +29,9 @@ const ChangeCategory = () => {
 
   const { mutate } = useChangeCategory();
   let clickedPileCategory = clicked.pile;
-  
- 
-  const isLoadingPileData = clickedPileCategory && !clickedPileCategory.category;
+
+  const isLoadingPileData =
+    clickedPileCategory && !clickedPileCategory.category;
 
   const handleChange = async (e) => {
     console.log(e);
@@ -59,15 +59,15 @@ const ChangeCategory = () => {
   return (
     <div
       onClick={() => setTheModal()}
-      className="relative z-10  w-[100%] rounded-xl h-[100svh] overflow-y-scroll inset-0 cursor-pointer flex justify-center items-center"
+      className="relative z-10 w-[100%] rounded-xl h-[100svh] overflow-y-scroll inset-0 cursor-pointer flex justify-center items-center"
     >
       <div
         onClick={(e) => [e.stopPropagation(), handleClose(e)]}
-        className="w-[90%]  md:w-[400px] h-[400px] rounded-xl overflow-scroll"
+        className="w-[95%] absolute max-md:top-8 md:w-[400px] h-[400px] rounded-xl overflow-scroll"
       >
         <div
           ref={categoryRef}
-          className="bg-white rounded-xl shadow-md p-4 flex flex-col z-[2000]"
+          className="bg-white pt-6 rounded-xl shadow-md flex flex-col z-[2000]"
         >
           <h1 className="text-sm font-semibold text-gray-700 mb-3 text-center">
             Change Category
@@ -80,7 +80,7 @@ const ChangeCategory = () => {
               </div>
             </div>
           ) : (
-            <div className="overflow-y-auto custom-scroll flex-1 space-y-1 pr-1 cursor-pointer">
+            <div className=" pt-4 px-3 pb-2 overflow-y-auto custom-scroll flex flex-col gap-2 flex-1 space-y-1 pr-1 cursor-pointer">
               {category
                 ?.slice()
                 .reverse()
@@ -108,6 +108,12 @@ const ChangeCategory = () => {
                 ))}
             </div>
           )}
+          <div
+            onClick={() => setTheModal({ isOpen: false })}
+            className="sticky bottom-0 border-[1px] border-gray-300 bg-white p-3  w-[100%] text-center md:hover:bg-gray-50 "
+          >
+            Done
+          </div>
         </div>
       </div>
       <CustomToast message={toast.message} show={toast.show} />
