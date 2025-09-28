@@ -253,7 +253,7 @@ const OnBoarding = () => {
             <div className="flex max-sm:flex-col max-sm:justify-center justify-between items-center text-center">
               <Link
                 to="/updates"
-                className="flex items-center justify-center gap-1 mb-2 hover:underline cursor-pointer hover:opacity-100 transition-opacity duration-200"
+                className="flex items-center justify-center gap-1 mb-2 underline decoration-1 cursor-pointer hover:opacity-100 transition-opacity duration-200"
               >
                 <InfoIcon className="h-4 w-4 sm:mt-1 " />
                 <div className="font-bold text-[.8rem] sm:text-2xl bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
