@@ -15,7 +15,7 @@ const Updates = () => {
     setImageLoading(true);
   };
   return (
-    <div className="min-h-screen max-h-screen overflow-y-auto bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
+    <div className="overflow-y-auto bg-gray-50 dark:bg-black py-4 sm:py-8 relative">
       <Helmet>
         {/* Title for tab + search engines */}
         <title>Updates - Supapile v1.0 Launch</title>
@@ -55,7 +55,10 @@ const Updates = () => {
         />
 
         {/* Article specific meta tags */}
-        <meta property="article:published_time" content="2024-09-24T00:00:00Z" />
+        <meta
+          property="article:published_time"
+          content="2024-09-24T00:00:00Z"
+        />
         <meta property="article:author" content="skai" />
         <meta property="article:section" content="Product Updates" />
         <meta property="article:tag" content="product launch" />
@@ -109,7 +112,7 @@ const Updates = () => {
           </div>
 
           <h1 className="text-[1.6rem] sm:text-4xl lg:text-5xl dark:text-white font-bold text-gray-900 mb-4 leading-tight">
-            Supapile, here we go!
+            Link, I choose you!
           </h1>
         </header>
 
@@ -142,27 +145,28 @@ const Updates = () => {
               <div className="text-sm sm:text-base dark:text-white space-y-3 sm:space-y-4">
                 <p className="leading-[1.8rem]">
                   I love to curate websites, especially the ones I find useful
-                  or can learn from. For the longest time, I&apos;d just dump them
-                  into my WhatsApp &quot;me&quote; chat for later… but over time, it became
-                  a chaotic mess.
+                  or can learn from. For the longest time, I&apos;d just dump
+                  them into my WhatsApp &quot;me&quot; chat for later… but over
+                  time, it became a chaotic mess.
                 </p>
 
                 <p className="leading-[1.8rem]">
                   I tried switching to bookmarks, but honestly, it was worse,
-                  I&apos;d forget about them completely, and the whole setup just
-                  didn&apos;t work for me.
+                  I&apos;d forget about them completely, and the whole setup
+                  just didn&apos;t work for me.
                 </p>
 
                 <p className="leading-[1.8rem]">
                   At work, people often asked if I had good resources to share.
                   Most times, I&apos;d be scrolling endlessly through my messy
-                  WhatsApp chat just to find one link.
+                  WhatsApp &quot;me&quot; chat just to find one link.
                 </p>
 
                 <p className="leading-[1.8rem]">
-                  Then one day, a colleague told me she hated how her own links
-                  on WhatsApp were scattered and clunky. Another colleague said
-                  the same thing not long after.
+                  Then one day, a colleague told me she hated how her links were
+                  scattered. Apparently, she was also saving them on WhatsApp,
+                  but it just felt messy and clunky. Not long after, another
+                  colleague said the exact same thing
                 </p>
 
                 <p className="font-semibold leading-[1.8rem]">
@@ -190,7 +194,8 @@ const Updates = () => {
                     •
                   </span>
                   <span className="text-sm sm:text-base leading-[1.8rem]">
-                    Share links on your Pileboard with friends
+                    Share piles you&apos;ve made visible on your Pileboard with
+                    friends.
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -198,8 +203,15 @@ const Updates = () => {
                     •
                   </span>
                   <span className="text-sm sm:text-base leading-[1.8rem]">
-                    Use the Supapile extension to save links from any site
-                    instantly—no need to open SupaPile
+                    Use the{" "}
+                    <a
+                      href="https://chromewebstore.google.com/detail/supapile/dijfgnlpkjppccgkiapcppdkeiekemah/"
+                      target="_blank"
+                      className="underline hover:opacity-70"
+                    >
+                      Supapile extension
+                    </a>{" "}
+                    to save links from any site instantly—no.
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -207,8 +219,17 @@ const Updates = () => {
                     •
                   </span>
                   <span className="text-sm sm:text-base leading-[1.8rem]">
-                    Add SupaPile to your device like an app so you can open it
-                    instantly
+                    Add Supapile to your device like an app so you can open it
+                    instantly.
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-black dark:text-white mr-2 flex-shrink-0">
+                    •
+                  </span>
+                  <span className="text-sm sm:text-base leading-[1.8rem]">
+                    On Android, once you add Supapile as an app, you can easily
+                    share links to it directly from other apps.
                   </span>
                 </li>
               </ul>
@@ -219,13 +240,11 @@ const Updates = () => {
 
               <div className="text-sm sm:text-base dark:text-white space-y-3 sm:space-y-4">
                 <p className="leading-[2rem]">
-                  I&apos;ll be honest with you - the SupaPile icon and concept draws
-                  heavy inspiration from Pokémon. You know how trainers collect,
-                  organize, and share their Pokémon? Well, that&apos;s exactly what I
-                  wanted Supapile to do for your favorite links. The
-                  Pokeball-inspired design reflects this &quot;gotta catch &apos;em all&quot;
-                  mentality, but for web resources! I thought it was a fun way
-                  to make link management feel more like an adventure.
+                  When I designed the Supapile icon, I drew inspiration from
+                  Pokémon. Just like trainers collect, organize, and share their
+                  Pokémon, I wanted Supapile to do the same for your favorite
+                  links. The Pokéball-inspired design captures that ‘gotta catch
+                  ’em all’ spirit but for web resources.
                 </p>
               </div>
             </div>
@@ -233,7 +252,7 @@ const Updates = () => {
         </div>
 
         <p className="text-gray-700 max-w-4xl mx-auto dark:text-gray-300 mt-6 sm:mt-8 text-sm sm:text-base leading-[1.8rem]">
-          I hope you&apos;ll enjoy using SupaPile!{" "}
+          I really hope you&apos;ll enjoy using Supapile!{" "}
           <button
             className="underline cursor-pointer hover:opacity-50 text-inherit bg-transparent border-none p-0 font-inherit"
             onClick={() => {
@@ -246,6 +265,7 @@ const Updates = () => {
             Feedback
           </button>{" "}
           or ideas are always welcome to help make future updates even better.
+          Arigatō gozaimasu!
         </p>
         {/* Article Footer */}
         <footer className="mt-8 sm:mt-10 py-4 sm:py-6 mb-4 sm:mb-8 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700  p-4">
