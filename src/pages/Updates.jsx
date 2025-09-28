@@ -211,7 +211,7 @@ const Updates = () => {
                     >
                       Supapile extension
                     </a>{" "}
-                    to save links from any site instantly—no.
+                    to save links from any site instantly.
                   </span>
                 </li>
                 <li className="flex items-start">
