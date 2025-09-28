@@ -1,6 +1,6 @@
 import { SupaPileAUTHContext } from "../context/SupaPileContext";
 import { useContext, useState, useEffect } from "react";
-import image from "../assets/Images/supapile-128.png";
+import image from "../assets/Images/supapile-128.png"
 
 const Login = () => {
   const { handleSignIn } = useContext(SupaPileAUTHContext);
@@ -28,7 +28,7 @@ const Login = () => {
             {/* Animated Logo */}
             <img
               src={image}
-              className={`mb-6 transform transition-all duration-700 delay-500 w-14 h-auto ${
+              className={`mb-2  transform transition-all duration-700 delay-500  ${
                 isLoaded
                   ? "translate-y-0 opacity-100"
                   : "translate-y-4 opacity-0"
