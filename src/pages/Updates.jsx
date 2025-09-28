@@ -105,7 +105,7 @@ const Updates = () => {
                   className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white"
                   dateTime="2024-01-15"
                 >
-                  September 24, 2025
+                  September 28, 2025
                 </time>
               </div>
             </div>
@@ -277,7 +277,7 @@ const Updates = () => {
               <a
                 href="https://x.com/superSaiyanSkai"
                 target="blank"
-                className="hover:underline cursor-pointer "
+                className="hover:underline cursor-pointer underline hover:opacity-80"
               >
                 @superSaiyanSkai
               </a>
