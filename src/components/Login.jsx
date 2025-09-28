@@ -50,7 +50,7 @@ const Login = () => {
                 </span>
               </h1>
               <p className="text-gray-600 text-sm font-medium tracking-wider uppercase">
-                SHAVE,ORGANIZE & SHARE URLS
+                SHAVE, ORGANIZE & SHARE URLS
               </p>
             </div>
 
