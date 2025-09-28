@@ -320,13 +320,13 @@ const AddOns = () => {
                         <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                           2
                         </span>
-                        Select "Add to Home Screen"
+                        Select &quot;Add to Home Screen&quot;
                       </li>
                       <li className="flex gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                           3
                         </span>
-                        Tap "Add" to confirm
+                        Tap &quot;Add&quot; to confirm
                       </li>
                     </ol>
                   </div>
@@ -345,7 +345,7 @@ const AddOns = () => {
                         <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
                           2
                         </span>
-                        Or use browser menu → "Install Supapile"
+                        Or use browser menu → &quot;Install Supapile&quot;
                       </li>
                       <li className="flex gap-3">
                         <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
@@ -391,7 +391,7 @@ const AddOns = () => {
           <div className="flex max-sm:flex-col max-sm:justify-center justify-between items-center text-center">
             <Link
               to="/updates"
-              className="flex items-center justify-center gap-1 mb-2 hover:underline cursor-pointer hover:opacity-100 transition-opacity duration-200"
+              className="flex items-center justify-center gap-1 mb-2 underline decoration-1 cursor-pointer hover:opacity-100 transition-opacity duration-200"
             >
               <InfoIcon className="h-4 w-4 sm:mt-1 " />
               <div className="font-bold text-[.8rem] sm:text-2xl bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
