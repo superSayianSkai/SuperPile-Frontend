@@ -1,6 +1,6 @@
 import { SupaPileAUTHContext } from "../context/SupaPileContext";
 import { useContext, useState, useEffect } from "react";
-import image from "../assets/Images/supapile-icon2.svg";
+import image from "../assets/Images/supapile-128.png";
 
 const Login = () => {
   const { handleSignIn } = useContext(SupaPileAUTHContext);
