@@ -165,8 +165,8 @@ const Updates = () => {
                 <p className="leading-[1.8rem]">
                   Then one day, a colleague told me she hated how her links were
                   scattered. Apparently, she was also saving them on WhatsApp,
-                  but it just felt messy and clunky. Not long after, another
-                  colleague said the exact same thing
+                  and she complained that it felt messy and clunky.. Not long
+                  after, another colleague said the exact same thing
                 </p>
 
                 <p className="font-semibold leading-[1.8rem]">
