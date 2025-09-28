@@ -241,9 +241,7 @@ const Updates = () => {
               <div className="text-sm sm:text-base dark:text-white space-y-3 sm:space-y-4">
                 <p className="leading-[2rem]">
                   When I designed the Supapile icon, I drew inspiration from
-                  Pokémon. Just like trainers collect, organize, and share their
-                  Pokémon, I wanted Supapile to do the same for your favorite
-                  links. The Pokéball-inspired design captures that ‘gotta catch
+                  Pokémon. Just like trainers collect, train, and trade their Pokémon, I wanted SupaPile to help you collect and manage your favorite links. The Pokéball-inspired design captures that ‘gotta catch
                   ’em all’ spirit but for web resources.
                 </p>
               </div>
