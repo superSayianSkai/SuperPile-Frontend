@@ -73,7 +73,7 @@ const ChangeCategory = () => {
           </h1>
 
           {isLoadingPileData ? (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center py-4 items-center">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-transparent bg-gradient-to-r from-[#ff66b2] to-[#ff8c00] p-0.5">
                 <div className="rounded-full h-full w-full bg-white"></div>
               </div>
@@ -107,12 +107,14 @@ const ChangeCategory = () => {
                 ))}
             </div>
           )}
-          <div
-            onClick={() => setTheModal({ isOpen: false })}
-            className="sticky bottom-0 border-[1px] border-gray-300 bg-white p-3 text-black  w-[100%] text-center md:hover:bg-gray-50 "
-          >
-            Done
-          </div>
+          {!isLoadingPileData && (
+            <div
+              onClick={() => setTheModal({ isOpen: false })}
+              className="sticky bottom-0 border-[1px] border-gray-300 bg-white p-3 text-black  w-[100%] text-center md:hover:bg-gray-50 "
+            >
+              Done
+            </div>
+          )}
         </div>
       </div>
       <CustomToast message={toast.message} show={toast.show} />
