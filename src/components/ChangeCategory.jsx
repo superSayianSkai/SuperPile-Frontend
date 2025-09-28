@@ -39,6 +39,7 @@ const ChangeCategory = () => {
     console.log("hey brother");
     console.log(ticked);
     setTheCategoryChangerStore(ticked);
+    setClickedState(ticked); // ✅ Execute this first, outside mutate
     mutate(
       {
         _id: clickedPileCategory._id,
@@ -48,7 +49,6 @@ const ChangeCategory = () => {
       },
       {
         onSuccess: (res) => {
-          setClickedState(ticked);
           showCustomToast(res?.data || "Category changed successfully");
         },
       }
