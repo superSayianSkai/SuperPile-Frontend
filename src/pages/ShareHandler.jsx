@@ -30,7 +30,7 @@ const ShareHandler = () => {
   
     // Fix common malformed patterns
     cleanUrl = cleanUrl
-      .replace(/^hrttps?:\/+/i, 'https://') // Fix hrttps://// -> https://
+      .replace(/^hrttps?:\/+/i, 'https://') 
       .replace(/^https?:\/+/i, (match) => {
         return match.toLowerCase().startsWith('https') ? 'https://' : 'http://';
       })
