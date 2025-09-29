@@ -60,98 +60,99 @@ const ShareHandler = () => {
   };
 
   useEffect(() => {
-    // Try multiple common parameter names used by different apps
-    const rawUrl = searchParams.get("url") || 
-                   searchParams.get("text") || 
-                   searchParams.get("link") || 
-                   searchParams.get("u") ||
-                   searchParams.get("href") ||
-                   searchParams.get("uri") ||
-                   searchParams.get("body");
+    try {
+      // Try multiple common parameter names used by different apps
+      const rawUrl = searchParams.get("url") || 
+                     searchParams.get("text") || 
+                     searchParams.get("link") || 
+                     searchParams.get("u") ||
+                     searchParams.get("href") ||
+                     searchParams.get("uri") ||
+                     searchParams.get("body");
   
-    console.log('Raw URL from params:', rawUrl);
+      console.log('Raw URL from params:', rawUrl);
   
-    const urlResult = extractAndValidateUrl(rawUrl);
-    console.log('URL validation result:', urlResult);
+      const urlResult = extractAndValidateUrl(rawUrl);
+      console.log('URL validation result:', urlResult);
   
-    if (urlResult?.error) {
-      // Show error for invalid URLs
-      setStatusMessage(urlResult.error);
-      CustomToast(urlResult.error);
+      if (urlResult?.error) {
+        // Show error for invalid URLs
+        setStatusMessage(urlResult.error);
+        CustomToast(urlResult.error);
+        
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 3000);
+        return;
+      }
+  
+      if (urlResult?.url) {
+        setIsProcessing(true);
+        setStatusMessage("Adding shared link...");
+  
+        // Add to your pile/collection using the mutate function
+        mutate(
+          { url: urlResult.url, category: "all" },
+          {
+            onSuccess: (data) => {
+              if (data?.message === "This link already exists in your pile.") {
+                setStatusMessage("Link already exists in your pile");
+                CustomToast("This link is already in your pile.");
+                setTimeout(() => {
+                  setIsProcessing(false);
+                  navigate("/", { replace: true });
+                }, 1500);
+                return;
+              }
+  
+              setStatusMessage("Link added successfully!");
+              setPostData(data);
+              queryClient.setQueryData(["user"], (prev) => prev);
+              queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
+              
+              setTimeout(() => {
+                setIsProcessing(false);
+                navigate("/", { replace: true });
+              }, 1000);
+            },
+            onError: (error) => {
+              console.error('Mutation error:', error);
+              const msg = error?.response?.data?.message;
+  
+              if (msg === "This link already exists in your pile.") {
+                setStatusMessage("Link already exists");
+                CustomToast("This link already exists in your pile.");
+              } else {
+                setStatusMessage("Failed to add link");
+                CustomToast("Something went wrong. Please try again.");
+              }
+              
+              setTimeout(() => {
+                setIsProcessing(false);
+                navigate("/", { replace: true });
+              }, 2000);
+            },
+          }
+        );
+      } else {
+        // No URL found
+        setStatusMessage("No valid link to process");
+        CustomToast("No valid link found to add to your pile.");
+        
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('ShareHandler error:', error);
+      setStatusMessage("An unexpected error occurred");
+      CustomToast("An unexpected error occurred. Please try again.");
       
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 3000);
-      return;
     }
-  
-    if (urlResult?.url) {
-      setIsProcessing(true);
-      setStatusMessage("Adding shared link...");
-  
-      // Add to your pile/collection using the mutate function
-      mutate(
-        { url: urlResult.url, category: "all" },
-        {
-          onSuccess: (data) => {
-            if (data?.message === "This link already exists in your pile.") {
-              setStatusMessage("Link already exists in your pile");
-              CustomToast("This link is already in your pile.");
-              setTimeout(() => {
-                setIsProcessing(false);
-                navigate("/", { replace: true });
-              }, 1500);
-              return;
-            }
-  
-            setStatusMessage("Link added successfully!");
-            setPostData(data);
-            queryClient.setQueryData(["user"], (prev) => prev);
-            queryClient.invalidateQueries({ queryKey: ["pile"], exact: false });
-            
-            setTimeout(() => {
-              setIsProcessing(false);
-              navigate("/", { replace: true });
-            }, 1000);
-          },
-          onError: (error) => {
-            console.error('Mutation error:', error);
-            const msg = error?.response?.data?.message;
-  
-            if (msg === "This link already exists in your pile.") {
-              setStatusMessage("Link already exists");
-              CustomToast("This link already exists in your pile.");
-            } else {
-              setStatusMessage("Failed to add link");
-              CustomToast("Something went wrong. Please try again.");
-            }
-            
-            setTimeout(() => {
-              setIsProcessing(false);
-              navigate("/", { replace: true });
-            }, 2000);
-          },
-        }
-      );
-    } else {
-      // No URL found
-      setStatusMessage("No valid link to process");
-      CustomToast("No valid link found to add to your pile.");
-      
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 2000);
-    }
-  } catch (error) {
-    console.error('ShareHandler error:', error);
-    setStatusMessage("An unexpected error occurred");
-    CustomToast("An unexpected error occurred. Please try again.");
-    
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 3000);
-  }
-}, [searchParams, navigate, mutate, queryClient, setPostData]);
+  }, [searchParams, navigate, mutate, queryClient, setPostData]);
 
   return (
     <>
