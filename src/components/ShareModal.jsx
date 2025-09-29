@@ -19,7 +19,7 @@ const ShareModal = ({ pile }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const shareOptions = [
+  const  shareOptions = [
     {
       //   name: "WhatsApp",
       icon: <i className="bi bi-whatsapp text-[30px] text-white"></i>,
