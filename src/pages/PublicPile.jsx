@@ -187,7 +187,7 @@ const PublicPile = () => {
                           onClick={() => copy(link.url)}
                           className="text-[15px]"
                         >
-                          <i className="bi bi-clipboard hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer "></i>
+                          <i className="bi bi-clipboard hover:opacity-70 transition cursor-pointer "></i>
                         </button>
                         <button
                           onClick={() =>
@@ -199,14 +199,14 @@ const PublicPile = () => {
                           }
                           className="text-[15px]"
                         >
-                          <i className="bi bi-share hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer "></i>
+                          <i className="bi bi-share hover:opacity-70 transition cursor-pointer "></i>
                         </button>
 
                         <button
                           onClick={() => handleLinkSubmit(link?.url)}
                           className="relative rounded-full text-[15px]"
                         >
-                          <i className="bi bi-floppy hover:text-gray-500 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ff66b2] hover:to-[#ff8c00] transition cursor-pointer"></i>
+                          <i className="bi bi-floppy hover:opacity-70 transition cursor-pointer"></i>
                         </button>
                       </div>
                     </div>
