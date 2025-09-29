@@ -117,14 +117,27 @@ const ShareHandler = () => {
             },
             onError: (error) => {
               console.error('Mutation error:', error);
+              console.error('Full error object:', JSON.stringify(error, null, 2));
+              console.error('Error response data:', error?.response?.data);
+              console.error('Error message:', error?.response?.data?.message);
+              
               const msg = error?.response?.data?.message;
   
-              if (msg === "This link already exists in your pile.") {
-                setStatusMessage("Link already exists");
-                CustomToast("This link already exists in your pile.");
+              // Check for duplicate link messages (more flexible matching)
+              const isDuplicateLink = msg && (
+                msg.toLowerCase().includes("already exists") ||
+                msg.toLowerCase().includes("duplicate") ||
+                msg === "This link already exists in your pile." ||
+                msg === "This link already exists in your pile" ||
+                msg.includes("already exists in your pile")
+              );
+  
+              if (isDuplicateLink) {
+                setStatusMessage("Link already exists in your pile");
+                CustomToast("This link is already in your pile.");
               } else {
                 setStatusMessage("Failed to add link");
-                CustomToast("Something went wrong. Please try again.");
+                CustomToast(msg || "Something went wrong. Please try again.");
               }
               
               setTimeout(() => {
