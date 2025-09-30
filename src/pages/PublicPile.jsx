@@ -180,7 +180,7 @@ const PublicPile = () => {
                   <p className="text-gray-500 text-[.6rem] text-ellipsis mt-[10px]">
                     {link?.description?.slice(0, 152)}
                   </p>
-                  {!userData && (
+                  {(
                     <div className="flex items-center w-[100%] pr-[1rem]">
                       <div className="flex gap-4  mt-[10px] items-center w-[100%]">
                         <button
