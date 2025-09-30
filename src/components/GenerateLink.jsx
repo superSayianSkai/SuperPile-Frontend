@@ -164,7 +164,7 @@ const GenerateLink = () => {
 
         {/* Description */}
         <p className="mb-8 leading-relaxed text-[1rem] md:text-lg">
-          Create a secure link to share your public pile with others
+          Create a secure link to share your public pile with friends
         </p>
 
         {/* Loading state while checking for current link */}
