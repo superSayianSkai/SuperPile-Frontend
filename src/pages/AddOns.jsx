@@ -278,7 +278,7 @@ const AddOns = () => {
                 <div className="flex items-start max-sm:text-sm gap-3">
                   <div className="w-2 h-2  bg-black dark:bg-white rounded-full mt-2"></div>
                   <p className="text-gray-700 dark:text-gray-300">
-                    Works offline with cached data
+                    Works offline
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
