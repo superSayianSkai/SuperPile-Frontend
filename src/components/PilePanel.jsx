@@ -40,6 +40,28 @@ const PilePanel = () => {
     }, 3000);
   };
 
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      const onWheel = (e) => {
+        // Prevent default vertical scrolling behavior
+        e.preventDefault();
+        // Adjust scrollLeft based on deltaY (mouse wheel movement)
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY,
+          behavior: "smooth", // Optional: for smooth scrolling animation
+        });
+      };
+
+      el.addEventListener("wheel", onWheel);
+
+      // Clean up the event listener on component unmount
+      return () => el.removeEventListener("wheel", onWheel);
+    }
+  }, [])
+
   const {
     setLinkBoardPanelToggle,
     modifyTheHostName,
@@ -379,7 +401,7 @@ const PilePanel = () => {
               {/* Category Suggestions */}
               <div className="pl-6 mt-4 sm:mt-3 ">
                 <p className="text-xs text-gray-500 mb-2">categories:</p>
-                <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-thin p-2 scroll border-black">
+                <div ref={scrollRef} className="flex gap-2 overflow-x-auto  whitespace-nowrap scroll p-2  border-black">
                   {categoryList.map((cat) => (
                     <button
                       key={cat}

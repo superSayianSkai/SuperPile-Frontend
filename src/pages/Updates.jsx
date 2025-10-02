@@ -105,7 +105,7 @@ const Updates = () => {
                   className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white"
                   dateTime="2024-01-15"
                 >
-                  September 28, 2025
+                  October 2, 2025
                 </time>
               </div>
             </div>
