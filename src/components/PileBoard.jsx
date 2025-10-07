@@ -66,7 +66,6 @@ const PileBoard = () => {
   const softDelete = (e) => {
     // Show immediate feedback
     showCustomToast("Pile Archived");
-    
     mutate(e, {
       onError: (error) => {
         showCustomToast("Failed to archive pile");

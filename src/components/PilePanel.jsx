@@ -41,6 +41,14 @@ const PilePanel = () => {
   };
 
   const scrollRef = useRef(null);
+  const handleHorizontalWheel = (e) => {
+    e.preventDefault();
+    const el = e.currentTarget;
+    el.scrollTo({
+      left: el.scrollLeft + e.deltaY,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -225,7 +233,7 @@ const PilePanel = () => {
                   >
                     <path
                       fillRule="evenodd"
-                      d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                      d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 005.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
                       clipRule="evenodd"
                     />
                   </svg>
@@ -401,7 +409,11 @@ const PilePanel = () => {
               {/* Category Suggestions */}
               <div className="pl-6 mt-4 sm:mt-3 ">
                 <p className="text-xs text-gray-500 mb-2">categories:</p>
-                <div ref={scrollRef} className="flex gap-2 overflow-x-auto  whitespace-nowrap scroll p-2  border-black">
+                <div
+                  ref={scrollRef}
+                  onWheel={handleHorizontalWheel}
+                  className="flex gap-2 overflow-x-auto whitespace-nowrap scroll p-2 border-black"
+                >
                   {categoryList.map((cat) => (
                     <button
                       key={cat}

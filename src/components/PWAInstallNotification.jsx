@@ -9,7 +9,7 @@ const PWAInstallNotification = () => {
   const [showDismissMessage, setShowDismissedMessage] = useState(false);
 
   const { mutate: timer } = useTimer();
-  // Features data for carousel
+  
   const features = [
     {
       icon: "📱",

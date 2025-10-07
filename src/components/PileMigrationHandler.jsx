@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePileMigration } from '../hooks/usePileMigration';
 import { localStoragePiles } from '../utilities/localStoragePiles';
 import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
